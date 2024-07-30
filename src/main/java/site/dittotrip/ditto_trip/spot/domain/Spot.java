@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,5 +29,8 @@ public class Spot {
     private String phoneNumber;
     private String homeUri;
     private Point point;
+
+    @OneToMany(mappedBy = "spot")
+    private List<SpotHashtag> spotHashtags = new ArrayList<>();
 
 }
