@@ -26,4 +26,12 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<CategoryHashtag> categoryHashtags = new ArrayList<>();
 
+    /**
+     * for CategoryListRes test
+     */
+    public Category(String categoryName, CategoryMajorType categoryMajorType, CategorySubType categorySubType) {
+        this.categoryName = categoryName;
+        this.categoryMajorType = categoryMajorType;
+        this.categorySubType = categorySubType;
+    }
 }
