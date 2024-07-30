@@ -26,5 +26,5 @@ public class Spot {
     private String phoneNumber;
     private String homeUri;
     private Point point;
-    
+
 }
