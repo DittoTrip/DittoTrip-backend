@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
+import site.dittotrip.ditto_trip.hashtag.domain.entity.CategoryHashtag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,5 +22,8 @@ public class Category {
     private String categoryName;
     private CategoryMajorType categoryMajorType;
     private CategorySubType categorySubType;
+
+    @OneToMany(mappedBy = "category")
+    private List<CategoryHashtag> categoryHashtags = new ArrayList<>();
 
 }
