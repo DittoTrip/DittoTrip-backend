@@ -32,7 +32,10 @@ public class CategoryService {
      *  리스트 형태인가 ?
      *  equal 검색 ? 포함 검색 ? 공백 제거 후 매칭 ?
      */
-
+    public CategoryListRes findCategoryListBySearch(String word) {
+        List<Category> categories = categoryRepository.findByCategoryNameContaining(word);
+        return fromEntities(categories);
+    }
 
     /**
      * 상세 조회
