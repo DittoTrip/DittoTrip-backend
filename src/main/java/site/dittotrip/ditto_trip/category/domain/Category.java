@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.entity.CategoryHashtag;
+import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.categoryspot.domain.CategorySpot;
 
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<CategorySpot> categorySpots = new ArrayList<>();
+
+    @OneToOne(mappedBy = "category")
+    private Image image;
 
     /**
      * for CategoryListRes test
