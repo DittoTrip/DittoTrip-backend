@@ -1,7 +1,8 @@
-package site.dittotrip.ditto_trip.category.domain.dto;
+package site.dittotrip.ditto_trip.category.domain.dto.list;
 
 import lombok.Data;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryDataInList;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 
 import java.util.ArrayList;

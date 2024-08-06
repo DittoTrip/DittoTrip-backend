@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
+import site.dittotrip.ditto_trip.category.domain.dto.list.CategoryListRes;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 
 import java.util.List;
 
-import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.*;
+import static site.dittotrip.ditto_trip.category.domain.dto.list.CategoryListRes.*;
 
 @Service
 @Transactional(readOnly = true)
