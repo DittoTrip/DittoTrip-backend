@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -30,6 +31,10 @@ public class Image {
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "spot_id")
     private Spot spot;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "still_cut_id")
+    private StillCut stillCut;
 
     // Review Mapping
 
