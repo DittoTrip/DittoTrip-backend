@@ -10,14 +10,14 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Stillcut {
+public class StillCut {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stillcut_id")
+    @Column(name = "still_cut_id")
     private Long id;
 
-    @Column(name = "stillcut_body")
+    @Column(name = "still_cut_body")
     private String body;
 
     @ManyToOne(fetch = LAZY)
