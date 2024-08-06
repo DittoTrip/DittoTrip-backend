@@ -37,8 +37,4 @@ public class CategoryListService {
         return fromEntities(categories);
     }
 
-    /**
-     * 상세 조회
-     */
-
 }
