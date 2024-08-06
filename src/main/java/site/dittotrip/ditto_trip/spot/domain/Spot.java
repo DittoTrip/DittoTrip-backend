@@ -21,7 +21,6 @@ public class Spot {
     private Long id;
 
     private String spotName;
-    // 이미지 URI
     private String intro;
     private String address;
     private LocalTime startTime;
