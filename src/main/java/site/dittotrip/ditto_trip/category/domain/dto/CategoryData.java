@@ -12,13 +12,15 @@ public class CategoryData {
 
     private Long categoryId;
     private String categoryName;
-    // 카테고리 이미지
+    private String imageFilePath;
 
     public static CategoryData fromEntity(Category category) {
 
         return CategoryData.builder()
                 .categoryId(category.getId())
-                .categoryName(category.getCategoryName()).build();
+                .categoryName(category.getCategoryName())
+                .imageFilePath(category.getImage().getFilePath())
+                .build();
     }
 
 }
