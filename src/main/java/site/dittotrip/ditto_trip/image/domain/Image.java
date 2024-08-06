@@ -3,7 +3,11 @@ package site.dittotrip.ditto_trip.image.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
+import site.dittotrip.ditto_trip.spot.domain.Spot;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
@@ -19,9 +23,13 @@ public class Image {
     @Enumerated(EnumType.STRING)
     private ForeignType foreignType;
 
-    // Category Mapping
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    // Spot Mapping
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "spot_id")
+    private Spot spot;
 
     // Review Mapping
 
