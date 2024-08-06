@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
+import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
 
 import java.time.LocalTime;
@@ -28,6 +29,9 @@ public class Spot {
     private String phoneNumber;
     private String homeUri;
     private Point point;
+
+    @OneToOne(mappedBy = "spot")
+    private Image image;
 
     @OneToMany(mappedBy = "spot")
     private List<StillCut> stillCuts = new ArrayList<>();
