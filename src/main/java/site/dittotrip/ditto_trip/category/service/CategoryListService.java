@@ -14,7 +14,7 @@ import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.*;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CategoryService {
+public class CategoryListService {
 
     private final CategoryRepository categoryRepository;
 
