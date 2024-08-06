@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
+import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
 
@@ -36,6 +37,8 @@ public class Image {
     @JoinColumn(name = "still_cut_id")
     private StillCut stillCut;
 
-    // Review Mapping
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "review_id")
+    private Review review;
 
 }

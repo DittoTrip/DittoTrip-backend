@@ -4,6 +4,7 @@ public enum ForeignType {
 
     CATEGORY,
     SPOT,
+    STILLCUT,
     REVIEW
 
 }

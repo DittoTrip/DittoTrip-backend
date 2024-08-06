@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -27,11 +30,15 @@ public class Review {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
+    // User mapping
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
-    // Image mapping
+    @OneToMany(mappedBy = "review")
+    private List<Image> images = new ArrayList<>();
 
     // Comment mapping
+
 }
