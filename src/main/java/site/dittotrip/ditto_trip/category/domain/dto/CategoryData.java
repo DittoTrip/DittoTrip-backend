@@ -6,12 +6,12 @@ import site.dittotrip.ditto_trip.category.domain.Category;
 
 @Data
 @AllArgsConstructor
-public class CategoryDataInList {
+public class CategoryData {
     private String categoryName;
     // 카테고리 이미지
 
-    public static CategoryDataInList fromEntity(Category category) {
-        return new CategoryDataInList(category.getCategoryName());
+    public static CategoryData fromEntity(Category category) {
+        return new CategoryData(category.getCategoryName());
     }
 
 }

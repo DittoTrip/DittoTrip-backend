@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CategoryDetailRes {
 
-    private CategoryDataInList categoryDataInList;
+    private CategoryData categoryData;
     // Spot Dto 리스트
 
 }
