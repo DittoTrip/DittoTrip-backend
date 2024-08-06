@@ -27,7 +27,7 @@ public class Image {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
