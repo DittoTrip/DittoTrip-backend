@@ -28,7 +28,7 @@ public class CategoryDetailService {
      */
     public CategoryDetailRes findCategoryDetail(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        List<CategorySpot> categorySpots = categorySpotRepository.findByScope();
+        List<CategorySpot> categorySpots = categorySpotRepository.findByScope(category);
 
         return CategoryDetailRes.fromEntity(category, convertSpotList(categorySpots));
     }
