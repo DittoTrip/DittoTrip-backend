@@ -26,7 +26,7 @@ public class Review {
     @Column(name = "review_body")
     private String body;
 
-    private Integer rating;
+    private Float rating;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;
