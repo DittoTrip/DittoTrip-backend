@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.mini.ReviewMiniData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotData;
+import site.dittotrip.ditto_trip.spot.spotditto.domain.SpotDitto;
 import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
 import site.dittotrip.ditto_trip.spot.stillcut.domain.dto.StillCutData;
 
@@ -24,15 +25,17 @@ public class SpotDetailRes {
 //    private CategoryData categoryData;
     private List<StillCutData> stillCutDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
+    private Boolean spotDittoData;
     // 사진 가이드
     // 주변 관광지
 
-    public static SpotDetailRes fromEntity(Spot spot, List<StillCut> stillCuts, List<Review> reviews) {
+    public static SpotDetailRes fromEntity(Spot spot, List<StillCut> stillCuts, List<Review> reviews, SpotDitto spotDitto) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
         spotDetailRes.setSpotData(SpotData.fromEntity(spot));
         spotDetailRes.putStillCutDataList(stillCuts);
         spotDetailRes.putReviewDataList(reviews);
+        spotDetailRes.putSpotDittoData(spotDitto);
 
         return spotDetailRes;
     }
@@ -51,6 +54,14 @@ public class SpotDetailRes {
             reviewDataList.add(ReviewMiniData.fromEntity(review));
         }
         this.setReviewDataList(reviewDataList);
+    }
+
+    private void putSpotDittoData(SpotDitto spotDitto) {
+        if (spotDitto != null) {
+            this.spotDittoData = Boolean.FALSE;
+        } else {
+            this.spotDittoData = Boolean.TRUE;
+        }
     }
 
 }
