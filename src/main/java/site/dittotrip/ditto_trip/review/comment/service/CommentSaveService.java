@@ -21,9 +21,6 @@ public class CommentSaveService {
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;
 
-    /**
-     * 리뷰 id, 부모 댓글 id, 유저 entity
-     */
     public void saveComment(Long reviewId, Long parentCommentId, User user,
                             CommentSaveReq commentSaveReq) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
