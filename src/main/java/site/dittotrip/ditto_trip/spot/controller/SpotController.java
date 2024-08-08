@@ -15,9 +15,9 @@ public class SpotController {
 
     private final SpotDetailService spotDetailService;
 
-    @GetMapping("/{spotId}")
-    private SpotDetailRes categoryDetail(@PathVariable(name = "spotId") Long spotId) {
-        return spotDetailService.findSpotDetail(spotId);
-    }
+//    @GetMapping("/{spotId}")
+//    private SpotDetailRes categoryDetail(@PathVariable(name = "spotId") Long spotId) {
+//        return spotDetailService.findSpotDetail(spotId);
+//    }
 
 }
