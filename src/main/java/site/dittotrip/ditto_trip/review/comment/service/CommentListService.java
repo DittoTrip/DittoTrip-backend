@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 
 @Service
-@Transactional(readOnly = false)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CommentRemoveService {
+public class CommentListService {
 
     private final CommentRepository commentRepository;
 
