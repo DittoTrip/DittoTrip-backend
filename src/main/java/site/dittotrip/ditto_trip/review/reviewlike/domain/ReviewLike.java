@@ -25,4 +25,9 @@ public class ReviewLike {
     @JoinColumn(name = "users_id")
     private User user;
 
+    public ReviewLike(Review review, User user) {
+        this.review = review;
+        this.user = user;
+    }
+
 }
