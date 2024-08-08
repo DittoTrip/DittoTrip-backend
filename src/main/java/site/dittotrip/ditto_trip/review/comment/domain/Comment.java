@@ -43,4 +43,11 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> childComments = new ArrayList<>();
 
+    public Comment(String body, User user, Review review, Comment parentComment) {
+        this.body = body;
+        this.user = user;
+        this.review = review;
+        this.parentComment = parentComment;
+    }
+
 }
