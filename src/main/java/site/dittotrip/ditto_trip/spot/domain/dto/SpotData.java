@@ -16,19 +16,25 @@ public class SpotData {
 
     private Long spotId;
     private String spotName;
-    // 이미지 URI
-    private float rating;
+    private Float rating;
     private String address;
     private Point point;
-    private List<Hashtag> hashtags = new ArrayList<>();
+    private String imageFilePath;
+//    private List<Hashtag> hashtags = new ArrayList<>();
 
     /**
      * 미완성
      */
     public static SpotData fromEntity(Spot spot) {
-        return SpotData.builder()
+        SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
+                .spotName(spot.getSpotName())
+                .address(spot.getAddress())
+                .point(spot.getPoint())
+                .imageFilePath(spot.getImage().getFilePath())
                 .build();
+
+        return spotData;
     }
 
 }

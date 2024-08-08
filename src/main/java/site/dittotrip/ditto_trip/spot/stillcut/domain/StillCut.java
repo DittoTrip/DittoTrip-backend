@@ -3,8 +3,11 @@ package site.dittotrip.ditto_trip.spot.stillcut.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -20,6 +23,9 @@ public class StillCut {
 
     @Column(name = "still_cut_body")
     private String body;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "spot_id")
