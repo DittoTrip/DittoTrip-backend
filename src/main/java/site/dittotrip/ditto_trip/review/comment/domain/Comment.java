@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.review.comment.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -22,6 +23,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
+    @Setter
     @Column(name = "comment_body")
     private String body;
 
