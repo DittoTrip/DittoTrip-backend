@@ -40,7 +40,7 @@ public class Comment {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
+    private Comment parentComment = null;
 
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> childComments = new ArrayList<>();
