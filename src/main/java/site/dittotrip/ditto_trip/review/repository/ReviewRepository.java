@@ -10,4 +10,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findTop3BySpotOrderByCreatedDateTimeDesc(Spot spot);
 
+    List<Review> findBySpotOrderByCreatedDateTimeDesc(Spot spot);
+
 }
