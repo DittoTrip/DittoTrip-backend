@@ -42,6 +42,12 @@ public class Review {
     @OneToMany(mappedBy = "review")
     private List<Image> images = new ArrayList<>();
 
-    // Comment mapping
-
+    public Review(String body, Float rating, LocalDateTime createdDateTime, User user, Spot spot, List<Image> images) {
+        this.body = body;
+        this.rating = rating;
+        this.createdDateTime = createdDateTime;
+        this.user = user;
+        this.spot = spot;
+        this.images = images;
+    }
 }
