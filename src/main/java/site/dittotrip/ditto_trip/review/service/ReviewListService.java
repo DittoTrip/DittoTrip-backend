@@ -44,8 +44,8 @@ public class ReviewListService {
         for (Review review : reviews) {
             Long likes = reviewLikeRepository.countByReview(review);
             Long commentsCount = commentRepository.countByReview(review);
-            Boolean isMine = putIsMine(user);
-            Boolean myLike = putMyLike(review, user);
+            Boolean isMine = getIsMine(user);
+            Boolean myLike = getMyLike(review, user);
 
             reviewDataList.add(ReviewData.fromEntity(review, likes.intValue(), isMine, myLike, commentsCount.intValue()));
             totalRating += review.getRating();
@@ -64,7 +64,7 @@ public class ReviewListService {
         return Math.round(avg * 20) / 20.0f;
     }
 
-    private Boolean putIsMine(User user) {
+    private Boolean getIsMine(User user) {
         if (user == null) {
             return Boolean.FALSE;
         }
@@ -77,7 +77,7 @@ public class ReviewListService {
         }
     }
 
-    private Boolean putMyLike(Review review, User user) {
+    private Boolean getMyLike(Review review, User user) {
         if (user == null) {
             return Boolean.FALSE;
         }
