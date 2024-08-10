@@ -45,6 +45,12 @@ public class ReviewListService {
             Long likes = reviewLikeRepository.countByReview(review);
             Long commentsCount = commentRepository.countByReview(review);
 
+            Boolean isMine = Boolean.FALSE;
+            Optional<Review> findReview = reviewRepository.findByUser(user);
+            if (findReview.isPresent()) {
+                isMine = Boolean.TRUE;
+            }
+
             Boolean myLike = Boolean.FALSE;
             if (user != null) {
                 Optional<ReviewLike> reviewLike = reviewLikeRepository.findByReviewAndUser(review, user);
@@ -52,7 +58,7 @@ public class ReviewListService {
                     myLike = Boolean.TRUE;
                 }
             }
-            reviewDataList.add(ReviewData.fromEntity(review, likes.intValue(), myLike, commentsCount.intValue()));
+            reviewDataList.add(ReviewData.fromEntity(review, likes.intValue(), isMine, myLike, commentsCount.intValue()));
             totalRating += review.getRating();
         }
 
