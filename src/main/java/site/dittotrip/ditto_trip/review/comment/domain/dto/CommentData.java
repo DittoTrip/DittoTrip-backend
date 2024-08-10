@@ -22,19 +22,16 @@ public class CommentData {
     private Boolean isMine;
 
     public static CommentData parentFromEntity(Comment comment) {
-        CommentData commentData = CommentData.builder()
-                .commentId(comment.getId())
-                .userData(UserData.fromEntity(comment.getUser()))
-                .body(comment.getBody())
-                .createdDateTime(comment.getCreatedDateTime())
-                .build();
-
+        CommentData commentData = fromEntity(comment);
         commentData.putChildrenCommentData(comment);
-
         return commentData;
     }
 
     private static CommentData childFromEntity(Comment comment) {
+        return fromEntity(comment);
+    }
+
+    private static CommentData fromEntity(Comment comment) {
         return CommentData.builder()
                 .commentId(comment.getId())
                 .userData(UserData.fromEntity(comment.getUser()))
