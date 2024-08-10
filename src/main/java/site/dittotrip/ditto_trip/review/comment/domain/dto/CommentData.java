@@ -13,10 +13,13 @@ import java.util.List;
 public class CommentData {
 
     private Long commentId;
-    private UserData userData;
     private String body;
     private LocalDateTime createdDateTime;
+
+    private UserData userData;
     private List<CommentData> childrenCommentsData;
+
+    private Boolean isMine;
 
     public static CommentData parentFromEntity(Comment comment) {
         CommentData commentData = CommentData.builder()
@@ -40,7 +43,7 @@ public class CommentData {
                 .build();
     }
 
-    public void putChildrenCommentData(Comment comment) {
+    private void putChildrenCommentData(Comment comment) {
         for (Comment childComment : comment.getChildComments()) {
             this.childrenCommentsData.add(childFromEntity(comment));
         }

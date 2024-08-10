@@ -44,20 +44,9 @@ public class ReviewListService {
         for (Review review : reviews) {
             Long likes = reviewLikeRepository.countByReview(review);
             Long commentsCount = commentRepository.countByReview(review);
+            Boolean isMine = putIsMine(user);
+            Boolean myLike = putMyLike(review, user);
 
-            Boolean isMine = Boolean.FALSE;
-            Optional<Review> findReview = reviewRepository.findByUser(user);
-            if (findReview.isPresent()) {
-                isMine = Boolean.TRUE;
-            }
-
-            Boolean myLike = Boolean.FALSE;
-            if (user != null) {
-                Optional<ReviewLike> reviewLike = reviewLikeRepository.findByReviewAndUser(review, user);
-                if (reviewLike.isPresent()) {
-                    myLike = Boolean.TRUE;
-                }
-            }
             reviewDataList.add(ReviewData.fromEntity(review, likes.intValue(), isMine, myLike, commentsCount.intValue()));
             totalRating += review.getRating();
         }
@@ -71,8 +60,34 @@ public class ReviewListService {
      * @return 0.0f, 0.5f, 1.0f, 1.5f, 2.0f, ... 4.5f, 5.0f
      */
     private Float calculateAvgOfRating(Float totalRating, Integer reviewCount) {
-        Float avg = totalRating / reviewCount.floatValue();
+        float avg = totalRating / reviewCount.floatValue();
         return Math.round(avg * 20) / 20.0f;
+    }
+
+    private Boolean putIsMine(User user) {
+        if (user == null) {
+            return Boolean.FALSE;
+        }
+
+        Optional<Review> findReview = reviewRepository.findByUser(user);
+        if (findReview.isPresent()) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+    private Boolean putMyLike(Review review, User user) {
+        if (user == null) {
+            return Boolean.FALSE;
+        }
+
+        Optional<ReviewLike> findReviewLike = reviewLikeRepository.findByReviewAndUser(review, user);
+        if (findReviewLike.isPresent()) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
     }
 
 }
