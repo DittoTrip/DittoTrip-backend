@@ -28,8 +28,6 @@ public class Review {
 
     private Float rating;
 
-    private Integer likes = 0;
-
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 

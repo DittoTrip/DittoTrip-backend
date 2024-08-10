@@ -10,4 +10,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(Review review);
 
+    Long countByReview(Review review);
+
 }

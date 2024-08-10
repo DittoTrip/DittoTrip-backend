@@ -15,4 +15,6 @@ public class ReviewListRes {
     private Float rating;
     private List<ReviewData> reviewDataList = new ArrayList<>();
 
+
+
 }

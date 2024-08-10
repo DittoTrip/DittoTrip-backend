@@ -12,4 +12,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findBySpotOrderByCreatedDateTimeDesc(Spot spot);
 
+    Long countBySpot(Spot spot);
+
 }

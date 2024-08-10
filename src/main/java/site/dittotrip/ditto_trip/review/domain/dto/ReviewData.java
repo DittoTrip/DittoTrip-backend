@@ -18,21 +18,22 @@ public class ReviewData {
     private String reviewBody;
     private Integer likes;
     private LocalDateTime createdDateTime;
-    private Integer commentsCount;
 
     private UserData userData;
     private List<ImageData> imageDataList;
 
     private Boolean myLike;
+    private Integer commentsCount;
 
-    public static ReviewData fromEntity(Review review, Boolean myLike) {
+    public static ReviewData fromEntity(Review review, Integer likes, Boolean myLike, Integer commentsCount) {
         ReviewData reviewData = ReviewData.builder()
                 .rating(review.getRating())
                 .reviewBody(review.getBody())
-                .likes(review.getLikes())
+                .likes(likes)
                 .createdDateTime(review.getCreatedDateTime())
                 .userData(UserData.fromEntity(review.getUser()))
                 .myLike(myLike)
+                .commentsCount(commentsCount)
                 .build();
 
         reviewData.putImageDataList(review.getImages());
