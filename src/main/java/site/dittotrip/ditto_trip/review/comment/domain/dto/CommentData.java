@@ -42,7 +42,7 @@ public class CommentData {
 
     private void putChildrenCommentData(Comment comment) {
         for (Comment childComment : comment.getChildComments()) {
-            this.childrenCommentsData.add(childFromEntity(comment));
+            this.childrenCommentsData.add(childFromEntity(childComment));
         }
     }
 
