@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.review.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import site.dittotrip.ditto_trip.review.domain.Review;
@@ -20,7 +21,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     List<Review> findTop3BySpotOrderByCreatedDateTimeDesc(Spot spot);
 
-    List<Review> findBySpotOrderByCreatedDateTimeDesc(Spot spot);
+    List<Review> findBySpot(Spot spot, Pageable pageable);
 
     Long countBySpot(Spot spot);
 

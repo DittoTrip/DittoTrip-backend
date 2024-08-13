@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,12 +34,9 @@ public class ReviewService {
     private final CommentRepository commentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
-    /**
-     * 최신순, 인기순
-     */
-    public ReviewListRes findReviewList(Long spotId, User user) {
+    public ReviewListRes findReviewList(Long spotId, User user, PageRequest pageRequest) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
-        List<Review> reviews = reviewRepository.findBySpotOrderByCreatedDateTimeDesc(spot);
+        List<Review> reviews = reviewRepository.findBySpot(spot, pageRequest);
 
         Integer reviewCount = reviewRepository.countBySpot(spot).intValue();
 
