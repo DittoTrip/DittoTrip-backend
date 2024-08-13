@@ -8,10 +8,12 @@ import site.dittotrip.ditto_trip.image.domain.Image;
 @Builder
 public class ImageData {
 
+    private Long imageId;
     private String filePath;
 
     public static ImageData fromEntity(Image image) {
         return ImageData.builder()
+                .imageId(image.getId())
                 .filePath(image.getFilePath()).build();
     }
 
