@@ -3,10 +3,12 @@ package site.dittotrip.ditto_trip.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
 import site.dittotrip.ditto_trip.review.domain.dto.list.ReviewListRes;
+import site.dittotrip.ditto_trip.review.domain.dto.save.ReviewSaveReq;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.reviewlike.domain.ReviewLike;
 import site.dittotrip.ditto_trip.review.reviewlike.repository.ReviewLikeRepository;
@@ -14,6 +16,7 @@ import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ReviewListService {
+public class ReviewService {
 
     private final SpotRepository spotRepository;
     private final ReviewRepository reviewRepository;
@@ -54,6 +57,36 @@ public class ReviewListService {
         Float avgRating = calculateAvgOfRating(totalRating, reviewCount);
 
         return new ReviewListRes(reviewCount, avgRating, reviewDataList);
+    }
+
+    public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
+        Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+
+        Review review = new Review(reviewSaveReq.getReviewBody(),
+                reviewSaveReq.getRating(),
+                LocalDateTime.now(),
+                user,
+                spot,
+                null);
+
+        reviewRepository.save(review);
+    }
+
+    /**
+     * 미완성
+     */
+    public void modifyReview(Long reviewId, User user, ReviewSaveReq reviewSaveReq) {
+
+    }
+
+    public void removeReview(Long reviewId, User user) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
+
+        if (!review.getUser().equals(user)) {
+            // throw new NoAuthorityException();
+        }
+
+        reviewRepository.delete(review);
     }
 
     /**
