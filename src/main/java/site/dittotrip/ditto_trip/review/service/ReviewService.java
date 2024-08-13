@@ -15,6 +15,7 @@ import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
 import site.dittotrip.ditto_trip.review.domain.dto.list.ReviewListRes;
 import site.dittotrip.ditto_trip.review.domain.dto.modify.ReviewModifyReq;
 import site.dittotrip.ditto_trip.review.domain.dto.save.ReviewSaveReq;
+import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.reviewlike.domain.ReviewLike;
@@ -65,9 +66,6 @@ public class ReviewService {
         return new ReviewListRes(reviewCount, avgRating, reviewDataList);
     }
 
-    /**
-     * 이미지 처리 x
-     */
     @Transactional(readOnly = false)
     public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -82,7 +80,6 @@ public class ReviewService {
                 user,
                 spot);
 
-        List<Image> images = new ArrayList<>();
         for (MultipartFile file : multipartFiles) {
             String filePath = imageManager.saveImage(file);
             Image image = Image.builder()
@@ -91,23 +88,40 @@ public class ReviewService {
                     .review(review)
                     .build();
 
-            images.add(image);
             imageRepository.save(image);
         }
 
-        review.setImages(images);
         reviewRepository.save(review);
     }
 
-    /**
-     * 이미지 처리 x
-     */
     @Transactional(readOnly = false)
-    public void modifyReview(Long reviewId, User user, ReviewModifyReq modifyReq) {
+    public void modifyReview(Long reviewId, User user, ReviewModifyReq modifyReq, List<MultipartFile> multipartFiles) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
         if (!review.getUser().equals(user)) {
-            // throw new NoAuthorityException();
+             throw new NoAuthorityException();
+        }
+
+        if (review.getImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 10) {
+            throw new TooManyImagesException();
+        }
+
+        modifyReq.modifyEntity(review);
+
+        for (Long removedImageId : modifyReq.getRemovedImageIds()) {
+            Image findImage = imageRepository.findById(removedImageId).orElseThrow(NoSuchElementException::new);
+            imageRepository.delete(findImage);
+        }
+
+        for (MultipartFile file : multipartFiles) {
+            String filePath = imageManager.saveImage(file);
+            Image image = Image.builder()
+                    .filePath(filePath)
+                    .foreignType(ForeignType.REVIEW)
+                    .review(review)
+                    .build();
+
+            imageRepository.save(image);
         }
 
         modifyReq.modifyEntity(review);

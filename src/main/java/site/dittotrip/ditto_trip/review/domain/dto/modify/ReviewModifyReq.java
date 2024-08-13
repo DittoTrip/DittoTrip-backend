@@ -4,14 +4,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.review.domain.Review;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class ReviewModifyReq {
 
     private Float rating;
     private String reviewBody;
-    // Removed Images
-    // Added Images
+    private List<Long> removedImageIds = new ArrayList<>();
 
     public void modifyEntity(Review review) {
         review.setRating(this.getRating());
