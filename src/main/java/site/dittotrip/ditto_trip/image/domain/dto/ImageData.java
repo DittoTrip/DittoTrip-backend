@@ -13,6 +13,7 @@ public class ImageData {
 
     public static ImageData fromEntity(Image image) {
         return ImageData.builder()
+                .imageId(image.getId())
                 .filePath(image.getFilePath()).build();
     }
 
