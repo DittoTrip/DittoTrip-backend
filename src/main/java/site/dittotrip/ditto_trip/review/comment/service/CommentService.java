@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.review.comment.domain.Comment;
 import site.dittotrip.ditto_trip.review.comment.domain.dto.CommentData;
 import site.dittotrip.ditto_trip.review.comment.domain.dto.list.CommentListRes;
+import site.dittotrip.ditto_trip.review.comment.domain.dto.save.CommentSaveReq;
 import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
@@ -19,7 +20,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CommentListService {
+public class CommentService {
 
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;
@@ -43,6 +44,40 @@ public class CommentListService {
 
         return new CommentListRes(commentDataList);
     }
+
+    public void saveComment(Long reviewId, Long parentCommentId, User user,
+                            CommentSaveReq commentSaveReq) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
+
+        Comment parentComment = null;
+        if (parentCommentId != null) {
+            parentComment = commentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+        }
+
+        Comment comment = new Comment(commentSaveReq.getBody(), user, review, parentComment);
+        commentRepository.save(comment);
+    }
+
+    public void modifyComment(Long commentId, User user, CommentSaveReq commentSaveReq) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+
+        if (!comment.getUser().equals(user)) {
+            // throw new NoAuthorityException;
+        }
+
+        comment.setBody(commentSaveReq.getBody());
+    }
+
+    public void removeComment(Long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+
+        if (!comment.getUser().equals(user)) {
+            // throw new NoAuthorityException;
+        }
+
+        commentRepository.delete(comment);
+    }
+
 
     private Boolean getIsMine(User user) {
         if (user == null) {

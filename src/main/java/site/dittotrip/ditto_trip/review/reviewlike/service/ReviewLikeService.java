@@ -9,10 +9,12 @@ import site.dittotrip.ditto_trip.review.reviewlike.exception.ExistingReviewLikeE
 import site.dittotrip.ditto_trip.review.reviewlike.repository.ReviewLikeRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.util.NoSuchElementException;
+
 @Service
-@Transactional(readOnly = false)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ReviewLikeSaveService {
+public class ReviewLikeService {
 
     private final ReviewLikeRepository reviewLikeRepository;
 
@@ -24,6 +26,12 @@ public class ReviewLikeSaveService {
         ReviewLike reviewLike = new ReviewLike(review, user);
         reviewLikeRepository.save(reviewLike);
         review.setLikes(review.getLikes() + 1);
+    }
+
+    public void removeReviewLike(Review review, User user) {
+        ReviewLike reviewLike = reviewLikeRepository.findByReviewAndUser(review, user).orElseThrow(NoSuchElementException::new);
+        reviewLikeRepository.delete(reviewLike);
+        review.setLikes(review.getLikes() - 1);
     }
 
 }
