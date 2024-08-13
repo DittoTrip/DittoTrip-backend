@@ -59,6 +59,7 @@ public class ReviewService {
         return new ReviewListRes(reviewCount, avgRating, reviewDataList);
     }
 
+    @Transactional(readOnly = false)
     public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
@@ -75,10 +76,12 @@ public class ReviewService {
     /**
      * 미완성
      */
+    @Transactional(readOnly = false)
     public void modifyReview(Long reviewId, User user, ReviewSaveReq reviewSaveReq) {
 
     }
 
+    @Transactional(readOnly = false)
     public void removeReview(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
