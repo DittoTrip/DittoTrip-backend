@@ -15,6 +15,7 @@ import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
 import site.dittotrip.ditto_trip.review.domain.dto.list.ReviewListRes;
 import site.dittotrip.ditto_trip.review.domain.dto.modify.ReviewModifyReq;
 import site.dittotrip.ditto_trip.review.domain.dto.save.ReviewSaveReq;
+import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.reviewlike.domain.ReviewLike;
 import site.dittotrip.ditto_trip.review.reviewlike.repository.ReviewLikeRepository;
@@ -70,6 +71,10 @@ public class ReviewService {
     @Transactional(readOnly = false)
     public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+
+        if (multipartFiles.size() > 10) {
+            throw new TooManyImagesException();
+        }
 
         Review review = new Review(reviewSaveReq.getReviewBody(),
                 reviewSaveReq.getRating(),
