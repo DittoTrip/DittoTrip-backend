@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.image.domain;
+package site.dittotrip.ditto_trip.image.manager;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
