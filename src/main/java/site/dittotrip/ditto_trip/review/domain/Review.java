@@ -46,14 +46,14 @@ public class Review {
     private Spot spot;
 
     @OneToMany(mappedBy = "review")
+    @Setter
     private List<Image> images = new ArrayList<>();
 
-    public Review(String body, Float rating, LocalDateTime createdDateTime, User user, Spot spot, List<Image> images) {
+    public Review(String body, Float rating, LocalDateTime createdDateTime, User user, Spot spot) {
         this.body = body;
         this.rating = rating;
         this.createdDateTime = createdDateTime;
         this.user = user;
         this.spot = spot;
-        this.images = images;
     }
 }

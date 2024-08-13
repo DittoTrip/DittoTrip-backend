@@ -5,6 +5,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.image.config.ImageManager;
+import site.dittotrip.ditto_trip.image.domain.Image;
+import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
+import site.dittotrip.ditto_trip.image.repository.ImageRepository;
 import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
@@ -33,6 +37,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final ImageRepository imageRepository;
+
+    private final ImageManager imageManager;
 
     public ReviewListRes findReviewList(Long spotId, User user, PageRequest pageRequest) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -68,9 +75,22 @@ public class ReviewService {
                 reviewSaveReq.getRating(),
                 LocalDateTime.now(),
                 user,
-                spot,
-                null);
+                spot);
 
+        List<Image> images = new ArrayList<>();
+        for (MultipartFile file : multipartFiles) {
+            String filePath = imageManager.saveImage(file);
+            Image image = Image.builder()
+                    .filePath(filePath)
+                    .foreignType(ForeignType.REVIEW)
+                    .review(review)
+                    .build();
+
+            images.add(image);
+            imageRepository.save(image);
+        }
+
+        review.setImages(images);
         reviewRepository.save(review);
     }
 
