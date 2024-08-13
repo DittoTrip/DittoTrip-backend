@@ -16,12 +16,11 @@ import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class SpotDetailService {
+public class SpotService {
 
     private final SpotRepository spotRepository;
     private final StillCutRepository stillCutRepository;
