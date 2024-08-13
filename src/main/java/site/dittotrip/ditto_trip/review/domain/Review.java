@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.review.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
@@ -27,6 +28,9 @@ public class Review {
     private String body;
 
     private Float rating;
+
+    @Setter
+    private Integer likes;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;

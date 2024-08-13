@@ -26,11 +26,11 @@ public class ReviewData {
     private Boolean myLike;
     private Integer commentsCount;
 
-    public static ReviewData fromEntity(Review review, Integer likes, Boolean isMine, Boolean myLike, Integer commentsCount) {
+    public static ReviewData fromEntity(Review review, Boolean isMine, Boolean myLike, Integer commentsCount) {
         ReviewData reviewData = ReviewData.builder()
                 .rating(review.getRating())
                 .reviewBody(review.getBody())
-                .likes(likes)
+                .likes(review.getLikes())
                 .createdDateTime(review.getCreatedDateTime())
                 .userData(UserData.fromEntity(review.getUser()))
                 .isMine(isMine)

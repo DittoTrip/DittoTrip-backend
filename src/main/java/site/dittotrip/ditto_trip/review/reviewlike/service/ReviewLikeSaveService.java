@@ -23,6 +23,7 @@ public class ReviewLikeSaveService {
 
         ReviewLike reviewLike = new ReviewLike(review, user);
         reviewLikeRepository.save(reviewLike);
+        review.setLikes(review.getLikes() + 1);
     }
 
 }

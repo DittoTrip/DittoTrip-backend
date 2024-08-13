@@ -11,6 +11,4 @@ public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 
     Optional<ReviewLike> findByReviewAndUser(Review review, User user);
 
-    Long countByReview(Review review);
-
 }

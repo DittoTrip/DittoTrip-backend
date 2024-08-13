@@ -20,6 +20,7 @@ public class ReviewLikeRemoveService {
     public void removeReviewLike(Review review, User user) {
         ReviewLike reviewLike = reviewLikeRepository.findByReviewAndUser(review, user).orElseThrow(NoSuchElementException::new);
         reviewLikeRepository.delete(reviewLike);
+        review.setLikes(review.getLikes() - 1);
     }
 
 }

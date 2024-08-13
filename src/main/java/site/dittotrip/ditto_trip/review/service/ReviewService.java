@@ -45,12 +45,11 @@ public class ReviewService {
 
         List<ReviewData> reviewDataList = new ArrayList<>();
         for (Review review : reviews) {
-            Long likes = reviewLikeRepository.countByReview(review);
             Long commentsCount = commentRepository.countByReview(review);
             Boolean isMine = getIsMine(user);
             Boolean myLike = getMyLike(review, user);
 
-            reviewDataList.add(ReviewData.fromEntity(review, likes.intValue(), isMine, myLike, commentsCount.intValue()));
+            reviewDataList.add(ReviewData.fromEntity(review, isMine, myLike, commentsCount.intValue()));
             totalRating += review.getRating();
         }
 
