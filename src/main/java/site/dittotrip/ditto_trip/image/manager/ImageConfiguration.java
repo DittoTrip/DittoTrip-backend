@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class ImageManager implements WebMvcConfigurer {
+public class ImageConfiguration implements WebMvcConfigurer {
 
     @Value("${image.connect-path}")
     private String connectPath;
