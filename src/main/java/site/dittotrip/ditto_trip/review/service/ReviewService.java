@@ -8,6 +8,7 @@ import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
 import site.dittotrip.ditto_trip.review.domain.dto.list.ReviewListRes;
+import site.dittotrip.ditto_trip.review.domain.dto.modify.ReviewModifyReq;
 import site.dittotrip.ditto_trip.review.domain.dto.save.ReviewSaveReq;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.reviewlike.domain.ReviewLike;
@@ -58,6 +59,9 @@ public class ReviewService {
         return new ReviewListRes(reviewCount, avgRating, reviewDataList);
     }
 
+    /**
+     * 이미지 처리 x
+     */
     @Transactional(readOnly = false)
     public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -73,11 +77,17 @@ public class ReviewService {
     }
 
     /**
-     * 미완성
+     * 이미지 처리 x
      */
     @Transactional(readOnly = false)
-    public void modifyReview(Long reviewId, User user, ReviewSaveReq reviewSaveReq) {
+    public void modifyReview(Long reviewId, User user, ReviewModifyReq modifyReq) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
+        if (!review.getUser().equals(user)) {
+            // throw new NoAuthorityException();
+        }
+
+        modifyReq.modifyEntity(review);
     }
 
     @Transactional(readOnly = false)

@@ -25,8 +25,10 @@ public class Review {
     private Long id;
 
     @Column(name = "review_body")
+    @Setter
     private String body;
 
+    @Setter
     private Float rating;
 
     @Setter

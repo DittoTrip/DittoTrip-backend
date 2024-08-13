@@ -9,5 +9,6 @@ public class ReviewSaveReq {
 
     private Float rating;
     private String reviewBody;
+    // Images
 
 }
