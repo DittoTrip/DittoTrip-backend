@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 @Slf4j
 @Component
-public class ImageConfiguration {
+public class ImageManager {
 
     @Value("${image.host-name}")
     private String hostName;
