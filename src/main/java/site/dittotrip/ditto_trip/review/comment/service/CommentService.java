@@ -45,6 +45,7 @@ public class CommentService {
         return new CommentListRes(commentDataList);
     }
 
+    @Transactional(readOnly = false)
     public void saveComment(Long reviewId, Long parentCommentId, User user,
                             CommentSaveReq commentSaveReq) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
@@ -58,6 +59,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = false)
     public void modifyComment(Long commentId, User user, CommentSaveReq commentSaveReq) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
@@ -68,6 +70,7 @@ public class CommentService {
         comment.setBody(commentSaveReq.getBody());
     }
 
+    @Transactional(readOnly = false)
     public void removeComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
