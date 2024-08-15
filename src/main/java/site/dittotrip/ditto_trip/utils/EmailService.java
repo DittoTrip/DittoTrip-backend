@@ -18,5 +18,3 @@ public class EmailService {
     mailSender.send(message);
   }
 }
-commit.gpgsign=true
-q
