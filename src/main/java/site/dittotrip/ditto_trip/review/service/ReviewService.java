@@ -1,14 +1,22 @@
 package site.dittotrip.ditto_trip.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.image.config.ImageManager;
+import site.dittotrip.ditto_trip.image.domain.Image;
+import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
+import site.dittotrip.ditto_trip.image.repository.ImageRepository;
 import site.dittotrip.ditto_trip.review.comment.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
 import site.dittotrip.ditto_trip.review.domain.dto.list.ReviewListRes;
+import site.dittotrip.ditto_trip.review.domain.dto.modify.ReviewModifyReq;
 import site.dittotrip.ditto_trip.review.domain.dto.save.ReviewSaveReq;
+import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.reviewlike.domain.ReviewLike;
 import site.dittotrip.ditto_trip.review.reviewlike.repository.ReviewLikeRepository;
@@ -31,13 +39,13 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final ImageRepository imageRepository;
 
-    /**
-     * 최신순, 인기순
-     */
-    public ReviewListRes findReviewList(Long spotId, User user) {
+    private final ImageManager imageManager;
+
+    public ReviewListRes findReviewList(Long spotId, User user, PageRequest pageRequest) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
-        List<Review> reviews = reviewRepository.findBySpotOrderByCreatedDateTimeDesc(spot);
+        List<Review> reviews = reviewRepository.findBySpot(spot, pageRequest);
 
         Integer reviewCount = reviewRepository.countBySpot(spot).intValue();
 
@@ -62,22 +70,61 @@ public class ReviewService {
     public void saveReview(Long spotId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
+        if (multipartFiles.size() > 10) {
+            throw new TooManyImagesException();
+        }
+
         Review review = new Review(reviewSaveReq.getReviewBody(),
                 reviewSaveReq.getRating(),
                 LocalDateTime.now(),
                 user,
-                spot,
-                null);
+                spot);
+
+        for (MultipartFile file : multipartFiles) {
+            String filePath = imageManager.saveImage(file);
+            Image image = Image.builder()
+                    .filePath(filePath)
+                    .foreignType(ForeignType.REVIEW)
+                    .review(review)
+                    .build();
+
+            imageRepository.save(image);
+        }
 
         reviewRepository.save(review);
     }
 
-    /**
-     * 미완성
-     */
     @Transactional(readOnly = false)
-    public void modifyReview(Long reviewId, User user, ReviewSaveReq reviewSaveReq) {
+    public void modifyReview(Long reviewId, User user, ReviewModifyReq modifyReq, List<MultipartFile> multipartFiles) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
+        if (!review.getUser().equals(user)) {
+             throw new NoAuthorityException();
+        }
+
+        if (review.getImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 10) {
+            throw new TooManyImagesException();
+        }
+
+        modifyReq.modifyEntity(review);
+
+        for (Long removedImageId : modifyReq.getRemovedImageIds()) {
+            Image findImage = imageRepository.findById(removedImageId).orElseThrow(NoSuchElementException::new);
+            imageRepository.delete(findImage);
+        }
+
+        for (MultipartFile file : multipartFiles) {
+            String filePath = imageManager.saveImage(file);
+            Image image = Image.builder()
+                    .filePath(filePath)
+                    .foreignType(ForeignType.REVIEW)
+                    .review(review)
+                    .build();
+
+            imageRepository.save(image);
+        }
+
+        modifyReq.modifyEntity(review);
     }
 
     @Transactional(readOnly = false)
