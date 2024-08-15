@@ -1,23 +1,29 @@
 package site.dittotrip.ditto_trip.user.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-/**
- * 임시 엔티티
- */
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Data
 @Table(name = "users")
-@NoArgsConstructor
-@Getter
 public class User {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "users_id")
+  private Long id;
+  
+  @Column(name = "user_name")
+  private String name;
+  
+  private String email;
+  private String password;
+  private String nickname;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "users_id")
-    private Long id;
-
-    @Column(name = "user_name")
-    private String name;
-
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Set<GrantedAuthority> authorities = new HashSet<>();
 }
