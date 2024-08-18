@@ -2,8 +2,8 @@ package site.dittotrip.ditto_trip.category.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.category.domain.dto.detail.CategoryDetailRes;
-import site.dittotrip.ditto_trip.category.domain.dto.list.CategoryListRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
 
 @RestController

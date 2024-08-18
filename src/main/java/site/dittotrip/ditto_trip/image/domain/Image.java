@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.category.domain.Category;
-import site.dittotrip.ditto_trip.image.domain.enumerated.ForeignType;
+import site.dittotrip.ditto_trip.image.domain.enums.ForeignType;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
+import site.dittotrip.ditto_trip.spot.domain.StillCut;
 
 import java.time.LocalDateTime;
 
