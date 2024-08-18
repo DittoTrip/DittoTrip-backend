@@ -4,18 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
-import site.dittotrip.ditto_trip.category.domain.dto.detail.CategoryDetailRes;
-import site.dittotrip.ditto_trip.category.domain.dto.list.CategoryListRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
-import site.dittotrip.ditto_trip.spot.categoryspot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.categoryspot.repository.CategorySpotRepository;
+import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
+import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static site.dittotrip.ditto_trip.category.domain.dto.list.CategoryListRes.fromEntities;
+import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.fromEntities;
 
 @Service
 @Transactional(readOnly = true)

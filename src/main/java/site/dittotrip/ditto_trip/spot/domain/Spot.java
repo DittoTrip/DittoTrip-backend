@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
 import site.dittotrip.ditto_trip.image.domain.Image;
-import site.dittotrip.ditto_trip.spot.categoryspot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.stillcut.domain.StillCut;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
