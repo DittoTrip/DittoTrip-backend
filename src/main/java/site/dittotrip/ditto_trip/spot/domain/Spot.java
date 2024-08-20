@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
-import site.dittotrip.ditto_trip.image.domain.Image;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -28,15 +27,13 @@ public class Spot {
     private String phoneNumber;
     private String homeUri;
     private Point point;
+    private String imagePath;
 
     @OneToMany(mappedBy = "spot")
     private List<CategorySpot> categorySpots;
 
-    @OneToOne(mappedBy = "spot")
-    private Image image;
-
     @OneToMany(mappedBy = "spot")
-    private List<StillCut> stillCuts = new ArrayList<>();
+    private List<SpotImage> SpotImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot")
     private List<SpotHashtag> spotHashtags = new ArrayList<>();

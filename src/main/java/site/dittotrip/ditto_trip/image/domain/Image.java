@@ -10,7 +10,7 @@ import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.image.domain.enums.ForeignType;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.StillCut;
+import site.dittotrip.ditto_trip.spot.domain.SpotImage;
 
 import java.time.LocalDateTime;
 
@@ -45,7 +45,7 @@ public class Image {
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "still_cut_id")
-    private StillCut stillCut;
+    private SpotImage spotImage;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "review_id")

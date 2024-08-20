@@ -10,7 +10,7 @@ import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
 import site.dittotrip.ditto_trip.spot.repository.SpotBookmarkRepository;
-import site.dittotrip.ditto_trip.spot.domain.StillCut;
+import site.dittotrip.ditto_trip.spot.domain.SpotImage;
 import site.dittotrip.ditto_trip.spot.repository.StillCutRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -30,11 +30,11 @@ public class SpotService {
     public SpotDetailRes findSpotDetail(Long spotId, User user) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        List<StillCut> stillCuts = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
+        List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         SpotBookmark spotBookmark = spotBookmarkRepository.findBySpotAndUser(spot, user).orElse(null);
 
-        return SpotDetailRes.fromEntity(spot, stillCuts, reviews, spotBookmark);
+        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, spotBookmark);
     }
 
 }

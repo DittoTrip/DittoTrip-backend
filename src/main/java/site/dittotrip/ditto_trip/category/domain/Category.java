@@ -24,6 +24,7 @@ public class Category {
     private String categoryName;
     private CategoryMajorType categoryMajorType;
     private CategorySubType categorySubType;
+    private String imagePath;
 
     @OneToMany(mappedBy = "category")
     private List<CategoryHashtag> categoryHashtags = new ArrayList<>();
@@ -31,15 +32,13 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
-    @OneToOne(mappedBy = "category")
-    private Image image;
-
     /**
      * for CategoryListRes test
      */
-    public Category(String categoryName, CategoryMajorType categoryMajorType, CategorySubType categorySubType) {
+    public Category(String categoryName, CategoryMajorType categoryMajorType, CategorySubType categorySubType, String imagePath) {
         this.categoryName = categoryName;
         this.categoryMajorType = categoryMajorType;
         this.categorySubType = categorySubType;
+        this.imagePath = imagePath;
     }
 }

@@ -5,7 +5,7 @@ import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewMiniData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
-import site.dittotrip.ditto_trip.spot.domain.StillCut;
+import site.dittotrip.ditto_trip.spot.domain.SpotImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,29 +19,29 @@ public class SpotDetailRes {
 
     private SpotData spotData;
 //    private CategoryData categoryData;
-    private List<StillCutData> stillCutDataList = new ArrayList<>();
+    private List<SpotImageData> spotImageDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
     private Boolean spotDittoData;
     // 사진 가이드
     // 주변 관광지
 
-    public static SpotDetailRes fromEntity(Spot spot, List<StillCut> stillCuts, List<Review> reviews, SpotBookmark spotBookmark) {
+    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, SpotBookmark spotBookmark) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
         spotDetailRes.setSpotData(SpotData.fromEntity(spot));
-        spotDetailRes.putStillCutDataList(stillCuts);
+        spotDetailRes.putStillCutDataList(SpotImages);
         spotDetailRes.putReviewDataList(reviews);
         spotDetailRes.putSpotDittoData(spotBookmark);
 
         return spotDetailRes;
     }
 
-    private void putStillCutDataList(List<StillCut> stillCuts) {
-        List<StillCutData> stillCutDataList = new ArrayList<>();
-        for (StillCut stillCut : stillCuts) {
-            stillCutDataList.add(StillCutData.fromEntity(stillCut));
+    private void putStillCutDataList(List<SpotImage> SpotImages) {
+        List<SpotImageData> spotImageDataList = new ArrayList<>();
+        for (SpotImage spotImage : SpotImages) {
+            spotImageDataList.add(SpotImageData.fromEntity(spotImage));
         }
-        this.setStillCutDataList(stillCutDataList);
+        this.setSpotImageDataList(spotImageDataList);
     }
 
     private void putReviewDataList(List<Review> reviews) {

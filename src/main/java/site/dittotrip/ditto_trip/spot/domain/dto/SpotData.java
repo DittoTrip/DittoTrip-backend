@@ -19,7 +19,7 @@ public class SpotData {
     private Float rating;
     private String address;
     private Point point;
-    private String imageFilePath;
+    private String imagePath;
 //    private List<Hashtag> hashtags = new ArrayList<>();
 
     /**
@@ -31,7 +31,7 @@ public class SpotData {
                 .spotName(spot.getSpotName())
                 .address(spot.getAddress())
                 .point(spot.getPoint())
-                .imageFilePath(spot.getImage().getFilePath())
+                .imagePath(spot.getImagePath())
                 .build();
 
         return spotData;
