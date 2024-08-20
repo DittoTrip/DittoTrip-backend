@@ -7,7 +7,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.Optional;
 
-public interface SpotDittoRepository extends JpaRepository<SpotBookmark, Long> {
+public interface SpotBookmarkRepository extends JpaRepository<SpotBookmark, Long> {
 
     Optional<SpotBookmark> findBySpotAndUser(Spot spot, User user);
 
