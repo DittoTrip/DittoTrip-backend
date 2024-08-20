@@ -11,6 +11,7 @@ import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * 작업 중
@@ -23,7 +24,7 @@ public class CategoryBookmarkService {
     private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategoryRepository categoryRepository;
 
-    private void addCategoryBookmark(Long categoryId, User user) {
+    public void addCategoryBookmark(Long categoryId, User user) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
         categoryBookmarkRepository.findByCategoryAndUser(category, user).ifPresent(m -> {
@@ -34,8 +35,11 @@ public class CategoryBookmarkService {
         categoryBookmarkRepository.save(categoryBookmark);
     }
 
-//    private void removeCategoryDibs(Long categoryDibsId, User user) {
-//        if
-//    }
+    public void removeCategoryBookmark(Long categoryId, User user) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+
+        CategoryBookmark categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, user).orElseThrow(NoSuchElementException::new);
+        categoryBookmarkRepository.delete(categoryBookmark);
+    }
 
 }

@@ -1,11 +1,14 @@
 package site.dittotrip.ditto_trip.category.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
+import site.dittotrip.ditto_trip.user.domain.User;
 
 @RestController
 @RequestMapping("/category")
@@ -31,13 +34,17 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}")
-    public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId) {
-
+    public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
+                                    @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        User user = customUserDetails.getUser();
+        categoryBookmarkService.addCategoryBookmark(categoryId, user);
     }
 
-    @DeleteMapping("/{categoryId]")
-    public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId) {
-
+    @DeleteMapping("/{categoryId}")
+    public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
+                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        User user = customUserDetails.getUser();
+        categoryBookmarkService.removeCategoryBookmark(categoryId, user);
     }
 
 }
