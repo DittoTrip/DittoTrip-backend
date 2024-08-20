@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
+import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
 
 @RestController
@@ -12,6 +13,7 @@ import site.dittotrip.ditto_trip.category.service.CategoryService;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryBookmarkService categoryBookmarkService;
 
     @GetMapping("/list")
     public CategoryListRes categoryList() {
@@ -26,6 +28,16 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     public CategoryDetailRes categoryDetail(@PathVariable(name = "categoryId") Long categoryId) {
         return categoryService.findCategoryDetail(categoryId);
+    }
+
+    @PostMapping("/{categoryId}")
+    public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId) {
+
+    }
+
+    @DeleteMapping("/{categoryId]")
+    public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId) {
+
     }
 
 }
