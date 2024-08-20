@@ -3,14 +3,14 @@ package site.dittotrip.ditto_trip.spot.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.dittotrip.ditto_trip.spot.service.SpotDittoService;
+import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 
 @RestController
 @RequestMapping("/spot/{spotId}/spot-ditto")
 @RequiredArgsConstructor
-public class SpotDittoController {
+public class SpotBookmarkController {
 
-    private final SpotDittoService spotDittoService;
+    private final SpotBookmarkService spotBookmarkService;
 
     /**
      * SpotDitto 추가

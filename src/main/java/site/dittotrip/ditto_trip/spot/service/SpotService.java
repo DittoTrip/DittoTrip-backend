@@ -8,7 +8,7 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
-import site.dittotrip.ditto_trip.spot.domain.SpotDitto;
+import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
 import site.dittotrip.ditto_trip.spot.repository.SpotDittoRepository;
 import site.dittotrip.ditto_trip.spot.domain.StillCut;
 import site.dittotrip.ditto_trip.spot.repository.StillCutRepository;
@@ -32,9 +32,9 @@ public class SpotService {
 
         List<StillCut> stillCuts = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
-        SpotDitto spotDitto = spotDittoRepository.findBySpotAndUser(spot, user).orElse(null);
+        SpotBookmark spotBookmark = spotDittoRepository.findBySpotAndUser(spot, user).orElse(null);
 
-        return SpotDetailRes.fromEntity(spot, stillCuts, reviews, spotDitto);
+        return SpotDetailRes.fromEntity(spot, stillCuts, reviews, spotBookmark);
     }
 
 }
