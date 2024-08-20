@@ -33,14 +33,14 @@ public class CategoryController {
         return categoryService.findCategoryDetail(categoryId);
     }
 
-    @PostMapping("/{categoryId}")
+    @PostMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
         categoryBookmarkService.addCategoryBookmark(categoryId, user);
     }
 
-    @DeleteMapping("/{categoryId}")
+    @DeleteMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
