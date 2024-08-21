@@ -54,6 +54,9 @@ public class SpotController {
         return spotService.findSpotDetail(spotId, user);
     }
 
+    /**
+     * SpotBookmark
+     */
     @PostMapping("/spot/{spotId}/bookmark")
     public void spotBookmarkAdd(@PathVariable(name = "spotId") Long spotId,
                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
