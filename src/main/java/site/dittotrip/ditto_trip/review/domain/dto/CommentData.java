@@ -2,7 +2,7 @@ package site.dittotrip.ditto_trip.review.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.review.domain.Comment;
+import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 import java.time.LocalDateTime;
@@ -21,28 +21,28 @@ public class CommentData {
 
     private Boolean isMine;
 
-    public static CommentData parentFromEntity(Comment comment) {
-        CommentData commentData = fromEntity(comment);
-        commentData.putChildrenCommentData(comment);
+    public static CommentData parentFromEntity(ReviewComment reviewComment) {
+        CommentData commentData = fromEntity(reviewComment);
+        commentData.putChildrenCommentData(reviewComment);
         return commentData;
     }
 
-    private static CommentData childFromEntity(Comment comment) {
-        return fromEntity(comment);
+    private static CommentData childFromEntity(ReviewComment reviewComment) {
+        return fromEntity(reviewComment);
     }
 
-    private static CommentData fromEntity(Comment comment) {
+    private static CommentData fromEntity(ReviewComment reviewComment) {
         return CommentData.builder()
-                .commentId(comment.getId())
-                .userData(UserData.fromEntity(comment.getUser()))
-                .body(comment.getBody())
-                .createdDateTime(comment.getCreatedDateTime())
+                .commentId(reviewComment.getId())
+                .userData(UserData.fromEntity(reviewComment.getUser()))
+                .body(reviewComment.getBody())
+                .createdDateTime(reviewComment.getCreatedDateTime())
                 .build();
     }
 
-    private void putChildrenCommentData(Comment comment) {
-        for (Comment childComment : comment.getChildComments()) {
-            this.childrenCommentsData.add(childFromEntity(childComment));
+    private void putChildrenCommentData(ReviewComment reviewComment) {
+        for (ReviewComment childReviewComment : reviewComment.getChildReviewComments()) {
+            this.childrenCommentsData.add(childFromEntity(childReviewComment));
         }
     }
 

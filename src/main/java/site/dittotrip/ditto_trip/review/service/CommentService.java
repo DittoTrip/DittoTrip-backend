@@ -3,7 +3,7 @@ package site.dittotrip.ditto_trip.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.dittotrip.ditto_trip.review.domain.Comment;
+import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentData;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentListRes;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
@@ -33,11 +33,11 @@ public class CommentService {
     public CommentListRes findCommentList(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
-        List<Comment> parentComments = commentRepository.findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(review);
+        List<ReviewComment> parentReviewComments = commentRepository.findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(review);
 
         List<CommentData> commentDataList = new ArrayList<>();
-        for (Comment parentComment : parentComments) {
-            CommentData commentData = CommentData.parentFromEntity(parentComment);
+        for (ReviewComment parentReviewComment : parentReviewComments) {
+            CommentData commentData = CommentData.parentFromEntity(parentReviewComment);
             commentData.setIsMine(getIsMine(user));
             commentDataList.add(commentData);
         }
@@ -50,35 +50,35 @@ public class CommentService {
                             CommentSaveReq commentSaveReq) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
-        Comment parentComment = null;
+        ReviewComment parentReviewComment = null;
         if (parentCommentId != null) {
-            parentComment = commentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+            parentReviewComment = commentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
         }
 
-        Comment comment = new Comment(commentSaveReq.getBody(), user, review, parentComment);
-        commentRepository.save(comment);
+        ReviewComment reviewComment = new ReviewComment(commentSaveReq.getBody(), user, review, parentReviewComment);
+        commentRepository.save(reviewComment);
     }
 
     @Transactional(readOnly = false)
     public void modifyComment(Long commentId, User user, CommentSaveReq commentSaveReq) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+        ReviewComment reviewComment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
-        if (!comment.getUser().equals(user)) {
+        if (!reviewComment.getUser().equals(user)) {
             // throw new NoAuthorityException;
         }
 
-        comment.setBody(commentSaveReq.getBody());
+        reviewComment.setBody(commentSaveReq.getBody());
     }
 
     @Transactional(readOnly = false)
     public void removeComment(Long commentId, User user) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+        ReviewComment reviewComment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
-        if (!comment.getUser().equals(user)) {
+        if (!reviewComment.getUser().equals(user)) {
             // throw new NoAuthorityException;
         }
 
-        commentRepository.delete(comment);
+        commentRepository.delete(reviewComment);
     }
 
 
@@ -87,7 +87,7 @@ public class CommentService {
             return Boolean.FALSE;
         }
 
-        Optional<Comment> findComment = commentRepository.findByUser(user);
+        Optional<ReviewComment> findComment = commentRepository.findByUser(user);
         if (findComment.isPresent()) {
             return Boolean.TRUE;
         } else {
