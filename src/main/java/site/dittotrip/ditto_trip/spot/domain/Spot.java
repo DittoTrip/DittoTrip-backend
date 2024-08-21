@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
+import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
 import java.time.LocalTime;
@@ -26,11 +27,13 @@ public class Spot {
     private LocalTime endTime;
     private String phoneNumber;
     private String homeUri;
-    private Point point;
+    private Double pointX;
+    private Double pointY;
     private String imagePath;
+    private Float rating;
 
     @OneToMany(mappedBy = "spot")
-    private List<CategorySpot> categorySpots;
+    private List<CategorySpot> categorySpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot")
     private List<SpotImage> spotImages = new ArrayList<>();

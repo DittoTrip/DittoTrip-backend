@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
@@ -50,11 +49,6 @@ public class CategoryController {
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             @RequestParam(name = "page") Integer page) {
         return categoryService.findCategoryPage(subType, page);
-    }
-
-    @GetMapping("/{categoryId}")
-    public CategoryDetailRes categoryDetail(@PathVariable(name = "categoryId") Long categoryId) {
-        return categoryService.findCategoryDetail(categoryId);
     }
 
     @PostMapping("/{categoryId}/bookmark")
