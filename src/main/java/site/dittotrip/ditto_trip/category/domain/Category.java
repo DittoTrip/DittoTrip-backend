@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
+import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;

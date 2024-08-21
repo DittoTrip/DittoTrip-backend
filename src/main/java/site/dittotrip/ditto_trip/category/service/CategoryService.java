@@ -7,15 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
-import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -31,7 +28,6 @@ import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.from
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategorySpotRepository categorySpotRepository;
     private final CategoryBookmarkRepository categoryBookmarkRepository;
 
     private static final int PAGE_SIZE = 10;
@@ -74,19 +70,19 @@ public class CategoryService {
     /**
      * 스팟 리스트 조회로 옮기기
      */
-    public CategoryDetailRes findCategoryDetail(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        List<CategorySpot> categorySpots = categorySpotRepository.findByScope(category);
-
-        return CategoryDetailRes.fromEntity(category, convertSpotList(categorySpots));
-    }
-
-    private List<Spot> convertSpotList(List<CategorySpot> categorySpots) {
-        List<Spot> spots = new ArrayList<>();
-        for (CategorySpot categorySpot : categorySpots) {
-            spots.add(categorySpot.getSpot());
-        }
-        return spots;
-    }
+//    public CategoryDetailRes findCategoryDetail(Long categoryId) {
+//        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+//        List<CategorySpot> categorySpots = categorySpotRepository.findByScope(category);
+//
+//        return CategoryDetailRes.fromEntity(category, convertSpotList(categorySpots));
+//    }
+//
+//    private List<Spot> convertSpotList(List<CategorySpot> categorySpots) {
+//        List<Spot> spots = new ArrayList<>();
+//        for (CategorySpot categorySpot : categorySpots) {
+//            spots.add(categorySpot.getSpot());
+//        }
+//        return spots;
+//    }
 
 }
