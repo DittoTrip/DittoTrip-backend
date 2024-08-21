@@ -90,7 +90,7 @@ public class SpotService {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
         List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
-        List<Review> reviews = reviewRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
+        List<Review> reviews = reviewRepository.findTop3BySpot(spot);
         Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, spotBookmarkOptional.isPresent());

@@ -30,20 +30,20 @@ public class CommentService {
      * 자식 댓글 날짜 정렬안되면 수정하기
      * 삭제된 댓글의 자식댓글 보여줄 것인가 등등 기획 확인 후 수정
      */
-    public CommentListRes findCommentList(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-
-        List<ReviewComment> parentReviewComments = commentRepository.findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(review);
-
-        List<CommentData> commentDataList = new ArrayList<>();
-        for (ReviewComment parentReviewComment : parentReviewComments) {
-            CommentData commentData = CommentData.parentFromEntity(parentReviewComment);
-            commentData.setIsMine(getIsMine(user));
-            commentDataList.add(commentData);
-        }
-
-        return new CommentListRes(commentDataList);
-    }
+//    public CommentListRes findCommentList(Long reviewId, User user) {
+//        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
+//
+//        List<ReviewComment> parentReviewComments = commentRepository.findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(review);
+//
+//        List<CommentData> commentDataList = new ArrayList<>();
+//        for (ReviewComment parentReviewComment : parentReviewComments) {
+//            CommentData commentData = CommentData.parentFromEntity(parentReviewComment);
+//            commentData.setIsMine(getIsMine(user));
+//            commentDataList.add(commentData);
+//        }
+//
+//        return new CommentListRes(commentDataList);
+//    }
 
     @Transactional(readOnly = false)
     public void saveComment(Long reviewId, Long parentCommentId, User user,

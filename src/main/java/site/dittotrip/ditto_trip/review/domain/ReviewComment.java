@@ -37,7 +37,7 @@ public class ReviewComment {
     private Review review;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "parent_comment_id")
+    @JoinColumn(name = "parent_review_comment_id")
     private ReviewComment parentReviewComment = null;
 
     @OneToMany(mappedBy = "parentReviewComment")
