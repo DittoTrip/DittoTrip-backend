@@ -46,8 +46,7 @@ public class Review {
     private Spot spot;
 
     @OneToMany(mappedBy = "review")
-    @Setter
-    private List<Image> images = new ArrayList<>();
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     public Review(String body, Float rating, LocalDateTime createdDateTime, User user, Spot spot) {
         this.body = body;

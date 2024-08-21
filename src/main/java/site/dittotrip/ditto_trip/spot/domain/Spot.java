@@ -33,7 +33,7 @@ public class Spot {
     private List<CategorySpot> categorySpots;
 
     @OneToMany(mappedBy = "spot")
-    private List<SpotImage> SpotImages = new ArrayList<>();
+    private List<SpotImage> spotImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot")
     private List<SpotHashtag> spotHashtags = new ArrayList<>();
