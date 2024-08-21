@@ -51,11 +51,6 @@ public class CategoryController {
         return categoryService.findCategoryPage(subType, page);
     }
 
-    @GetMapping("/{categoryId}")
-    public CategoryDetailRes categoryDetail(@PathVariable(name = "categoryId") Long categoryId) {
-        return categoryService.findCategoryDetail(categoryId);
-    }
-
     @PostMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails customUserDetails) {
