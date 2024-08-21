@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotListInMapRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotListRes;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotVisitListRes;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -15,7 +16,8 @@ import site.dittotrip.ditto_trip.user.domain.User;
  * 1. Spot 리스트 지도 기반 조회 (카테고리 선택 후)
  * 2. 즐겨찾는 Spot 리스트 조회
  * 3. Spot 리스트 검색 조회
- * 4. Spot 상세 조회
+ * 4. 방문 spot 리스트 조회
+ * 5. Spot 상세 조회
  */
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +47,13 @@ public class SpotController {
                                         @RequestParam(name = "page") Integer page) {
         User user = customUserDetails.getUser();
         return spotService.findSpotListBySearch(user, query, page);
+    }
+
+    @GetMapping("/spot/list/visit")
+    public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                          @RequestParam(name = "page") Integer page) {
+        User user = customUserDetails.getUser();
+        return spotService.findSpotVisitList(user, page);
     }
 
     @GetMapping("/spot/{spotId}")

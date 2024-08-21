@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,18 +10,9 @@ import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
-import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotData;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotListInMapRes;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotListRes;
-import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
-import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
-import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
-import site.dittotrip.ditto_trip.spot.repository.SpotBookmarkRepository;
-import site.dittotrip.ditto_trip.spot.domain.SpotImage;
-import site.dittotrip.ditto_trip.spot.repository.StillCutRepository;
+import site.dittotrip.ditto_trip.spot.domain.*;
+import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
@@ -38,6 +30,7 @@ public class SpotService {
     private final StillCutRepository stillCutRepository;
     private final ReviewRepository reviewRepository;
     private final SpotBookmarkRepository spotBookmarkRepository;
+    private final SpotVisitRepository spotVisitRepository;
 
     private static final int PAGE_SIZE = 10;
 
@@ -75,6 +68,22 @@ public class SpotService {
         }
 
         return spotListRes;
+    }
+
+    public SpotVisitListRes findSpotVisitList(User user, Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        Page<SpotVisit> spotVisitPage = spotVisitRepository.findByUser(user, pageRequest);
+
+        List<SpotVisit> spotVisits = spotVisitPage.getContent();
+
+        SpotVisitListRes spotVisitListRes = new SpotVisitListRes();
+        spotVisitListRes.setCount((int) spotVisitPage.getTotalElements());
+        for (SpotVisit spotVisit : spotVisits) {
+            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spotVisit.getSpot(), user);
+            spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, spotBookmarkOptional.isPresent()));
+        }
+
+        return spotVisitListRes;
     }
 
     public SpotDetailRes findSpotDetail(Long spotId, User user) {
