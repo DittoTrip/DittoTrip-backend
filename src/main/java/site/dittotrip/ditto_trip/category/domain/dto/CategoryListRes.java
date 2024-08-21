@@ -13,6 +13,7 @@ import static site.dittotrip.ditto_trip.category.domain.dto.CategoryData.*;
 
 @Data
 public class CategoryListRes {
+
     private Map<CategorySubType, List<CategoryData>> data = new HashMap<>();
 
     public CategoryListRes() {
