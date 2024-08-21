@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotListInMapRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotListRes;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotVisitListRes;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -46,6 +47,13 @@ public class SpotController {
                                         @RequestParam(name = "page") Integer page) {
         User user = customUserDetails.getUser();
         return spotService.findSpotListBySearch(user, query, page);
+    }
+
+    @GetMapping("/spot/list/visit")
+    public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                          @RequestParam(name = "page") Integer page) {
+        User user = customUserDetails.getUser();
+        return spotService.findSpotVisitList(user, page);
     }
 
     @GetMapping("/spot/{spotId}")
