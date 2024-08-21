@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.entity.CategoryHashtag;
-import site.dittotrip.ditto_trip.image.domain.Image;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 
 import java.util.ArrayList;

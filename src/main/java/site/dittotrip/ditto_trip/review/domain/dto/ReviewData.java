@@ -2,9 +2,8 @@ package site.dittotrip.ditto_trip.review.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.image.domain.Image;
-import site.dittotrip.ditto_trip.image.domain.dto.ImageData;
 import site.dittotrip.ditto_trip.review.domain.Review;
+import site.dittotrip.ditto_trip.review.domain.ReviewImage;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 import java.time.LocalDateTime;
@@ -20,7 +19,7 @@ public class ReviewData {
     private LocalDateTime createdDateTime;
 
     private UserData userData;
-    private List<ImageData> imageDataList;
+    private List<String> imagePaths;
 
     private Boolean isMine;
     private Boolean myLike;
@@ -38,14 +37,14 @@ public class ReviewData {
                 .commentsCount(commentsCount)
                 .build();
 
-        reviewData.putImageDataList(review.getImages());
+        reviewData.putImageDataList(review.getReviewImages());
 
         return reviewData;
     }
 
-    private void putImageDataList(List<Image> images) {
-        for (Image image : images) {
-            this.imageDataList.add(ImageData.fromEntity(image));
+    private void putImageDataList(List<ReviewImage> reviewImages) {
+        for (ReviewImage reviewImage : reviewImages) {
+            this.imagePaths.add(reviewImage.getImagePath());
         }
     }
 

@@ -5,10 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import site.dittotrip.ditto_trip.image.manager.ImageManager;
-import site.dittotrip.ditto_trip.image.domain.Image;
-import site.dittotrip.ditto_trip.image.domain.enums.ForeignType;
-import site.dittotrip.ditto_trip.image.repository.ImageRepository;
 import site.dittotrip.ditto_trip.review.repository.CommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
@@ -39,9 +35,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
-    private final ImageRepository imageRepository;
-
-    private final ImageManager imageManager;
 
     public ReviewListRes findReviewList(Long spotId, User user, PageRequest pageRequest) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -80,16 +73,7 @@ public class ReviewService {
                 user,
                 spot);
 
-        for (MultipartFile file : multipartFiles) {
-            String filePath = imageManager.saveImage(file);
-            Image image = Image.builder()
-                    .filePath(filePath)
-                    .foreignType(ForeignType.REVIEW)
-                    .review(review)
-                    .build();
-
-            imageRepository.save(image);
-        }
+        // image 처리
 
         reviewRepository.save(review);
     }
@@ -102,27 +86,13 @@ public class ReviewService {
              throw new NoAuthorityException();
         }
 
-        if (review.getImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 10) {
+        if (review.getReviewImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 10) {
             throw new TooManyImagesException();
         }
 
         modifyReq.modifyEntity(review);
 
-        for (Long removedImageId : modifyReq.getRemovedImageIds()) {
-            Image findImage = imageRepository.findById(removedImageId).orElseThrow(NoSuchElementException::new);
-            imageRepository.delete(findImage);
-        }
-
-        for (MultipartFile file : multipartFiles) {
-            String filePath = imageManager.saveImage(file);
-            Image image = Image.builder()
-                    .filePath(filePath)
-                    .foreignType(ForeignType.REVIEW)
-                    .review(review)
-                    .build();
-
-            imageRepository.save(image);
-        }
+        // 이미지 처리
 
         modifyReq.modifyEntity(review);
     }
@@ -132,7 +102,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
         if (!review.getUser().equals(user)) {
-            // throw new NoAuthorityException();
+             throw new NoAuthorityException();
         }
 
         reviewRepository.delete(review);
