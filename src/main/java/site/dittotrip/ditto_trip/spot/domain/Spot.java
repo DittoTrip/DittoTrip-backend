@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +20,6 @@ public class Spot {
     private Long id;
 
     private String spotName;
-    // 이미지 URI
     private String intro;
     private String address;
     private LocalTime startTime;
@@ -26,5 +27,15 @@ public class Spot {
     private String phoneNumber;
     private String homeUri;
     private Point point;
+    private String imagePath;
+
+    @OneToMany(mappedBy = "spot")
+    private List<CategorySpot> categorySpots;
+
+    @OneToMany(mappedBy = "spot")
+    private List<SpotImage> spotImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "spot")
+    private List<SpotHashtag> spotHashtags = new ArrayList<>();
 
 }
