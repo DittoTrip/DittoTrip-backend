@@ -37,7 +37,8 @@ public class CategoryController {
 
     @GetMapping("/list/bookmark")
     public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return null;
+        User user = customUserDetails.getUser();
+        return categoryService.findCategoryListByBookmark(user);
     }
 
     @GetMapping("/list/search")
@@ -48,7 +49,7 @@ public class CategoryController {
     @GetMapping("/list/add")
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             @RequestParam(name = "page") Integer page) {
-        return null;
+        return categoryService.findCategoryPage(subType, page);
     }
 
     @GetMapping("/{categoryId}")

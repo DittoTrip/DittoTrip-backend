@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.category.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -8,6 +9,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class CategoryBookmark {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
