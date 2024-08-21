@@ -17,11 +17,8 @@ import java.util.List;
 public class SpotDetailRes {
 
     private SpotData spotData;
-//    private CategoryData categoryData;
     private List<SpotImageData> spotImageDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
-    // 사진 가이드
-    // 주변 관광지
 
     public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Boolean isBookmark) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
