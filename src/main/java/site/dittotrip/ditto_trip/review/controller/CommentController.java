@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.dittotrip.ditto_trip.review.service.CommentService;
 
+/**
+ *
+ *
+ */
 @RestController
 @RequestMapping("/review/{reviewId}/comment")
 @RequiredArgsConstructor

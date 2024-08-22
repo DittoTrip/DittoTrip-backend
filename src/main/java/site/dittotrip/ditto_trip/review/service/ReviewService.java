@@ -2,16 +2,14 @@ package site.dittotrip.ditto_trip.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import site.dittotrip.ditto_trip.review.repository.CommentRepository;
+import site.dittotrip.ditto_trip.review.domain.ReviewComment;
+import site.dittotrip.ditto_trip.review.domain.dto.*;
+import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewData;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewListRes;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewModifyReq;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewSaveReq;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
@@ -23,7 +21,6 @@ import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,18 +37,15 @@ public class ReviewService {
     private final SpotRepository spotRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
-    private final CommentRepository commentRepository;
+    private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
     private static final int PAGE_SIZE = 10;
 
-    public ReviewListRes findReviewList(Long spotId, User user, Integer page) {
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
-
+    public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
-        Page<Review> reviewsPage = reviewRepository.findBySpot(spot, pageRequest);
+        Page<Review> reviewsPage = reviewRepository.findBySpot(spot, pageable);
         List<Review> reviews = reviewsPage.getContent();
-
 
         ReviewListRes reviewListRes = ReviewListRes.builder()
                 .reviewsCount((int) reviewsPage.getTotalElements())
@@ -60,14 +54,36 @@ public class ReviewService {
                 .build();
 
         for (Review review : reviews) {
-            Integer commentsCount = commentRepository.countByReview(review).intValue();
-            Boolean isMine = getIsMine(user);
+            Integer commentsCount = reviewCommentRepository.countByReview(review).intValue();
+            Boolean isMine = getIsMine(review, user);
             Boolean myLike = getMyLike(review, user);
 
             reviewListRes.getReviewDataList().add(ReviewData.fromEntity(review, isMine, myLike, commentsCount));
         }
 
         return reviewListRes;
+    }
+
+    public ReviewDetailRes findReviewDetail(Long reviewId, User user) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
+        Spot spot = review.getSpotVisit().getSpot();
+
+        ReviewDetailRes reviewDetailRes = new ReviewDetailRes();
+        reviewDetailRes.setSpotName(spot.getSpotName());
+
+        int commentsCount = reviewCommentRepository.countByReview(review).intValue();
+        Boolean isMine = getIsMine(review, user);
+        Boolean myLike = getMyLike(review, user);
+        reviewDetailRes.setReviewData(ReviewData.fromEntity(review, isMine, myLike, commentsCount));
+
+        List<ReviewComment> parentComments = reviewCommentRepository.findParentCommentsByReview(review);
+        List<ReviewCommentData> commentDataList = new ArrayList<>();
+        for (ReviewComment parentComment : parentComments) {
+            commentDataList.add(ReviewCommentData.parentFromEntity(parentComment, user));
+        }
+        reviewDetailRes.setReviewCommentDataList(commentDataList);
+
+        return reviewDetailRes;
     }
 
     @Transactional(readOnly = false)
@@ -121,13 +137,12 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    private Boolean getIsMine(User user) {
+    private Boolean getIsMine(Review review, User user) {
         if (user == null) {
             return Boolean.FALSE;
         }
 
-        Optional<Review> findReview = reviewRepository.findByUser(user);
-        if (findReview.isPresent()) {
+        if (review.getUser().equals(user)) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;

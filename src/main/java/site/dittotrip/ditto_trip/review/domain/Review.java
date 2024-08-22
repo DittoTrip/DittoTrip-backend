@@ -47,6 +47,9 @@ public class Review {
     @OneToMany(mappedBy = "review")
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
+//    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+//    private List<ReviewComment> reviewComments = new ArrayList<>();
+
     public Review(String body, Float rating, LocalDateTime createdDateTime, User user, SpotVisit spotVisit) {
         this.body = body;
         this.rating = rating;

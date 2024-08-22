@@ -4,16 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
-import site.dittotrip.ditto_trip.review.domain.dto.CommentData;
-import site.dittotrip.ditto_trip.review.domain.dto.CommentListRes;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
-import site.dittotrip.ditto_trip.review.repository.CommentRepository;
+import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,7 +19,7 @@ import java.util.Optional;
 public class CommentService {
 
     private final ReviewRepository reviewRepository;
-    private final CommentRepository commentRepository;
+    private final ReviewCommentRepository reviewCommentRepository;
 
     /**
      * 등록순, 최신순 기획 변경될 수 있음
@@ -52,16 +48,16 @@ public class CommentService {
 
         ReviewComment parentReviewComment = null;
         if (parentCommentId != null) {
-            parentReviewComment = commentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+            parentReviewComment = reviewCommentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
         }
 
         ReviewComment reviewComment = new ReviewComment(commentSaveReq.getBody(), user, review, parentReviewComment);
-        commentRepository.save(reviewComment);
+        reviewCommentRepository.save(reviewComment);
     }
 
     @Transactional(readOnly = false)
     public void modifyComment(Long commentId, User user, CommentSaveReq commentSaveReq) {
-        ReviewComment reviewComment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+        ReviewComment reviewComment = reviewCommentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
         if (!reviewComment.getUser().equals(user)) {
             // throw new NoAuthorityException;
@@ -72,13 +68,13 @@ public class CommentService {
 
     @Transactional(readOnly = false)
     public void removeComment(Long commentId, User user) {
-        ReviewComment reviewComment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+        ReviewComment reviewComment = reviewCommentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
         if (!reviewComment.getUser().equals(user)) {
             // throw new NoAuthorityException;
         }
 
-        commentRepository.delete(reviewComment);
+        reviewCommentRepository.delete(reviewComment);
     }
 
 
@@ -87,7 +83,7 @@ public class CommentService {
             return Boolean.FALSE;
         }
 
-        Optional<ReviewComment> findComment = commentRepository.findByUser(user);
+        Optional<ReviewComment> findComment = reviewCommentRepository.findByUser(user);
         if (findComment.isPresent()) {
             return Boolean.TRUE;
         } else {

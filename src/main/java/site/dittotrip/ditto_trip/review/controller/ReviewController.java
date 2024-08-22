@@ -1,13 +1,12 @@
 package site.dittotrip.ditto_trip.review.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewListRes;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewModifyReq;
-import site.dittotrip.ditto_trip.review.domain.dto.ReviewSaveReq;
+import site.dittotrip.ditto_trip.review.domain.dto.*;
 import site.dittotrip.ditto_trip.review.service.ReviewLikeService;
 import site.dittotrip.ditto_trip.review.service.ReviewService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -17,11 +16,12 @@ import java.util.List;
 /**
  * 1. 리뷰 리스트 조회
  *  - 페이징
- * 2. 리뷰 작성
- * 3. 리뷰 수정
- * 4. 리뷰 삭제
- * 5. 리뷰 좋아요 등록
- * 6. 리뷰 좋아요 삭제
+ * 2. 리뷰 상세 페이지
+ * 3. 리뷰 작성
+ * 4. 리뷰 수정
+ * 5. 리뷰 삭제
+ * 6. 리뷰 좋아요 등록
+ * 7. 리뷰 좋아요 삭제
  */
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +33,19 @@ public class ReviewController {
     @GetMapping("/spot/{spotId}/review/list")
     public ReviewListRes reviewList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "spotId") Long spotId,
-                                    @RequestParam(name = "page") Integer page) {
+                                    Pageable pageable) {
         User user = userDetails.getUser();
-        return reviewService.findReviewList(spotId, user, page);
+        return reviewService.findReviewList(spotId, user, pageable);
+    }
+
+    /**
+     * 작업 중
+     */
+    @GetMapping("/review/{reviewId}")
+    public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                        @PathVariable(name = "reviewId") Long reviewId) {
+        User user = userDetails.getUser();
+        return reviewService.findReviewDetail(reviewId, user);
     }
 
     @PostMapping("/review")
