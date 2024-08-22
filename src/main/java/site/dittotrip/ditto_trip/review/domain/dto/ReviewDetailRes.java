@@ -1,15 +1,17 @@
 package site.dittotrip.ditto_trip.review.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-public class CommentListRes {
+@NoArgsConstructor
+public class ReviewDetailRes {
 
+    private String spotName;
+    private ReviewData reviewData;
     private List<ReviewCommentData> reviewCommentDataList = new ArrayList<>();
 
 }

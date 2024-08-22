@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.spot.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.geo.Point;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -30,7 +31,10 @@ public class Spot {
     private Double pointX;
     private Double pointY;
     private String imagePath;
-    private Float rating;
+    @Setter
+    private Integer reviewCount = 0;
+    @Setter
+    private Float rating = 0.0f;
 
     @OneToMany(mappedBy = "spot")
     private List<CategorySpot> categorySpots = new ArrayList<>();
