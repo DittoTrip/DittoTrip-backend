@@ -16,7 +16,7 @@ public class DittoImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ditto_id")
+    @Column(name = "ditto_image_id")
     private Long id;
 
     private String imagePath;

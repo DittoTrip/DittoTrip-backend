@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.ditto.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -22,7 +23,9 @@ public class Ditto {
     @Column(name = "ditto_id")
     private Long id;
 
+    @Setter
     private String title;
+    @Setter
     private String body;
 
     @CreationTimestamp
@@ -32,10 +35,16 @@ public class Ditto {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "ditto")
+    @OneToMany(mappedBy = "ditto", orphanRemoval = true)
     private List<DittoImage> dittoImages = new ArrayList<>();
 
     @ManyToMany(mappedBy = "dittos")
     private List<Hashtag> hashtags = new ArrayList<>();
+
+    public Ditto(String title, String body, User user) {
+        this.title = title;
+        this.body = body;
+        this.user = user;
+    }
 
 }

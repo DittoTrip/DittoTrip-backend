@@ -20,7 +20,7 @@ public class DittoComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ditto_id")
+    @Column(name = "ditto_comment_id")
     private Long id;
 
     @Setter

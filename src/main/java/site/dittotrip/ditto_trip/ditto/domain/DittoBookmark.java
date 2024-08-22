@@ -18,11 +18,16 @@ public class DittoBookmark {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "ditto_id")
+    private Ditto ditto;
+
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "users_id")
     private User user;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ditto_id")
-    private Ditto ditto;
+    public DittoBookmark(Ditto ditto, User user) {
+        this.ditto = ditto;
+        this.user = user;
+    }
 
 }
