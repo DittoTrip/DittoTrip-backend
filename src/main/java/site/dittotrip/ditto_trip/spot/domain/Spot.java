@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Spot {
     @OneToMany(mappedBy = "spot")
     private List<SpotImage> spotImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot")
-    private List<SpotHashtag> spotHashtags = new ArrayList<>();
+    @ManyToMany(mappedBy = "spots")
+    private List<Hashtag> hashtags = new ArrayList<>();
 
 }

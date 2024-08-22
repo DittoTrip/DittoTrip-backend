@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
-import site.dittotrip.ditto_trip.hashtag.domain.entity.CategoryHashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class Category {
     private CategorySubType categorySubType;
     private String imagePath;
 
-    @OneToMany(mappedBy = "category")
-    private List<CategoryHashtag> categoryHashtags = new ArrayList<>();
+    @ManyToMany(mappedBy = "categories")
+    private List<Hashtag> hashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "category")
     private List<CategorySpot> categorySpots = new ArrayList<>();
