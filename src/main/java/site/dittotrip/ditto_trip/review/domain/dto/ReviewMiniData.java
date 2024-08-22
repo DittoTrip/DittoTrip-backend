@@ -13,14 +13,14 @@ import site.dittotrip.ditto_trip.review.domain.Review;
 public class ReviewMiniData {
 
     private Long reviewId;
-//    private String username;
+    private String username;
     private float rating;
     private String reviewBody;
 
     public static ReviewMiniData fromEntity(Review review) {
         return ReviewMiniData.builder()
                 .reviewId(review.getId())
-//                .username(user.getName())
+                .username(review.getUser().getName())
                 .rating(review.getRating())
                 .reviewBody(review.getBody())
                 .build();

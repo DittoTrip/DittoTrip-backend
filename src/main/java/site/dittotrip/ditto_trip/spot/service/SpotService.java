@@ -1,21 +1,23 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
+import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
-import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
-import site.dittotrip.ditto_trip.spot.domain.SpotDitto;
-import site.dittotrip.ditto_trip.spot.repository.SpotDittoRepository;
-import site.dittotrip.ditto_trip.spot.domain.StillCut;
-import site.dittotrip.ditto_trip.spot.repository.StillCutRepository;
+import site.dittotrip.ditto_trip.spot.domain.*;
+import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,18 +25,75 @@ import java.util.NoSuchElementException;
 public class SpotService {
 
     private final SpotRepository spotRepository;
+    private final CategoryRepository categoryRepository;
+    private final CategorySpotRepository categorySpotRepository;
     private final StillCutRepository stillCutRepository;
     private final ReviewRepository reviewRepository;
-    private final SpotDittoRepository spotDittoRepository;
+    private final SpotBookmarkRepository spotBookmarkRepository;
+    private final SpotVisitRepository spotVisitRepository;
+
+    private static final int PAGE_SIZE = 10;
+
+    public SpotListInMapRes findSpotListInMap(Long categoryId, User user,
+                                              Double startX, Double endX, Double startY, Double endY) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
+
+        SpotListInMapRes spotListInMapRes = new SpotListInMapRes();
+        spotListInMapRes.setCategoryData(CategoryData.fromEntity(category));
+        for (CategorySpot categorySpot : categorySpots) {
+            Spot spot = categorySpot.getSpot();
+            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
+            spotListInMapRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkOptional.isPresent()));
+        }
+        spotListInMapRes.setCount(categorySpots.size());
+
+        return spotListInMapRes;
+    }
+
+    public SpotListRes findSpotListByBookmark(User user) {
+        List<SpotBookmark> spotBookmarks = spotBookmarkRepository.findByUser(user);
+        return SpotListRes.fromEntitiesByBookmark(spotBookmarks);
+    }
+
+
+    public SpotListRes findSpotListBySearch(User user, String word, Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        List<Spot> spots = spotRepository.findBySpotNameContaining(word, pageRequest);
+
+        SpotListRes spotListRes = new SpotListRes();
+        for (Spot spot : spots) {
+            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
+            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkOptional.isPresent()));
+        }
+
+        return spotListRes;
+    }
+
+    public SpotVisitListRes findSpotVisitList(User user, Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        Page<SpotVisit> spotVisitPage = spotVisitRepository.findByUser(user, pageRequest);
+
+        List<SpotVisit> spotVisits = spotVisitPage.getContent();
+
+        SpotVisitListRes spotVisitListRes = new SpotVisitListRes();
+        spotVisitListRes.setCount((int) spotVisitPage.getTotalElements());
+        for (SpotVisit spotVisit : spotVisits) {
+            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spotVisit.getSpot(), user);
+            spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, spotBookmarkOptional.isPresent()));
+        }
+
+        return spotVisitListRes;
+    }
 
     public SpotDetailRes findSpotDetail(Long spotId, User user) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        List<StillCut> stillCuts = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
-        List<Review> reviews = reviewRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
-        SpotDitto spotDitto = spotDittoRepository.findBySpotAndUser(spot, user).orElse(null);
+        List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
+        List<Review> reviews = reviewRepository.findTop3BySpot(spot);
+        Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
 
-        return SpotDetailRes.fromEntity(spot, stillCuts, reviews, spotDitto);
+        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, spotBookmarkOptional.isPresent());
     }
 
 }

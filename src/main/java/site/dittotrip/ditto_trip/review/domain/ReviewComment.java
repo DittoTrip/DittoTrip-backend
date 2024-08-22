@@ -16,14 +16,13 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Comment {
+public class ReviewComment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "review_comment_id")
     private Long id;
 
     @Setter
-    @Column(name = "comment_body")
     private String body;
 
     @CreationTimestamp
@@ -38,17 +37,17 @@ public class Comment {
     private Review review;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment = null;
+    @JoinColumn(name = "parent_review_comment_id")
+    private ReviewComment parentReviewComment = null;
 
-    @OneToMany(mappedBy = "parentComment")
-    private List<Comment> childComments = new ArrayList<>();
+    @OneToMany(mappedBy = "parentReviewComment")
+    private List<ReviewComment> childReviewComments = new ArrayList<>();
 
-    public Comment(String body, User user, Review review, Comment parentComment) {
+    public ReviewComment(String body, User user, Review review, ReviewComment parentReviewComment) {
         this.body = body;
         this.user = user;
         this.review = review;
-        this.parentComment = parentComment;
+        this.parentReviewComment = parentReviewComment;
     }
 
 }

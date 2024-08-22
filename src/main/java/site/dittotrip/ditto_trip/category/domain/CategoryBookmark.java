@@ -1,23 +1,19 @@
 package site.dittotrip.ditto_trip.category.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static jakarta.persistence.FetchType.LAZY;
 
-/**
- * Naming : Dibs -> Bookmark
- */
 @Entity
 @NoArgsConstructor
-public class CategoryDibs {
+@Getter
+public class CategoryBookmark {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_dibs_id")
+    @Column(name = "category_bookmark_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -28,7 +24,7 @@ public class CategoryDibs {
     @JoinColumn(name = "users_id")
     private User user;
 
-    public CategoryDibs(Category category, User user) {
+    public CategoryBookmark(Category category, User user) {
         this.category = category;
         this.user = user;
     }

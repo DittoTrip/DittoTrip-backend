@@ -19,7 +19,7 @@ public class CategoryData {
         return CategoryData.builder()
                 .categoryId(category.getId())
                 .categoryName(category.getCategoryName())
-                .imageFilePath(category.getImage().getFilePath())
+                .imageFilePath(category.getImagePath())
                 .build();
     }
 

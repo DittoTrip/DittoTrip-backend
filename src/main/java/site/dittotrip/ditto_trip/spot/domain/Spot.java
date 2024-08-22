@@ -3,9 +3,10 @@ package site.dittotrip.ditto_trip.spot.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.hashtag.domain.entity.SpotHashtag;
-import site.dittotrip.ditto_trip.image.domain.Image;
+import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,18 +28,21 @@ public class Spot {
     private LocalTime endTime;
     private String phoneNumber;
     private String homeUri;
-    private Point point;
+    private Double pointX;
+    private Double pointY;
+    private String imagePath;
+    @Setter
+    private Integer reviewCount = 0;
+    @Setter
+    private Float rating = 0.0f;
 
     @OneToMany(mappedBy = "spot")
-    private List<CategorySpot> categorySpots;
-
-    @OneToOne(mappedBy = "spot")
-    private Image image;
+    private List<CategorySpot> categorySpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot")
-    private List<StillCut> stillCuts = new ArrayList<>();
+    private List<SpotImage> spotImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot")
-    private List<SpotHashtag> spotHashtags = new ArrayList<>();
+    @ManyToMany(mappedBy = "spots")
+    private List<Hashtag> hashtags = new ArrayList<>();
 
 }

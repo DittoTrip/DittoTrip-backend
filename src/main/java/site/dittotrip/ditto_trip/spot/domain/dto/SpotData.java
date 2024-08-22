@@ -2,8 +2,8 @@ package site.dittotrip.ditto_trip.spot.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.hashtag.domain.entity.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.dto.HashtagData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.time.LocalTime;
@@ -16,25 +16,36 @@ public class SpotData {
 
     private Long spotId;
     private String spotName;
-    private Float rating;
     private String address;
-    private Point point;
-    private String imageFilePath;
-//    private List<Hashtag> hashtags = new ArrayList<>();
+    private Double pointX;
+    private Double pointY;
+    private String imagePath;
+    private Float rating;
 
-    /**
-     * 미완성
-     */
-    public static SpotData fromEntity(Spot spot) {
+    private List<HashtagData> hashtagData = new ArrayList<>();
+    private Boolean isBookmark;
+
+    public static SpotData fromEntity(Spot spot, Boolean isBookmark) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
                 .spotName(spot.getSpotName())
                 .address(spot.getAddress())
-                .point(spot.getPoint())
-                .imageFilePath(spot.getImage().getFilePath())
+                .pointX(spot.getPointX())
+                .pointY(spot.getPointY())
+                .imagePath(spot.getImagePath())
+                .rating(spot.getRating())
+                .isBookmark(isBookmark)
                 .build();
 
+        spotData.putHashtagData(spot);
+
         return spotData;
+    }
+
+    private void putHashtagData(Spot spot) {
+        for (Hashtag hashtag : spot.getHashtags()) {
+            hashtagData.add(HashtagData.fromEntity(hashtag));
+        }
     }
 
 }

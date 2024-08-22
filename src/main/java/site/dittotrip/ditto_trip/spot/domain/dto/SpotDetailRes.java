@@ -4,8 +4,7 @@ import lombok.Data;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewMiniData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.SpotDitto;
-import site.dittotrip.ditto_trip.spot.domain.StillCut;
+import site.dittotrip.ditto_trip.spot.domain.SpotImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,30 +17,25 @@ import java.util.List;
 public class SpotDetailRes {
 
     private SpotData spotData;
-//    private CategoryData categoryData;
-    private List<StillCutData> stillCutDataList = new ArrayList<>();
+    private List<SpotImageData> spotImageDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
-    private Boolean spotDittoData;
-    // 사진 가이드
-    // 주변 관광지
 
-    public static SpotDetailRes fromEntity(Spot spot, List<StillCut> stillCuts, List<Review> reviews, SpotDitto spotDitto) {
+    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Boolean isBookmark) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
-        spotDetailRes.setSpotData(SpotData.fromEntity(spot));
-        spotDetailRes.putStillCutDataList(stillCuts);
+        spotDetailRes.setSpotData(SpotData.fromEntity(spot, isBookmark));
+        spotDetailRes.putImageDataList(SpotImages);
         spotDetailRes.putReviewDataList(reviews);
-        spotDetailRes.putSpotDittoData(spotDitto);
 
         return spotDetailRes;
     }
 
-    private void putStillCutDataList(List<StillCut> stillCuts) {
-        List<StillCutData> stillCutDataList = new ArrayList<>();
-        for (StillCut stillCut : stillCuts) {
-            stillCutDataList.add(StillCutData.fromEntity(stillCut));
+    private void putImageDataList(List<SpotImage> SpotImages) {
+        List<SpotImageData> spotImageDataList = new ArrayList<>();
+        for (SpotImage spotImage : SpotImages) {
+            spotImageDataList.add(SpotImageData.fromEntity(spotImage));
         }
-        this.setStillCutDataList(stillCutDataList);
+        this.setSpotImageDataList(spotImageDataList);
     }
 
     private void putReviewDataList(List<Review> reviews) {
@@ -50,14 +44,6 @@ public class SpotDetailRes {
             reviewDataList.add(ReviewMiniData.fromEntity(review));
         }
         this.setReviewDataList(reviewDataList);
-    }
-
-    private void putSpotDittoData(SpotDitto spotDitto) {
-        if (spotDitto != null) {
-            this.spotDittoData = Boolean.FALSE;
-        } else {
-            this.spotDittoData = Boolean.TRUE;
-        }
     }
 
 }
