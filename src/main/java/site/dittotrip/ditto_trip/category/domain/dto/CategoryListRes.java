@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static site.dittotrip.ditto_trip.category.domain.dto.CategoryDataInList.*;
+import static site.dittotrip.ditto_trip.category.domain.dto.CategoryData.*;
 
 @Data
 public class CategoryListRes {
-    private Map<CategorySubType, List<CategoryDataInList>> data = new HashMap<>();
+
+    private Map<CategorySubType, List<CategoryData>> data = new HashMap<>();
 
     public CategoryListRes() {
         CategorySubType[] types = CategorySubType.values();
@@ -24,7 +25,7 @@ public class CategoryListRes {
 
     public static CategoryListRes fromEntities(List<Category> categories) {
         CategoryListRes categoryListRes = new CategoryListRes();
-        Map<CategorySubType, List<CategoryDataInList>> data = categoryListRes.getData();
+        Map<CategorySubType, List<CategoryData>> data = categoryListRes.getData();
 
         for (Category category : categories) {
             data.get(category.getCategorySubType()).add(fromEntity(category));

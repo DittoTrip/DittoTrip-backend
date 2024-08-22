@@ -1,15 +1,36 @@
 spring:
-  application:
-    name: ditto-trip
-
   datasource:
-    url: jdbc:mysql://localhost:3306/dittotrip?serverTimezone=Asia/Seoul
-    username: root
-    password: 1234
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      exprire-time: ${REDIS_EXPIRE_TIME}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          timeout: 5000
+jwt:
+  token:
+    secret-key: ${JWT_SECRET_KEY}
+    expire-time: ${JWT_EXPIRE_TIME}

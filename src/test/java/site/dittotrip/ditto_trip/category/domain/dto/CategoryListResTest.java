@@ -1,7 +1,6 @@
 package site.dittotrip.ditto_trip.category.domain.dto;
 
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
