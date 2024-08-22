@@ -4,8 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +28,14 @@ public class Ditto {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "users_id")
+    private User user;
 
+    @OneToMany(mappedBy = "ditto")
+    private List<DittoImage> dittoImages = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "dittos")
+    private List<Hashtag> hashtags = new ArrayList<>();
 
 }
