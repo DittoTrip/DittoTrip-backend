@@ -44,4 +44,12 @@ public class DittoComment {
     @OneToMany(mappedBy = "parentDittoComment")
     private List<DittoComment> childDittoComments = new ArrayList<>();
 
+    public DittoComment(String body, LocalDateTime createdDateTime, User user, Ditto ditto, DittoComment parentDittoComment) {
+        this.body = body;
+        this.createdDateTime = createdDateTime;
+        this.user = user;
+        this.ditto = ditto;
+        this.parentDittoComment = parentDittoComment;
+    }
+
 }

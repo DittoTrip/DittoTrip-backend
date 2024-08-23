@@ -1,20 +1,21 @@
 package site.dittotrip.ditto_trip.ditto.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoBookmark;
-import site.dittotrip.ditto_trip.ditto.domain.dto.DittoDetailRes;
-import site.dittotrip.ditto_trip.ditto.domain.dto.DittoModifyReq;
-import site.dittotrip.ditto_trip.ditto.domain.dto.DittoSaveReq;
+import site.dittotrip.ditto_trip.ditto.domain.dto.*;
 import site.dittotrip.ditto_trip.ditto.repository.DittoBookmarkRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -26,6 +27,22 @@ public class DittoService {
 
     private final DittoRepository dittoRepository;
     private final DittoBookmarkRepository dittoBookmarkRepository;
+
+    public DittoListRes findDittoList(User user, Pageable pageable) {
+        Page<Ditto> page = dittoRepository.findAll(pageable);
+        return DittoListRes.fromEntities(page, user);
+    }
+
+    public DittoListRes findDittoListInBookmark(User user) {
+        List<DittoBookmark> dittoBookmarks = dittoBookmarkRepository.findByUser(user);
+
+        List<Ditto> dittos = new ArrayList<>();
+        for (DittoBookmark dittoBookmark : dittoBookmarks) {
+            dittos.add(dittoBookmark.getDitto());
+        }
+
+        return DittoListRes.fromEntities(dittos, user);
+    }
 
     public DittoDetailRes findDittoDetail(Long dittoId, User user) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);

@@ -21,6 +21,7 @@ public class DittoBookmarkService {
     private final DittoRepository dittoRepository;
     private final DittoBookmarkRepository dittoBookmarkRepository;
 
+    @Transactional(readOnly = false)
     public void saveDittoBookmark(Long dittoId, User user) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
 
@@ -32,6 +33,7 @@ public class DittoBookmarkService {
         dittoBookmarkRepository.save(dittoBookmark);
     }
 
+    @Transactional(readOnly = false)
     public void removeDittoBookmark(Long dittoId, User user) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
         DittoBookmark dittoBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user).orElseThrow(NoSuchElementException::new);
