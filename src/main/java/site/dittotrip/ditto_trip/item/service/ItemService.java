@@ -20,9 +20,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ItemService {
 
-    private UserRepository userRepository;
-    private UserItemRepository userItemRepository;
-    private UserBadgeRepository userBadgeRepository;
+    private final UserRepository userRepository;
+    private final UserItemRepository userItemRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     public UserItemListRes findUsersItemList(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
