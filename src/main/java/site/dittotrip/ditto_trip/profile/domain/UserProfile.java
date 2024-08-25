@@ -18,6 +18,8 @@ public class UserProfile {
     @Column(name = "user_profile_id")
     private Long id;
 
+    private Integer progressionBar;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "users_id")
     private User user;
