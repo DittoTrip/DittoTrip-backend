@@ -2,6 +2,7 @@ package site.dittotrip.ditto_trip.profile.contoller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class UserProfileController {
 
     private UserProfileService userProfileService;
 
+    @PutMapping
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
         User user = userDetails.getUser();
