@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
 
-    private UserRepository userRepository;+
+    private UserRepository userRepository;
     private UserItemRepository userItemRepository;
     private UserBadgeRepository userBadgeRepository;
 
