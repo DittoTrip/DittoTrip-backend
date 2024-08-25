@@ -19,7 +19,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 @RequiredArgsConstructor
 public class UserProfileController {
 
-    private UserProfileService userProfileService;
+    private final UserProfileService userProfileService;
 
     @PutMapping
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
