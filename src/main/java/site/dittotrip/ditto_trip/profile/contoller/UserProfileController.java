@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
 import site.dittotrip.ditto_trip.profile.service.UserProfileService;
-import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 /**
@@ -23,7 +22,6 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
 
     @PutMapping
-    @SwaggerAuth
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
         User user = userDetails.getUser();

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.follow.domain.dto.FollowListRes;
 import site.dittotrip.ditto_trip.follow.service.FollowService;
-import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 /**
@@ -23,7 +22,6 @@ public class FollowController {
     private final FollowService followService;
 
     @GetMapping("/following-list/{userId}")
-    @SwaggerAuth
     public FollowListRes FollowingList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                        @PathVariable(name = "userId") Long userId) {
         User user = userDetails.getUser();
@@ -31,7 +29,6 @@ public class FollowController {
     }
 
     @GetMapping("/followed-list/{userId}")
-    @SwaggerAuth
     public FollowListRes followedList(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "userId") Long userId) {
         User user = userDetails.getUser();
@@ -39,7 +36,6 @@ public class FollowController {
     }
 
     @PostMapping("/follow/{userId}")
-    @SwaggerAuth
     public void followSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @PathVariable(name = "userId") Long userId) {
         User user = userDetails.getUser();
@@ -47,7 +43,6 @@ public class FollowController {
     }
 
     @DeleteMapping("/follow/{followId}")
-    @SwaggerAuth
     public void followRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "followId") Long followId) {
         User user = userDetails.getUser();

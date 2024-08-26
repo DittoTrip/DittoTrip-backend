@@ -10,7 +10,6 @@ import site.dittotrip.ditto_trip.spot.domain.dto.SpotListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotVisitListRes;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
-import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 /**
@@ -28,7 +27,6 @@ public class SpotController {
     private final SpotBookmarkService spotBookmarkService;
 
     @GetMapping("/category/{categoryId}/spot/list")
-    @SwaggerAuth
     public SpotListInMapRes spotListInMap(@PathVariable(name = "categoryId") Long categoryId,
                                           @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                           @RequestParam(name = "startX") Double startX, @RequestParam(name = "endX") Double endX,
@@ -38,14 +36,12 @@ public class SpotController {
     }
 
     @GetMapping("/spot/list/bookmark")
-    @SwaggerAuth
     public SpotListRes spotListByBookmark(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
         return spotService.findSpotListByBookmark(user);
     }
 
     @GetMapping("/spot/list/search")
-    @SwaggerAuth
     public SpotListRes spotListBySearch(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                         @RequestParam(name = "query") String query,
                                         @RequestParam(name = "page") Integer page) {
@@ -54,7 +50,6 @@ public class SpotController {
     }
 
     @GetMapping("/spot/list/visit")
-    @SwaggerAuth
     public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                           @RequestParam(name = "page") Integer page) {
         User user = customUserDetails.getUser();
@@ -62,7 +57,6 @@ public class SpotController {
     }
 
     @GetMapping("/spot/{spotId}")
-    @SwaggerAuth
     public SpotDetailRes categoryDetail(@PathVariable(name = "spotId") Long spotId,
                                         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
@@ -73,7 +67,6 @@ public class SpotController {
      * SpotBookmark
      */
     @PostMapping("/spot/{spotId}/bookmark")
-    @SwaggerAuth
     public void spotBookmarkAdd(@PathVariable(name = "spotId") Long spotId,
                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
@@ -81,7 +74,6 @@ public class SpotController {
     }
 
     @DeleteMapping("/spot/{spotId}/bookmark")
-    @SwaggerAuth
     public void spotBookmarkRemove(@PathVariable(name = "spotId") Long spotId,
                                    @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
