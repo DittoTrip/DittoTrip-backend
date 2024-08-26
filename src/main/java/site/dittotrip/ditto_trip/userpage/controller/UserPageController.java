@@ -2,6 +2,7 @@ package site.dittotrip.ditto_trip.userpage.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class UserPageController {
 
     private final UserPageService userPageService;
 
+    @GetMapping
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
         User reqUser = userDetails.getUser();
