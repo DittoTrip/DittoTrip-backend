@@ -8,6 +8,8 @@ import site.dittotrip.ditto_trip.ditto.domain.dto.DittoCommentSaveReq;
 import site.dittotrip.ditto_trip.ditto.service.DittoCommentService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+
 /**
  * 1. DittoComment 등록 (대댓글 포함)
  * 2. DittoComment 수정
@@ -25,7 +27,7 @@ public class DittoCommentController {
                                  @PathVariable(name = "dittoId") Long dittoId,
                                  @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
                                  @RequestBody DittoCommentSaveReq saveReq) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         dittoCommentService.saveDittoComment(dittoId, parentCommentId, user, saveReq);
     }
 
@@ -33,14 +35,14 @@ public class DittoCommentController {
     public void dittoCommentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId,
                                    @RequestBody DittoCommentSaveReq saveReq) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         dittoCommentService.modifyDittoComment(commentId, user, saveReq);
     }
 
     @DeleteMapping("/{commentId}")
     public void dittoCommentRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         dittoCommentService.removeDittoComment(commentId, user);
     }
 

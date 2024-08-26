@@ -8,6 +8,8 @@ import site.dittotrip.ditto_trip.follow.domain.dto.FollowListRes;
 import site.dittotrip.ditto_trip.follow.service.FollowService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+
 /**
  * 1. 팔로잉 리스트 조회
  * 2. 팔로잉 리스트 조회
@@ -24,28 +26,28 @@ public class FollowController {
     @GetMapping("/following-list/{userId}")
     public FollowListRes FollowingList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                        @PathVariable(name = "userId") Long userId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         return followService.findFollowingList(user, userId);
     }
 
     @GetMapping("/followed-list/{userId}")
     public FollowListRes followedList(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "userId") Long userId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         return followService.findFollowedList(user, userId);
     }
 
     @PostMapping("/follow/{userId}")
     public void followSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @PathVariable(name = "userId") Long userId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         followService.saveFollow(user, userId);
     }
 
     @DeleteMapping("/follow/{followId}")
     public void followRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "followId") Long followId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails);
         followService.removeFollow(user, followId);
     }
 

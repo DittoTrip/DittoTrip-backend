@@ -11,6 +11,8 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 import site.dittotrip.ditto_trip.userpage.service.UserPageService;
 
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
+
 /**
  * 타인의 유저 페이지와 내 유저 페이지 조회의 데이터가 다를 경우 수정 필요
  * 1. 유저 페이지 조회
@@ -25,7 +27,7 @@ public class UserPageController {
     @GetMapping
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
-        User reqUser = userDetails.getUser();
+        User reqUser = getUserFromUserDetails(userDetails);
         return userPageService.findUserPage(reqUser, userId);
     }
 
