@@ -2,11 +2,11 @@ package site.dittotrip.ditto_trip.userpage.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 import site.dittotrip.ditto_trip.userpage.service.UserPageService;
@@ -22,7 +22,7 @@ public class UserPageController {
 
     private final UserPageService userPageService;
 
-    @SwaggerAuth
+    @GetMapping
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
         User reqUser = userDetails.getUser();
