@@ -21,10 +21,10 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class UserPageService {
 
-    private UserRepository userRepository;
-    private UserProfileRepository userProfileRepository;
-    private DittoRepository dittoRepository;
-    private FollowRepository followRepository;
+    private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
+    private final DittoRepository dittoRepository;
+    private final FollowRepository followRepository;
 
     /** 추가될 데이터
      * 1. 팔로우, 팔로잉 데이터
