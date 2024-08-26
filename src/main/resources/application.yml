@@ -1,3 +1,4 @@
+# 주의 !!!! ddl-auto : create-drop
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
