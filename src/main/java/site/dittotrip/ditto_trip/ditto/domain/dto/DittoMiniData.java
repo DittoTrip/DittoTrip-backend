@@ -27,6 +27,7 @@ public class DittoMiniData {
                 .build();
     }
 
+
     public static List<DittoMiniData> listFromEntities(List<Ditto> dittos, User user) {
         List<DittoMiniData> dittoMiniDataList = new ArrayList<>();
         for (Ditto ditto : dittos) {
@@ -34,5 +35,4 @@ public class DittoMiniData {
         }
         return dittoMiniDataList;
     }
-
 }

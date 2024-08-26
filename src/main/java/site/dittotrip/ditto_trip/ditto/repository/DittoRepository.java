@@ -16,5 +16,4 @@ public interface DittoRepository extends JpaRepository<Ditto, Long> {
     Optional<Ditto> findByIdWithUser(Long dittoId);
 
     List<Ditto> findTop6ByUserOrderByCreatedDateTimeDesc(User user);
-
 }
