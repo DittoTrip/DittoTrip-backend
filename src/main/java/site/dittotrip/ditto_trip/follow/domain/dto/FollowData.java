@@ -2,6 +2,10 @@ package site.dittotrip.ditto_trip.follow.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import site.dittotrip.ditto_trip.follow.domain.Follow;
+import site.dittotrip.ditto_trip.profile.domain.UserProfile;
+import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileData;
+import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 @Data
@@ -10,8 +14,39 @@ public class FollowData {
 
     private Long followId;
     private UserData userData;
-    // UserProfile
+    private UserProfileData userProfileData;
 
-    private Boolean isMine;
+    private Boolean isMine = false;
+
+    public static FollowData followingListFromEntity(Follow follow, User reqUser) {
+        User followedUser = follow.getFollowedUser();
+        FollowData followData = FollowData.builder()
+                .followId(follow.getId())
+                .userData(UserData.fromEntity(followedUser))
+                .userProfileData(UserProfileData.fromEntity(followedUser.getUserProfile()))
+                .build();
+
+        if (followedUser.equals(reqUser)) {
+            followData.setIsMine(Boolean.TRUE);
+        }
+
+        return followData;
+    }
+
+    public static FollowData followedListFromEntity(Follow follow, User reqUser) {
+        User followingUser = follow.getFollowingUser();
+
+        FollowData followData = FollowData.builder()
+                .followId(follow.getId())
+                .userData(UserData.fromEntity(followingUser))
+                .userProfileData(UserProfileData.fromEntity(followingUser.getUserProfile()))
+                .build();
+
+        if (followingUser.equals(reqUser)) {
+            followData.setIsMine(Boolean.TRUE);
+        }
+
+        return followData;
+    }
 
 }
