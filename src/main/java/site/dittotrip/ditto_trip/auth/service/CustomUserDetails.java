@@ -54,4 +54,13 @@ public class CustomUserDetails implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  public static User getUserFromUserDetails(CustomUserDetails userDetails) {
+    if (userDetails == null) {
+      return null;
+    } else {
+      return userDetails.getUser();
+    }
+  }
+
 }
