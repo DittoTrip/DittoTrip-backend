@@ -12,6 +12,7 @@ import site.dittotrip.ditto_trip.ditto.domain.dto.DittoModifyReq;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoSaveReq;
 import site.dittotrip.ditto_trip.ditto.service.DittoBookmarkService;
 import site.dittotrip.ditto_trip.ditto.service.DittoService;
+import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class DittoController {
     private final DittoBookmarkService dittoBookmarkService;
 
     @GetMapping("/list")
+    @SwaggerAuth
     public DittoListRes dittoList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
         User user = userDetails.getUser();
@@ -43,12 +45,14 @@ public class DittoController {
     }
 
     @GetMapping("/list/bookmark")
+    @SwaggerAuth
     public DittoListRes dittoListInBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = userDetails.getUser();
         return dittoService.findDittoListInBookmark(user);
     }
 
     @GetMapping("/{dittoId}")
+    @SwaggerAuth
     public DittoDetailRes dittoDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                       @PathVariable(name = "dittoId") Long dittoId) {
         User user = userDetails.getUser();
@@ -56,6 +60,7 @@ public class DittoController {
     }
 
     @PostMapping
+    @SwaggerAuth
     public void dittoSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                           @RequestBody DittoSaveReq saveReq,
                           @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
@@ -64,6 +69,7 @@ public class DittoController {
     }
 
     @PutMapping("/{dittoId}")
+    @SwaggerAuth
     public void dittoModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId,
                             @RequestBody DittoModifyReq modifyReq,
@@ -73,6 +79,7 @@ public class DittoController {
     }
 
     @DeleteMapping("/{dittoId}")
+    @SwaggerAuth
     public void dittoRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId) {
         User user = userDetails.getUser();
@@ -83,6 +90,7 @@ public class DittoController {
      * DittoBookmark 기능
      */
     @PostMapping("/bookmark/{dittoId}")
+    @SwaggerAuth
     public void dittoBookmarkSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable(name = "dittoId") Long dittoId) {
         User user = userDetails.getUser();
@@ -90,6 +98,7 @@ public class DittoController {
     }
 
     @DeleteMapping("/bookmark/{dittoId}")
+    @SwaggerAuth
     public void dittoBookmarkRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "dittoId") Long dittoId) {
         User user = userDetails.getUser();

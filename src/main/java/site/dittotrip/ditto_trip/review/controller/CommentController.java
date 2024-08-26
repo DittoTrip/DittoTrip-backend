@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
 import site.dittotrip.ditto_trip.review.service.CommentService;
+import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 /**
@@ -21,6 +22,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
+    @SwaggerAuth
     public void commentSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "reviewId") Long reviewId,
                             @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
@@ -30,6 +32,7 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
+    @SwaggerAuth
     public void commentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "commentId") Long commentId,
                               @RequestBody CommentSaveReq commentSaveReq) {
@@ -38,6 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
+    @SwaggerAuth
     public void commentRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "commentId") Long commentId) {
         User user = userDetails.getUser();

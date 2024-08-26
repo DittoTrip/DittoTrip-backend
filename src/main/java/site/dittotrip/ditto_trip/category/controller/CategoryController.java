@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
+import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 /**
@@ -35,6 +36,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list/bookmark")
+    @SwaggerAuth
     public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
         return categoryService.findCategoryListByBookmark(user);
@@ -52,6 +54,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}/bookmark")
+    @SwaggerAuth
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();
@@ -59,6 +62,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
+    @SwaggerAuth
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         User user = customUserDetails.getUser();

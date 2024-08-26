@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
 import site.dittotrip.ditto_trip.review.service.ReviewLikeService;
 import site.dittotrip.ditto_trip.review.service.ReviewService;
+import site.dittotrip.ditto_trip.swagger.SwaggerAuth;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class ReviewController {
     private final ReviewLikeService reviewLikeService;
 
     @GetMapping("/spot/{spotId}/review/list")
+    @SwaggerAuth
     public ReviewListRes reviewList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "spotId") Long spotId,
                                     Pageable pageable) {
@@ -42,6 +44,7 @@ public class ReviewController {
      * 작업 중
      */
     @GetMapping("/review/{reviewId}")
+    @SwaggerAuth
     public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "reviewId") Long reviewId) {
         User user = userDetails.getUser();
@@ -49,6 +52,7 @@ public class ReviewController {
     }
 
     @PostMapping("/review")
+    @SwaggerAuth
     public void reviewSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
                            @RequestBody ReviewSaveReq reviewSaveReq,
@@ -58,6 +62,7 @@ public class ReviewController {
     }
 
     @PutMapping("/review/{reviewId}")
+    @SwaggerAuth
     public void reviewModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId,
                              @RequestBody ReviewModifyReq reviewModifyReq,
@@ -67,6 +72,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/review/{reviewId}")
+    @SwaggerAuth
     public void reviewRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
         User user = userDetails.getUser();
@@ -74,6 +80,7 @@ public class ReviewController {
     }
 
     @PostMapping("/review/{reviewId}/like")
+    @SwaggerAuth
     public void reviewLikeSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "reviewId") Long reviewId) {
         User user = userDetails.getUser();
@@ -81,6 +88,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/review/{reviewId}/like")
+    @SwaggerAuth
     public void reviewLikeRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
         User user = userDetails.getUser();
