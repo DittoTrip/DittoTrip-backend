@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
+import site.dittotrip.ditto_trip.follow.domain.Follow;
+import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -22,6 +24,7 @@ public class UserPageService {
     private UserRepository userRepository;
     private UserProfileRepository userProfileRepository;
     private DittoRepository dittoRepository;
+    private FollowRepository followRepository;
 
     /** 추가될 데이터
      * 1. 팔로우, 팔로잉 데이터
@@ -32,7 +35,10 @@ public class UserPageService {
         UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(NoSuchElementException::new);
         List<Ditto> dittos = dittoRepository.findTop6ByUserOrderByCreatedDateTimeDesc(user);
 
-        return UserPageRes.fromEntities(user, userProfile, dittos);
+        Integer followingCount = followRepository.countByFollowingUser(user);
+        Integer followedCount = followRepository.countByFollowedUser(user);
+
+        return UserPageRes.fromEntities(user, userProfile, dittos, followingCount, followedCount);
     }
 
 }

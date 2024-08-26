@@ -18,16 +18,19 @@ public class UserPageRes {
 
     private UserData userData;
     private UserProfileData userProfileData;
-
-//    private Integer followedCount;
-//    private Integer followingCount;
     private List<DittoMiniData> dittoMiniDataList;
 
-    public static UserPageRes fromEntities(User user, UserProfile userProfile, List<Ditto> dittos) {
+    private Integer followingCount;
+    private Integer followedCount;
+
+    public static UserPageRes fromEntities(User user, UserProfile userProfile, List<Ditto> dittos,
+                                           Integer followingCount, Integer followedCount) {
         return UserPageRes.builder()
                 .userData(UserData.fromEntity(user))
                 .userProfileData(UserProfileData.fromEntity(userProfile))
                 .dittoMiniDataList(DittoMiniData.listFromEntities(dittos, user))
+                .followingCount(followingCount)
+                .followedCount(followedCount)
                 .build();
     }
 
