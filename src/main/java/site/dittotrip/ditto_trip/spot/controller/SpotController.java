@@ -33,13 +33,13 @@ public class SpotController {
                                           @AuthenticationPrincipal CustomUserDetails userDetails,
                                           @RequestParam(name = "startX") Double startX, @RequestParam(name = "endX") Double endX,
                                           @RequestParam(name = "startY") Double startY, @RequestParam(name = "endY") Double endY) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotListInMap(categoryId, user, startX, endX, startY, endY);
     }
 
     @GetMapping("/spot/list/bookmark")
     public SpotListRes spotListByBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         return spotService.findSpotListByBookmark(user);
     }
 
@@ -47,21 +47,21 @@ public class SpotController {
     public SpotListRes spotListBySearch(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @RequestParam(name = "query") String query,
                                         @RequestParam(name = "page") Integer page) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotListBySearch(user, query, page);
     }
 
     @GetMapping("/spot/list/visit")
     public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                           @RequestParam(name = "page") Integer page) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         return spotService.findSpotVisitList(user, page);
     }
 
     @GetMapping("/spot/{spotId}")
     public SpotDetailRes categoryDetail(@PathVariable(name = "spotId") Long spotId,
                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotDetail(spotId, user);
     }
 
@@ -71,14 +71,14 @@ public class SpotController {
     @PostMapping("/spot/{spotId}/bookmark")
     public void spotBookmarkAdd(@PathVariable(name = "spotId") Long spotId,
                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         spotBookmarkService.addSpotBookmark(spotId, user);
     }
 
     @DeleteMapping("/spot/{spotId}/bookmark")
     public void spotBookmarkRemove(@PathVariable(name = "spotId") Long spotId,
                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         spotBookmarkService.removeSpotBookmark(spotId, user);
     }
 

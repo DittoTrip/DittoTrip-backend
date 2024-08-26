@@ -27,7 +27,7 @@ public class CommentController {
                             @PathVariable(name = "reviewId") Long reviewId,
                             @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
                             @RequestBody CommentSaveReq commentSaveReq) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         commentService.saveComment(reviewId, parentCommentId, user, commentSaveReq);
     }
 
@@ -35,14 +35,14 @@ public class CommentController {
     public void commentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "commentId") Long commentId,
                               @RequestBody CommentSaveReq commentSaveReq) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         commentService.modifyComment(commentId, user, commentSaveReq);
     }
 
     @DeleteMapping("/{commentId}")
     public void commentRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "commentId") Long commentId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         commentService.removeComment(commentId, user);
     }
 

@@ -26,7 +26,7 @@ public class UserProfileController {
     @PutMapping
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         userProfileService.modifyUserProfile(user, modifyReq);
     }
 

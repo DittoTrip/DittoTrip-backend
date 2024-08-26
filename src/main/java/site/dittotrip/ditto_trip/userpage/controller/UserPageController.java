@@ -27,7 +27,7 @@ public class UserPageController {
     @GetMapping
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
-        User reqUser = getUserFromUserDetails(userDetails);
+        User reqUser = getUserFromUserDetails(userDetails, false);
         return userPageService.findUserPage(reqUser, userId);
     }
 

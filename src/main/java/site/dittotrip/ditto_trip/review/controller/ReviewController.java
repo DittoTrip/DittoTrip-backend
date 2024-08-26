@@ -36,7 +36,7 @@ public class ReviewController {
     public ReviewListRes reviewList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "spotId") Long spotId,
                                     Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, false);
         return reviewService.findReviewList(spotId, user, pageable);
     }
 
@@ -46,7 +46,7 @@ public class ReviewController {
     @GetMapping("/review/{reviewId}")
     public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, false);
         return reviewService.findReviewDetail(reviewId, user);
     }
 
@@ -55,7 +55,7 @@ public class ReviewController {
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
                            @RequestBody ReviewSaveReq reviewSaveReq,
                            @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         reviewService.saveReview(spotVisitId, user, reviewSaveReq, multipartFiles);
     }
 
@@ -64,28 +64,28 @@ public class ReviewController {
                              @PathVariable(name = "reviewId") Long reviewId,
                              @RequestBody ReviewModifyReq reviewModifyReq,
                              @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         reviewService.modifyReview(reviewId, user, reviewModifyReq, multipartFiles);
     }
 
     @DeleteMapping("/review/{reviewId}")
     public void reviewRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         reviewService.removeReview(reviewId, user);
     }
 
     @PostMapping("/review/{reviewId}/like")
     public void reviewLikeSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         reviewLikeService.saveReviewLike(reviewId, user);
     }
 
     @DeleteMapping("/review/{reviewId}/like")
     public void reviewLikeRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         reviewLikeService.removeReviewLike(reviewId, user);
     }
 

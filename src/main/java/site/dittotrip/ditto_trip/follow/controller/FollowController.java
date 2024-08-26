@@ -26,28 +26,28 @@ public class FollowController {
     @GetMapping("/following-list/{userId}")
     public FollowListRes FollowingList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                        @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         return followService.findFollowingList(user, userId);
     }
 
     @GetMapping("/followed-list/{userId}")
     public FollowListRes followedList(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         return followService.findFollowedList(user, userId);
     }
 
     @PostMapping("/follow/{userId}")
     public void followSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         followService.saveFollow(user, userId);
     }
 
     @DeleteMapping("/follow/{followId}")
     public void followRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "followId") Long followId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         followService.removeFollow(user, followId);
     }
 

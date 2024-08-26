@@ -38,7 +38,7 @@ public class CategoryController {
 
     @GetMapping("/list/bookmark")
     public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         return categoryService.findCategoryListByBookmark(user);
     }
 
@@ -56,14 +56,14 @@ public class CategoryController {
     @PostMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.addCategoryBookmark(categoryId, user);
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.removeCategoryBookmark(categoryId, user);
     }
 

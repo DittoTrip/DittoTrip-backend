@@ -27,7 +27,7 @@ public class DittoCommentController {
                                  @PathVariable(name = "dittoId") Long dittoId,
                                  @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
                                  @RequestBody DittoCommentSaveReq saveReq) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         dittoCommentService.saveDittoComment(dittoId, parentCommentId, user, saveReq);
     }
 
@@ -35,14 +35,14 @@ public class DittoCommentController {
     public void dittoCommentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId,
                                    @RequestBody DittoCommentSaveReq saveReq) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         dittoCommentService.modifyDittoComment(commentId, user, saveReq);
     }
 
     @DeleteMapping("/{commentId}")
     public void dittoCommentRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId) {
-        User user = getUserFromUserDetails(userDetails);
+        User user = getUserFromUserDetails(userDetails, true);
         dittoCommentService.removeDittoComment(commentId, user);
     }
 
