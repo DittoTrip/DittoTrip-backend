@@ -21,9 +21,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class UserProfileService {
 
-    private UserProfileRepository userProfileRepository;
-    private ItemRepository itemRepository;
-    private BadgeRepository badgeRepository;
+    private final UserProfileRepository userProfileRepository;
+    private final ItemRepository itemRepository;
+    private final BadgeRepository badgeRepository;
 
 
     public void modifyUserProfile(User user, UserProfileModifyReq modifyReq) {

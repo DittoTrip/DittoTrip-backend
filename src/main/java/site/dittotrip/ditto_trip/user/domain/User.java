@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 
 import java.util.ArrayList;
@@ -32,4 +33,8 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private List<SpotVisit> spotVisits = new ArrayList<>();
+
+  @OneToOne(mappedBy = "user")
+  private UserProfile userProfile;
+
 }
