@@ -40,8 +40,6 @@ public class ReviewService {
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
-    private static final int PAGE_SIZE = 10;
-
     public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
         Page<Review> reviewsPage = reviewRepository.findBySpot(spot, pageable);
