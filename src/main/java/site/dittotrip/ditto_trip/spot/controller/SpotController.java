@@ -52,11 +52,15 @@ public class SpotController {
         return spotService.findSpotListBySearch(user, query, pageable);
     }
 
-    @GetMapping("/spot/list/visit")
+    /**
+     * 마이페이지 기능인가 ?
+     */
+    @GetMapping("/user/{userId}/visited")
     public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                          @PathVariable(name = "userId") Long userId,
                                           Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return spotService.findSpotVisitList(user, pageable);
+        User reqUser = getUserFromUserDetails(userDetails, true);
+        return spotService.findSpotVisitList(userId, reqUser, pageable);
     }
 
     @GetMapping("/spot/{spotId}")

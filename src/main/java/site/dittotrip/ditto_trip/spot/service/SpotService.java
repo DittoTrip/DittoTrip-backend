@@ -15,6 +15,7 @@ import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,6 +33,7 @@ public class SpotService {
     private final ReviewRepository reviewRepository;
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
+    private final UserRepository userRepository;
 
     public SpotListInMapRes findSpotListInMap(Long categoryId, User user,
                                               Double startX, Double endX, Double startY, Double endY) {
@@ -69,7 +71,8 @@ public class SpotService {
         return spotListRes;
     }
 
-    public SpotVisitListRes findSpotVisitList(User user, Pageable pageable) {
+    public SpotVisitListRes findSpotVisitList(Long userId, User reqUser, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Page<SpotVisit> page = spotVisitRepository.findByUser(user, pageable);
 
         List<SpotVisit> spotVisits = page.getContent();
@@ -79,7 +82,7 @@ public class SpotService {
         spotVisitListRes.setTotalPages(page.getTotalPages());
 
         for (SpotVisit spotVisit : spotVisits) {
-            Long bookmarkId = getBookmarkId(spotVisit.getSpot(), user);
+            Long bookmarkId = getBookmarkId(spotVisit.getSpot(), reqUser);
             spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, bookmarkId));
         }
 
