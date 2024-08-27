@@ -30,7 +30,7 @@ public class DittoService {
 
     public DittoListRes findDittoList(User user, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
-        return DittoListRes.fromEntities(page, user);
+        return DittoListRes.fromEntities(page);
     }
 
     public DittoListRes findDittoListInBookmark(User user) {
@@ -41,7 +41,7 @@ public class DittoService {
             dittos.add(dittoBookmark.getDitto());
         }
 
-        return DittoListRes.fromEntities(dittos, user);
+        return DittoListRes.fromEntities(dittos);
     }
 
     public DittoDetailRes findDittoDetail(Long dittoId, User user) {
