@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -25,10 +27,12 @@ public class TestDataConfig {
         String email = "won9619v@naver.com";
         String nickname = "haus";
         String password = "1234";
-        userRepository.findByEmail(email).ifPresent(m -> {
-            log.info("===== ALREADY DATA INIT =====");
+
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isPresent()) {
+            log.info("===== ALREADY EXISTING DATA =====");
             return;
-        });
+        }
 
         User user = new User();
         user.setEmail(email);
