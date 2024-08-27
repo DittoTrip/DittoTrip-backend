@@ -28,7 +28,7 @@ public class UserPageRes {
         return UserPageRes.builder()
                 .userData(UserData.fromEntity(user))
                 .userProfileData(UserProfileData.fromEntity(userProfile))
-                .dittoMiniDataList(DittoMiniData.listFromEntities(dittos, user))
+                .dittoMiniDataList(DittoMiniData.listFromEntities(dittos))
                 .followingCount(followingCount)
                 .followedCount(followedCount)
                 .build();

@@ -18,20 +18,20 @@ public class DittoMiniData {
     private String imagePath;
     private UserData userData;
 
-    public static DittoMiniData fromEntity(Ditto ditto, User user) {
+    public static DittoMiniData fromEntity(Ditto ditto) {
         return DittoMiniData.builder()
                 .dittoId(ditto.getId())
                 .title(ditto.getTitle())
                 .imagePath(ditto.getDittoImages().get(0).getImagePath())
-                .userData(UserData.fromEntity(user))
+                .userData(UserData.fromEntity(ditto.getUser()))
                 .build();
     }
 
 
-    public static List<DittoMiniData> listFromEntities(List<Ditto> dittos, User user) {
+    public static List<DittoMiniData> listFromEntities(List<Ditto> dittos) {
         List<DittoMiniData> dittoMiniDataList = new ArrayList<>();
         for (Ditto ditto : dittos) {
-            dittoMiniDataList.add(fromEntity(ditto, user));
+            dittoMiniDataList.add(fromEntity(ditto));
         }
         return dittoMiniDataList;
     }
