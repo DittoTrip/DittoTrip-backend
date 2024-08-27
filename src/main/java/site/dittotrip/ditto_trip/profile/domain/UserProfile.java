@@ -10,6 +10,9 @@ import site.dittotrip.ditto_trip.user.domain.User;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+/**
+ * 초기화 작업 필요
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -19,7 +22,7 @@ public class UserProfile {
     @Column(name = "user_profile_id")
     private Long id;
 
-    private Integer progressionBar;
+    private Integer progressionBar = 0;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "users_id")
