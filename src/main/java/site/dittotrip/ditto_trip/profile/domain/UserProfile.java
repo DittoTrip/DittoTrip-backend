@@ -58,4 +58,7 @@ public class UserProfile {
     @Setter
     private Badge badge;
 
+    public UserProfile(User user) {
+        this.user = user;
+    }
 }
