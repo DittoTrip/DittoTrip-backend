@@ -7,6 +7,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import site.dittotrip.ditto_trip.profile.domain.UserProfile;
+import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -19,6 +21,7 @@ public class TestDataConfig {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserProfileRepository userProfileRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void testUserDataInit() {
@@ -41,6 +44,10 @@ public class TestDataConfig {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         user.getAuthorities().add(authority);
         userRepository.save(user);
+
+        UserProfile userProfile = new UserProfile(user);
+        user.setUserProfile(userProfile);
+        userProfileRepository.save(userProfile);
 
         log.info("===== TEST DATA INIT END =====");
     }
