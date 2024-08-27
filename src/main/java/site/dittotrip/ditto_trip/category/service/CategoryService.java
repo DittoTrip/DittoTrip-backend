@@ -63,26 +63,7 @@ public class CategoryService {
         PageRequest pageRequest = PageRequest.of(pageNumber, PAGE_SIZE);
         Page<Category> page = categoryRepository.findBySubType(subType, pageRequest);
 
-        return CategoryPageRes.fromEntities(page.getContent());
+        return CategoryPageRes.fromEntities(page);
     }
-
-
-    /**
-     * 스팟 리스트 조회로 옮기기
-     */
-//    public CategoryDetailRes findCategoryDetail(Long categoryId) {
-//        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-//        List<CategorySpot> categorySpots = categorySpotRepository.findByScope(category);
-//
-//        return CategoryDetailRes.fromEntity(category, convertSpotList(categorySpots));
-//    }
-//
-//    private List<Spot> convertSpotList(List<CategorySpot> categorySpots) {
-//        List<Spot> spots = new ArrayList<>();
-//        for (CategorySpot categorySpot : categorySpots) {
-//            spots.add(categorySpot.getSpot());
-//        }
-//        return spots;
-//    }
 
 }
