@@ -20,10 +20,10 @@ public class SpotDetailRes {
     private List<SpotImageData> spotImageDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
 
-    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Boolean isBookmark) {
+    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Long bookmarkId) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
-        spotDetailRes.setSpotData(SpotData.fromEntity(spot, isBookmark));
+        spotDetailRes.setSpotData(SpotData.fromEntity(spot, bookmarkId));
         spotDetailRes.putImageDataList(SpotImages);
         spotDetailRes.putReviewDataList(reviews);
 

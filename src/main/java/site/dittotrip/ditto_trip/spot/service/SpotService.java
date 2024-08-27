@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.spot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
@@ -32,8 +33,6 @@ public class SpotService {
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
 
-    private static final int PAGE_SIZE = 10;
-
     public SpotListInMapRes findSpotListInMap(Long categoryId, User user,
                                               Double startX, Double endX, Double startY, Double endY) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
@@ -43,10 +42,10 @@ public class SpotService {
         spotListInMapRes.setCategoryData(CategoryData.fromEntity(category));
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
-            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
-            spotListInMapRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkOptional.isPresent()));
+            Long bookmarkId = getBookmarkId(spot, user);
+            spotListInMapRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
-        spotListInMapRes.setCount(categorySpots.size());
+        spotListInMapRes.setSpotCount(categorySpots.size());
 
         return spotListInMapRes;
     }
@@ -57,30 +56,31 @@ public class SpotService {
     }
 
 
-    public SpotListRes findSpotListBySearch(User user, String word, Integer page) {
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
-        List<Spot> spots = spotRepository.findBySpotNameContaining(word, pageRequest);
+    public SpotListRes findSpotListBySearch(User user, String word, Pageable pageable) {
+        List<Spot> spots = spotRepository.findBySpotNameContaining(word, pageable);
 
         SpotListRes spotListRes = new SpotListRes();
+        spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
-            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkOptional.isPresent()));
+            Long bookmarkId = getBookmarkId(spot, user);
+            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
 
         return spotListRes;
     }
 
-    public SpotVisitListRes findSpotVisitList(User user, Integer page) {
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
-        Page<SpotVisit> spotVisitPage = spotVisitRepository.findByUser(user, pageRequest);
+    public SpotVisitListRes findSpotVisitList(User user, Pageable pageable) {
+        Page<SpotVisit> page = spotVisitRepository.findByUser(user, pageable);
 
-        List<SpotVisit> spotVisits = spotVisitPage.getContent();
+        List<SpotVisit> spotVisits = page.getContent();
 
         SpotVisitListRes spotVisitListRes = new SpotVisitListRes();
-        spotVisitListRes.setCount((int) spotVisitPage.getTotalElements());
+        spotVisitListRes.setCount((int) page.getTotalElements());
+        spotVisitListRes.setTotalPages(page.getTotalPages());
+
         for (SpotVisit spotVisit : spotVisits) {
-            Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spotVisit.getSpot(), user);
-            spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, spotBookmarkOptional.isPresent()));
+            Long bookmarkId = getBookmarkId(spotVisit.getSpot(), user);
+            spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, bookmarkId));
         }
 
         return spotVisitListRes;
@@ -91,9 +91,17 @@ public class SpotService {
 
         List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
-        Optional<SpotBookmark> spotBookmarkOptional = spotBookmarkRepository.findBySpotAndUser(spot, user);
+        Long bookmarkId = getBookmarkId(spot, user);
 
-        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, spotBookmarkOptional.isPresent());
+        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
+    }
+
+    private Long getBookmarkId(Spot spot, User user) {
+        if (user == null) {
+            return null;
+        }
+        Optional<SpotBookmark> findBookmark = spotBookmarkRepository.findBySpotAndUser(spot, user);
+        return findBookmark.map(SpotBookmark::getId).orElse(null);
     }
 
 }
