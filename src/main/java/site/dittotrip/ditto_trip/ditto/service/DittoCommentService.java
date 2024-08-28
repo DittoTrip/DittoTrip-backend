@@ -24,6 +24,7 @@ public class DittoCommentService {
     private final DittoRepository dittoRepository;
     private final DittoCommentRepository dittoCommentRepository;
 
+    @Transactional(readOnly = false)
     public void saveDittoComment(Long dittoId, Long parentCommentId, User user,
                                  DittoCommentSaveReq saveReq) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
@@ -44,6 +45,7 @@ public class DittoCommentService {
         dittoCommentRepository.save(dittoComment);
     }
 
+    @Transactional(readOnly = false)
     public void modifyDittoComment(Long dittoCommentId, User user, DittoCommentSaveReq saveReq) {
         DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
@@ -54,6 +56,7 @@ public class DittoCommentService {
         saveReq.modifyEntity(comment);
     }
 
+    @Transactional(readOnly = false)
     public void removeDittoComment(Long dittoCommentId, User user) {
         DittoComment dittoComment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
