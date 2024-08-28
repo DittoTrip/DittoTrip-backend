@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
+import site.dittotrip.ditto_trip.review.exception.DoubleChildReviewCommentException;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.NotMatchedRelationException;
 import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
@@ -31,6 +32,10 @@ public class CommentService {
         ReviewComment parentReviewComment = null;
         if (parentCommentId != null) {
             parentReviewComment = reviewCommentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+            if (parentReviewComment.getParentReviewComment() != null) {
+                throw new DoubleChildReviewCommentException();
+            }
+
             if (!parentReviewComment.getReview().equals(review)) {
                 throw new NotMatchedRelationException();
             }
