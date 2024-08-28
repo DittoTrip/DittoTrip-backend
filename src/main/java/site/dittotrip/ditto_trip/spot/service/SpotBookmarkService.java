@@ -38,7 +38,7 @@ public class SpotBookmarkService {
     public void removeSpotBookmark(long bookmarkId, User user) {
         SpotBookmark bookmark = spotBookmarkRepository.findById(bookmarkId).orElseThrow(NoSuchElementException::new);
 
-        if (!bookmark.getUser().equals(user)) {
+        if (bookmark.getUser().getId() != user.getId()) {
             throw new NoAuthorityException();
         }
 
