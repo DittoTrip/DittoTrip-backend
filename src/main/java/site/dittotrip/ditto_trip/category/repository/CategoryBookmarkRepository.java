@@ -13,7 +13,7 @@ public interface CategoryBookmarkRepository extends JpaRepository<CategoryBookma
 
     Optional<CategoryBookmark> findByCategoryAndUser(Category category, User user);
 
-    @EntityGraph(attributePaths = {"category"})
+    @EntityGraph(attributePaths = "category")
     List<CategoryBookmark> findByUser(User user);
 
 }

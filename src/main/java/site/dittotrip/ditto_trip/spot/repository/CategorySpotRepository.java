@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CategorySpotRepository extends JpaRepository<CategorySpot, Long> {
 
-    @EntityGraph(attributePaths = {"spot"})
+    @EntityGraph(attributePaths = "spot")
     @Query("select cs from CategorySpot cs where cs.category= :category" +
             " and :startX < cs.spot.pointX and cs.spot.pointX < :endX" +
             " and :startY < cs.spot.pointY and cs.spot.pointY < :endY")
