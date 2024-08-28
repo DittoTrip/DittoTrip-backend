@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
@@ -29,4 +30,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findByUser(User user);
 
+    Optional<Review> findBySpotVisit(SpotVisit spotVisit);
 }

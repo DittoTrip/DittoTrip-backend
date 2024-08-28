@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
+import site.dittotrip.ditto_trip.review.exception.AlreadyWriteReviewException;
 import site.dittotrip.ditto_trip.review.exception.ReviewWritePeriodOverException;
 import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
@@ -92,6 +93,10 @@ public class ReviewService {
     @Transactional(readOnly = false)
     public void saveReview(Long spotVisitId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         SpotVisit spotVisit = spotVisitRepository.findById(spotVisitId).orElseThrow(NoSuchElementException::new);
+
+        reviewRepository.findBySpotVisit(spotVisit).ifPresent(m -> {
+            throw new AlreadyWriteReviewException();
+        });
 
         Duration duration = Duration.between(spotVisit.getCreatedDateTime(), LocalDateTime.now());
         if (duration.getSeconds() > REVIEW_WRITE_PERIOD) {
