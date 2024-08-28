@@ -155,7 +155,7 @@ public class ReviewService {
             return Boolean.FALSE;
         }
 
-        if (review.getUser().equals(user)) {
+        if (review.getUser().getId() == user.getId()) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
