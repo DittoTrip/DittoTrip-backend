@@ -106,7 +106,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         Float oldRating = review.getRating();
 
-        if (!review.getUser().equals(user)) {
+        if (review.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
@@ -125,7 +125,7 @@ public class ReviewService {
     public void removeReview(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
-        if (!review.getUser().equals(user)) {
+        if (review.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
