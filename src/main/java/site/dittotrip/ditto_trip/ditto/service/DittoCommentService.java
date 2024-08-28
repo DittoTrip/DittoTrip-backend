@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoCommentSaveReq;
+import site.dittotrip.ditto_trip.ditto.exception.DoubleChildDittoCommentException;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
@@ -30,6 +31,10 @@ public class DittoCommentService {
         DittoComment parentComment = null;
         if (parentCommentId != null) {
             parentComment = dittoCommentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+            if (parentComment.getParentDittoComment() != null) {
+                throw new DoubleChildDittoCommentException();
+            }
+
             if (!parentComment.getDitto().equals(ditto)) {
                 throw new NotMatchedRelationException();
             }
