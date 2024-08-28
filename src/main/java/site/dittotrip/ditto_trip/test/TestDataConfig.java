@@ -81,6 +81,8 @@ public class TestDataConfig {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setNickname(nickname);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        user.getAuthorities().add(authority);
         userRepository.save(user);
 
         UserProfile userProfile = new UserProfile(user);
