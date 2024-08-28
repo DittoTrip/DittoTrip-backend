@@ -19,12 +19,13 @@ public class DittoMiniData {
     private UserData userData;
 
     public static DittoMiniData fromEntity(Ditto ditto) {
-        return DittoMiniData.builder()
+        DittoMiniData dittoMiniData = DittoMiniData.builder()
                 .dittoId(ditto.getId())
                 .title(ditto.getTitle())
-                .imagePath(ditto.getDittoImages().get(0).getImagePath())
                 .userData(UserData.fromEntity(ditto.getUser()))
                 .build();
+        dittoMiniData.putImagePath(ditto);
+        return dittoMiniData;
     }
 
 
@@ -35,4 +36,11 @@ public class DittoMiniData {
         }
         return dittoMiniDataList;
     }
+
+    private void putImagePath(Ditto ditto) {
+        if (!ditto.getDittoImages().isEmpty()) {
+            this.imagePath = ditto.getDittoImages().get(0).getImagePath();
+        }
+    }
+
 }

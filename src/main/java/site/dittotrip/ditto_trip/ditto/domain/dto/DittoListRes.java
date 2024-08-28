@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class DittoListRes {
 
+    @Builder.Default
     private List<DittoMiniData> dittoMiniDataList = new ArrayList<>();
     private Integer totalPage;
 
