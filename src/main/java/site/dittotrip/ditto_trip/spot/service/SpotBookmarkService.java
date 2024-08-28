@@ -35,7 +35,7 @@ public class SpotBookmarkService {
     }
 
     @Transactional(readOnly = false)
-    public void removeSpotBookmark(long bookmarkId, User user) {
+    public void removeSpotBookmark(Long bookmarkId, User user) {
         SpotBookmark bookmark = spotBookmarkRepository.findById(bookmarkId).orElseThrow(NoSuchElementException::new);
 
         if (bookmark.getUser().getId() != user.getId()) {
