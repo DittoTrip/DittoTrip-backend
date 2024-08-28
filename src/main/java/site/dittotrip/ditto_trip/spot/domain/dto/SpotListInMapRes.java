@@ -11,6 +11,6 @@ public class SpotListInMapRes {
 
     private CategoryData categoryData;
     private List<SpotData> spotDataList = new ArrayList<>();
-    private Integer count;
+    private Integer spotCount;
 
 }

@@ -21,6 +21,7 @@ public class DittoData {
     private LocalDateTime createdDateTime;
 
     private UserData userData;
+    @Builder.Default
     private List<String> imagePaths = new ArrayList<>();
 
     private Boolean isMine;
@@ -32,7 +33,7 @@ public class DittoData {
                 .title(ditto.getTitle())
                 .body(ditto.getBody())
                 .createdDateTime(ditto.getCreatedDateTime())
-                .userData(UserData.fromEntity(new User()))
+                .userData(UserData.fromEntity(ditto.getUser()))
                 .isMine(isMine)
                 .myBookmarkId(myBookmarkId)
                 .build();

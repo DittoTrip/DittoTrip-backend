@@ -11,12 +11,14 @@ import java.util.List;
 public class SpotListRes {
 
     private List<SpotData> spotDataList = new ArrayList<>();
+    private Integer spotCount;
 
     public static SpotListRes fromEntitiesByBookmark(List<SpotBookmark> spotBookmarks) {
         SpotListRes spotListRes = new SpotListRes();
+        spotListRes.setSpotCount(spotBookmarks.size());
 
         for (SpotBookmark spotBookmark : spotBookmarks) {
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spotBookmark.getSpot(), true));
+            spotListRes.getSpotDataList().add(SpotData.fromEntity(spotBookmark.getSpot(), spotBookmark.getId()));
         }
 
         return spotListRes;

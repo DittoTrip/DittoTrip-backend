@@ -30,7 +30,7 @@ public class DittoService {
 
     public DittoListRes findDittoList(User user, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
-        return DittoListRes.fromEntities(page, user);
+        return DittoListRes.fromEntities(page);
     }
 
     public DittoListRes findDittoListInBookmark(User user) {
@@ -41,7 +41,7 @@ public class DittoService {
             dittos.add(dittoBookmark.getDitto());
         }
 
-        return DittoListRes.fromEntities(dittos, user);
+        return DittoListRes.fromEntities(dittos);
     }
 
     public DittoDetailRes findDittoDetail(Long dittoId, User user) {
@@ -105,7 +105,7 @@ public class DittoService {
             return Boolean.FALSE;
         }
 
-        if (ditto.getUser().equals(user)) {
+        if (ditto.getUser().getId() == user.getId()) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
@@ -119,8 +119,6 @@ public class DittoService {
 
         Optional<DittoBookmark> dittoBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user);
         return dittoBookmark.map(DittoBookmark::getId).orElse(null);
-
-
     }
 
 }

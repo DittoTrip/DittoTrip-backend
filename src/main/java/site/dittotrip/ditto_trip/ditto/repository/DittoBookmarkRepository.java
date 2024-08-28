@@ -14,7 +14,7 @@ public interface DittoBookmarkRepository extends JpaRepository<DittoBookmark, Lo
 
     Optional<DittoBookmark> findByDittoAndUser(Ditto ditto, User user);
 
-    @EntityGraph(attributePaths = "{ditto}")
+    @EntityGraph(attributePaths = "ditto")
     List<DittoBookmark> findByUser(User user);
 
 }

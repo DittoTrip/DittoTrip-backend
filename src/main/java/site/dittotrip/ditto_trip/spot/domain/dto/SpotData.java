@@ -6,7 +6,6 @@ import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.dto.HashtagData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class SpotData {
     private Float rating;
 
     private List<HashtagData> hashtagData = new ArrayList<>();
-    private Boolean isBookmark;
+    private Long bookmarkId;
 
-    public static SpotData fromEntity(Spot spot, Boolean isBookmark) {
+    public static SpotData fromEntity(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
                 .spotName(spot.getSpotName())
@@ -34,7 +33,7 @@ public class SpotData {
                 .pointY(spot.getPointY())
                 .imagePath(spot.getImagePath())
                 .rating(spot.getRating())
-                .isBookmark(isBookmark)
+                .bookmarkId(bookmarkId)
                 .build();
 
         spotData.putHashtagData(spot);

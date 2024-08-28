@@ -13,7 +13,7 @@ public interface ReviewCommentRepository extends JpaRepository<ReviewComment, Lo
 
     Optional<ReviewComment> findByUser(User user);
 
-    @Query("select c from ReviewComment c where c.review= :review and c.parentReviewComment= null")
+    @Query("select c from ReviewComment c where c.review= :review and c.parentReviewComment is null")
     List<ReviewComment> findParentCommentsByReview(Review review);
 
 //    List<ReviewComment> findByReviewAndParentCommentIsNullOrderByCreatedDateTimeAsc(Review review);

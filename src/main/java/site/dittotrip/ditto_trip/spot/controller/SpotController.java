@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.spot.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
@@ -46,16 +47,20 @@ public class SpotController {
     @GetMapping("/spot/list/search")
     public SpotListRes spotListBySearch(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @RequestParam(name = "query") String query,
-                                        @RequestParam(name = "page") Integer page) {
+                                        Pageable pageable) {
         User user = getUserFromUserDetails(userDetails, false);
-        return spotService.findSpotListBySearch(user, query, page);
+        return spotService.findSpotListBySearch(user, query, pageable);
     }
 
-    @GetMapping("/spot/list/visit")
+    /**
+     * 마이페이지 기능인가 ?
+     */
+    @GetMapping("/user/{userId}/visited")
     public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                          @RequestParam(name = "page") Integer page) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return spotService.findSpotVisitList(user, page);
+                                          @PathVariable(name = "userId") Long userId,
+                                          Pageable pageable) {
+        User reqUser = getUserFromUserDetails(userDetails, true);
+        return spotService.findSpotVisitList(userId, reqUser, pageable);
     }
 
     @GetMapping("/spot/{spotId}")
@@ -75,11 +80,11 @@ public class SpotController {
         spotBookmarkService.addSpotBookmark(spotId, user);
     }
 
-    @DeleteMapping("/spot/{spotId}/bookmark")
-    public void spotBookmarkRemove(@PathVariable(name = "spotId") Long spotId,
+    @DeleteMapping("/spot/{spotId}/bookmark/{bookmarkId}")
+    public void spotBookmarkRemove(@PathVariable(name = "bookmarkId") Long bookmarkId,
                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
-        spotBookmarkService.removeSpotBookmark(spotId, user);
+        spotBookmarkService.removeSpotBookmark(bookmarkId, user);
     }
 
 }

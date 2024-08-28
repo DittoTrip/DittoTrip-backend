@@ -31,7 +31,7 @@ public class Review {
     private Float rating;
 
     @Setter
-    private Integer likes;
+    private Integer likes = 0;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;

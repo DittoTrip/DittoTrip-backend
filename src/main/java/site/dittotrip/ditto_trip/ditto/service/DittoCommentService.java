@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoCommentSaveReq;
+import site.dittotrip.ditto_trip.ditto.exception.DoubleChildDittoCommentException;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
@@ -23,6 +24,7 @@ public class DittoCommentService {
     private final DittoRepository dittoRepository;
     private final DittoCommentRepository dittoCommentRepository;
 
+    @Transactional(readOnly = false)
     public void saveDittoComment(Long dittoId, Long parentCommentId, User user,
                                  DittoCommentSaveReq saveReq) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
@@ -30,6 +32,10 @@ public class DittoCommentService {
         DittoComment parentComment = null;
         if (parentCommentId != null) {
             parentComment = dittoCommentRepository.findById(parentCommentId).orElseThrow(NoSuchElementException::new);
+            if (parentComment.getParentDittoComment() != null) {
+                throw new DoubleChildDittoCommentException();
+            }
+
             if (!parentComment.getDitto().equals(ditto)) {
                 throw new NotMatchedRelationException();
             }
@@ -39,6 +45,7 @@ public class DittoCommentService {
         dittoCommentRepository.save(dittoComment);
     }
 
+    @Transactional(readOnly = false)
     public void modifyDittoComment(Long dittoCommentId, User user, DittoCommentSaveReq saveReq) {
         DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
@@ -49,6 +56,7 @@ public class DittoCommentService {
         saveReq.modifyEntity(comment);
     }
 
+    @Transactional(readOnly = false)
     public void removeDittoComment(Long dittoCommentId, User user) {
         DittoComment dittoComment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
