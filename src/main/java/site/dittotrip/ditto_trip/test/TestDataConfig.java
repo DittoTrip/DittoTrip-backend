@@ -48,7 +48,7 @@ public class TestDataConfig {
         User user2 = createUser("인주", "huhhuh@naver.com", "12345", "YH486");
         User user3 = createUser("윤하", "yunha@naver.com", "123456", "realYH");
 
-        Category category1 = createCategory("뷰티 인사이드", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category1 = createCategory("이상한 변호사 우영우", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
         Category category2 = createCategory("동백꽃 필 무렵", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
         Category category3 = createCategory("눈물의 여왕", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
         Category category4 = createCategory("서울의 봄", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
@@ -65,8 +65,12 @@ public class TestDataConfig {
         Category category14 = createCategory("윤하", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
         Category category15 = createCategory("최유리", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
 
-        createSpot("소소주점", "소소한 주점입니다", "강원도 강릉시 주문진읍", LocalTime.of(14, 0), LocalTime.of(23, 0),
-                "031-121-2322", null, 36.7, 127.0, null, List.of(category2, category12));
+        Spot spot1 = createSpot("소소주점", "소소한 주점입니다", "강원도 강릉시 주문진읍", LocalTime.of(14, 0), LocalTime.of(23, 0),
+                "031-121-2322", null, 127.0, 36.9, null, List.of(category2, category12));
+
+        Spot spot2 = createSpot("소덕동 팽나무", "커다란 나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", null, null,
+                null, null, 126.9, 36.7, null, List.of(category1, category12));
+
 
         log.info("===== TEST DATA INIT END =====");
     }
