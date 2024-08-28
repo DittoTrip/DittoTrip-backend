@@ -45,4 +45,19 @@ public class Spot {
     @ManyToMany(mappedBy = "spots")
     private List<Hashtag> hashtags = new ArrayList<>();
 
+    /**
+     * for test
+     */
+    public Spot(String spotName, String intro, String address, LocalTime startTime, LocalTime endTime, String phoneNumber, String homeUri, Double pointX, Double pointY, String imagePath) {
+        this.spotName = spotName;
+        this.intro = intro;
+        this.address = address;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.phoneNumber = phoneNumber;
+        this.homeUri = homeUri;
+        this.pointX = pointX;
+        this.pointY = pointY;
+        this.imagePath = imagePath;
+    }
 }

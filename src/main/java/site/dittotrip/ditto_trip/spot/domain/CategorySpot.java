@@ -24,4 +24,12 @@ public class CategorySpot {
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
+    /**
+     * for test
+     */
+    public CategorySpot(Category category, Spot spot) {
+        this.category = category;
+        this.spot = spot;
+    }
+
 }
