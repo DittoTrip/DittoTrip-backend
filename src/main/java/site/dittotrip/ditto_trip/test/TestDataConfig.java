@@ -13,6 +13,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
+import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
@@ -37,16 +38,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TestDataConfig {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final CategoryRepository categoryRepository;
     private final SpotRepository spotRepository;
     private final CategorySpotRepository categorySpotRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
-
-
+    private final DittoRepository dittoRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void testDataInit() {
@@ -84,7 +84,13 @@ public class TestDataConfig {
         SpotVisit spotVisit1 = createSpotVisit(spot1, user1);
         SpotVisit spotVisit2 = createSpotVisit(spot2, user2);
 
-        Review review1 = createReview("좋았습니다.", 3f, user2, spotVisit2);
+        Review review1 = createReview("좋았슴", 4f, user2, spotVisit1);
+        Review review2 = createReview("좋았습니다.", 3f, user2, spotVisit2);
+
+        Ditto ditto1 = createDitto("제목1", "여기 좋아요1", user1);
+        Ditto ditto2 = createDitto("제목2", "여기 좋아요2", user1);
+        Ditto ditto3 = createDitto("제목3", "여기 좋아요3", user2);
+        Ditto ditto4 = createDitto("제목4", "여기 좋아요4", user2);
 
         log.info("===== TEST DATA INIT END =====");
     }
@@ -133,19 +139,36 @@ public class TestDataConfig {
     private Review createReview(String body, Float rating, User user, SpotVisit spotVisit) {
         Review review = new Review(body, rating, null, user, spotVisit);
         reviewRepository.save(review);
+        Spot spot = spotVisit.getSpot();
+        modifySpotRating(spot, 3.0f, null);
         return review;
     }
 
-    @EventListener(ContextClosedEvent.class)
-    public void testDataRestore() {
-        User user1 = userRepository.findByEmail("won9619v@naver.com").get();
-        User user2 = userRepository.findByEmail("huhhuh@naver.com").get();
-        User user3 = userRepository.findByEmail("yunha@naver.com").get();
+    private Ditto createDitto(String title, String body, User user) {
+        Ditto ditto = new Ditto(title, body, user);
+        dittoRepository.save(ditto);
+        return ditto;
+    }
 
-        userRepository.delete(user1);
-        userRepository.delete(user2);
-        userRepository.delete(user3);
-        
+
+    private void modifySpotRating(Spot spot, Float add, Float sub) {
+        int reviewCount = spot.getReviewCount();
+        float ratingSum = spot.getRating() * reviewCount;
+
+        if (add != null) {
+            reviewCount++;
+            ratingSum += add;
+        }
+
+        if (sub != null) {
+            reviewCount--;
+            ratingSum -= sub;
+        }
+
+        Float newRating = ratingSum / reviewCount;
+
+        spot.setReviewCount(reviewCount);
+        spot.setRating(newRating);
     }
 
 }
