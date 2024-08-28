@@ -13,7 +13,7 @@ public interface SpotBookmarkRepository extends JpaRepository<SpotBookmark, Long
 
     Optional<SpotBookmark> findBySpotAndUser(Spot spot, User user);
 
-    @EntityGraph(attributePaths = "{spot}")
+    @EntityGraph(attributePaths = "spot")
     List<SpotBookmark> findByUser(User user);
 
 }
