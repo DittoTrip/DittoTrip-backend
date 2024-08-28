@@ -15,10 +15,14 @@ import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
+import site.dittotrip.ditto_trip.review.domain.Review;
+import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
+import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -39,6 +43,9 @@ public class TestDataConfig {
     private final CategoryRepository categoryRepository;
     private final SpotRepository spotRepository;
     private final CategorySpotRepository categorySpotRepository;
+    private final SpotVisitRepository spotVisitRepository;
+    private final ReviewRepository reviewRepository;
+
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -67,10 +74,17 @@ public class TestDataConfig {
 
         Spot spot1 = createSpot("소소주점", "소소한 주점입니다", "강원도 강릉시 주문진읍", LocalTime.of(14, 0), LocalTime.of(23, 0),
                 "031-121-2322", null, 127.0, 36.9, null, List.of(category2, category12));
-
         Spot spot2 = createSpot("소덕동 팽나무", "커다란 나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", null, null,
                 null, null, 126.9, 36.7, null, List.of(category1, category12));
+        Spot spot3 = createSpot("순재네 집", "순재가 사는 집", "서울 광진구", null, null,
+                null, null, 126.8, 36.6, null, List.of(category13, category15));
+        Spot spot4 = createSpot("인주네 집", "인주가 사는 집", "교대역쪽", null, null,
+                null, null, 126.7, 36.5, null, List.of(category14));
 
+        SpotVisit spotVisit1 = createSpotVisit(spot1, user1);
+        SpotVisit spotVisit2 = createSpotVisit(spot2, user2);
+
+        Review review1 = createReview("좋았습니다.", 3f, user2, spotVisit2);
 
         log.info("===== TEST DATA INIT END =====");
     }
@@ -108,6 +122,18 @@ public class TestDataConfig {
         }
 
         return spot;
+    }
+
+    private SpotVisit createSpotVisit(Spot spot, User user) {
+        SpotVisit spotVisit = new SpotVisit(spot, user);
+        spotVisitRepository.save(spotVisit);
+        return spotVisit;
+    }
+
+    private Review createReview(String body, Float rating, User user, SpotVisit spotVisit) {
+        Review review = new Review(body, rating, null, user, spotVisit);
+        reviewRepository.save(review);
+        return review;
     }
 
     @EventListener(ContextClosedEvent.class)

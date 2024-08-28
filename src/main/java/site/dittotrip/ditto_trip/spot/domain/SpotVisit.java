@@ -31,4 +31,9 @@ public class SpotVisit {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
+    public SpotVisit(Spot spot, User user) {
+        this.spot = spot;
+        this.user = user;
+    }
+
 }
