@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +19,8 @@ public class ReviewCommentData {
     private LocalDateTime createdDateTime;
 
     private UserData userData;
-    private List<ReviewCommentData> childrenCommentsData;
+    @Builder.Default
+    private List<ReviewCommentData> childrenCommentsData = new ArrayList<>();
 
     private Boolean isMine = Boolean.FALSE;
 
