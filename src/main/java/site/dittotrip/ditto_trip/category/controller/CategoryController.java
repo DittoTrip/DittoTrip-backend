@@ -12,6 +12,8 @@ import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+
 /**
  * 1. 카테고리 탐색 첫 페이지 (majorType 별 리스트 -> PERSON / CONTENT)
  *      => subType 별 리스트들 반환 (리스트들)
@@ -35,8 +37,8 @@ public class CategoryController {
     }
 
     @GetMapping("/list/bookmark")
-    public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
+    public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = getUserFromUserDetails(userDetails, true);
         return categoryService.findCategoryListByBookmark(user);
     }
 
@@ -53,15 +55,15 @@ public class CategoryController {
 
     @PostMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
-                                    @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.addCategoryBookmark(categoryId, user);
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
-                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
+                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.removeCategoryBookmark(categoryId, user);
     }
 

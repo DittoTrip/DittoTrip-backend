@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import site.dittotrip.ditto_trip.auth.exception.NotFoundUserInfoException;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 
@@ -54,4 +55,17 @@ public class CustomUserDetails implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  public static User getUserFromUserDetails(CustomUserDetails userDetails, boolean isRequired) {
+    if (userDetails == null) {
+      if (isRequired) {
+        throw new NotFoundUserInfoException();
+      } else {
+        return null;
+      }
+    } else {
+      return userDetails.getUser();
+    }
+  }
+
 }

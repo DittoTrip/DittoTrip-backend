@@ -11,6 +11,8 @@ import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
 import site.dittotrip.ditto_trip.profile.service.UserProfileService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+
 /**
  * 1. 프로필 수정 - item, badge
  */
@@ -24,7 +26,7 @@ public class UserProfileController {
     @PutMapping
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         userProfileService.modifyUserProfile(user, modifyReq);
     }
 
