@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
+import site.dittotrip.ditto_trip.review.exception.ReviewWritePeriodOverException;
 import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
@@ -21,6 +22,8 @@ import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,6 +42,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+
+    private final int REVIEW_WRITE_PERIOD = 604800;
 
     public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -87,6 +92,11 @@ public class ReviewService {
     @Transactional(readOnly = false)
     public void saveReview(Long spotVisitId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         SpotVisit spotVisit = spotVisitRepository.findById(spotVisitId).orElseThrow(NoSuchElementException::new);
+
+        Duration duration = Duration.between(spotVisit.getCreatedDateTime(), LocalDateTime.now());
+        if (duration.getSeconds() > REVIEW_WRITE_PERIOD) {
+            throw new ReviewWritePeriodOverException();
+        }
 
         if (multipartFiles.size() > 10) {
             throw new TooManyImagesException();
