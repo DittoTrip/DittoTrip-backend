@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CommentService {
+public class ReviewCommentService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
