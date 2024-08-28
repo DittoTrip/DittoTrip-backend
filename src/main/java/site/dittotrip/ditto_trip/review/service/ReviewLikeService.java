@@ -23,6 +23,7 @@ public class ReviewLikeService {
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
+    @Transactional(readOnly = false)
     public void saveReviewLike(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         reviewLikeRepository.findByReviewAndUser(review, user).ifPresent(m -> {
@@ -34,6 +35,7 @@ public class ReviewLikeService {
         review.setLikes(review.getLikes() + 1);
     }
 
+    @Transactional(readOnly = false)
     public void removeReviewLike(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         ReviewLike reviewLike = reviewLikeRepository.findByReviewAndUser(review, user).orElseThrow(NoSuchElementException::new);
