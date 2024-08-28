@@ -105,7 +105,7 @@ public class DittoService {
             return Boolean.FALSE;
         }
 
-        if (ditto.getUser().equals(user)) {
+        if (ditto.getUser().getId() == user.getId()) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
@@ -119,8 +119,6 @@ public class DittoService {
 
         Optional<DittoBookmark> dittoBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user);
         return dittoBookmark.map(DittoBookmark::getId).orElse(null);
-
-
     }
 
 }
