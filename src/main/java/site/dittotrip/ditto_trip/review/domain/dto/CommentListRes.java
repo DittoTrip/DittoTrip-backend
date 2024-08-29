@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentListRes {
 
-    private List<CommentData> commentDataList = new ArrayList<>();
+    private List<ReviewCommentData> reviewCommentDataList = new ArrayList<>();
 
 }

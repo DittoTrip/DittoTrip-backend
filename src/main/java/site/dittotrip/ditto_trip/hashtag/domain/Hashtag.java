@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.util.ArrayList;
@@ -27,5 +28,9 @@ public class Hashtag {
     @ManyToMany
     @JoinTable(name = "hashtag_spot")
     private List<Spot> spots = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "hashtag_ditto")
+    private List<Ditto> dittos = new ArrayList<>();
 
 }

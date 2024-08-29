@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.auth.contoroller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,21 +33,29 @@ public class AuthController {
   }
 
   @GetMapping("/duplication-check")
+  @Operation(summary = "이메일 중복 확인",
+          description = "")
   public boolean duplicationCheck(String email, String nickname) {
     return authService.duplicationCheck(email, nickname);
   }
 
   @GetMapping("/send-code")
+  @Operation(summary = "인증 코드 전송",
+          description = "")
   public String sendCode(String email) {
     return authService.sendCode(email);
   }
 
   @PostMapping("/verify-code")
+  @Operation(summary = "인증 코드 확인",
+          description = "")
   public boolean verifyCode(@RequestBody VerifyCodeReq dto) {
     return authService.verifyCode(dto.getEmail(), dto.getCode());
   }
 
   @PostMapping("/signup")
+  @Operation(summary = "회원 가입",
+          description = "")
   public void signup(@RequestBody SignupReq dto, HttpServletResponse response) throws IOException {
     authService.signup(dto);
     String redirectUrl = "/";
@@ -54,6 +63,8 @@ public class AuthController {
   }
 
   @PostMapping("/login")
+  @Operation(summary = "로그인",
+          description = "")
   public String login(@RequestBody LoginReq dto)throws Exception{
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
     // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
