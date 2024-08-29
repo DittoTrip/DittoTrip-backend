@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list/bookmark")
-    @Operation(summary = "카테고리 리스트 조회",
+    @Operation(summary = "내 북마크 카테고리 리스트 조회",
             description = "")
     public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -48,14 +48,14 @@ public class CategoryController {
     }
 
     @GetMapping("/list/search")
-    @Operation(summary = "카테고리 리스트 조회",
+    @Operation(summary = "카테고리 리스트 검색 조회",
             description = "")
     public CategoryListRes categorySearchList(@RequestParam(name = "query") String query) {
         return categoryService.findCategoryListBySearch(query);
     }
 
     @GetMapping("/list/add")
-    @Operation(summary = "카테고리 리스트 조회",
+    @Operation(summary = "",
             description = "")
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             @RequestParam(name = "page") Integer page) {
@@ -63,7 +63,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}/bookmark")
-    @Operation(summary = "카테고리 리스트 조회",
+    @Operation(summary = "카테고리 북마크 추가",
             description = "")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -72,7 +72,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
-    @Operation(summary = "카테고리 리스트 조회",
+    @Operation(summary = "카테고리 북마크 삭제",
             description = "")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
