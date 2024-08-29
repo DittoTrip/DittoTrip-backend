@@ -4,14 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotDetailRes;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotListInMapRes;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotListRes;
-import site.dittotrip.ditto_trip.spot.domain.dto.SpotVisitListRes;
+import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
 import site.dittotrip.ditto_trip.user.domain.User;
+
+import java.util.List;
 
 import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
 
@@ -28,6 +29,7 @@ public class SpotController {
 
     private final SpotService spotService;
     private final SpotBookmarkService spotBookmarkService;
+    private final SpotApplyService spotApplyService;
 
     @GetMapping("/category/{categoryId}/spot/list")
     public SpotListInMapRes spotListInMap(@PathVariable(name = "categoryId") Long categoryId,
@@ -68,6 +70,15 @@ public class SpotController {
                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotDetail(spotId, user);
+    }
+
+    @PostMapping("/spot/apply")
+    public void spotApplySave(@AuthenticationPrincipal CustomUserDetails userDetails,
+                              @RequestBody SpotApplySaveReq saveReq,
+                              @RequestParam(name = "image") MultipartFile multipartFile,
+                              @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+        User user = userDetails.getUser();
+        spotApplyService.saveSpotApply(user, saveReq, multipartFile, multipartFiles);
     }
 
     /**
