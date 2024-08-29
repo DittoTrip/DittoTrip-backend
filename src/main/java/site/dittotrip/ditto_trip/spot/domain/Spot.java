@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
 import java.time.LocalTime;
@@ -21,7 +19,7 @@ public class Spot {
     @Column(name = "spot_id")
     private Long id;
 
-    private String spotName;
+    private String name;
     private String intro;
     private String address;
     private LocalTime startTime;
@@ -48,8 +46,8 @@ public class Spot {
     /**
      * for test
      */
-    public Spot(String spotName, String intro, String address, LocalTime startTime, LocalTime endTime, String phoneNumber, String homeUri, Double pointX, Double pointY, String imagePath) {
-        this.spotName = spotName;
+    public Spot(String name, String intro, String address, LocalTime startTime, LocalTime endTime, String phoneNumber, String homeUri, Double pointX, Double pointY, String imagePath) {
+        this.name = name;
         this.intro = intro;
         this.address = address;
         this.startTime = startTime;

@@ -7,7 +7,6 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    private String categoryName;
+    private String name;
     private CategoryMajorType categoryMajorType;
     private CategorySubType categorySubType;
     private String imagePath;
@@ -35,8 +34,8 @@ public class Category {
     /**
      * for CategoryListRes test
      */
-    public Category(String categoryName, CategoryMajorType categoryMajorType, CategorySubType categorySubType, String imagePath) {
-        this.categoryName = categoryName;
+    public Category(String name, CategoryMajorType categoryMajorType, CategorySubType categorySubType, String imagePath) {
+        this.name = name;
         this.categoryMajorType = categoryMajorType;
         this.categorySubType = categorySubType;
         this.imagePath = imagePath;
