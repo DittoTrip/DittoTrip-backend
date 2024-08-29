@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.category.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -32,28 +33,38 @@ public class CategoryController {
     private final CategoryBookmarkService categoryBookmarkService;
 
     @GetMapping("/list")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public CategoryListRes categoryList(@RequestParam(name = "majorType") CategoryMajorType majorType) {
         return categoryService.findCategoryList(majorType);
     }
 
     @GetMapping("/list/bookmark")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
         return categoryService.findCategoryListByBookmark(user);
     }
 
     @GetMapping("/list/search")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public CategoryListRes categorySearchList(@RequestParam(name = "query") String query) {
         return categoryService.findCategoryListBySearch(query);
     }
 
     @GetMapping("/list/add")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             @RequestParam(name = "page") Integer page) {
         return categoryService.findCategoryPage(subType, page);
     }
 
     @PostMapping("/{categoryId}/bookmark")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -61,6 +72,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
