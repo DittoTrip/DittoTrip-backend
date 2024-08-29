@@ -14,7 +14,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 
-    List<Category> findByCategoryNameContaining(String word);
+    List<Category> findByNameContaining(String word);
 
 
     @Query("select c from Category c where c.categoryMajorType= :majorType")
