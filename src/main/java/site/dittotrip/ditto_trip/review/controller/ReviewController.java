@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.review.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +34,8 @@ public class ReviewController {
     private final ReviewLikeService reviewLikeService;
 
     @GetMapping("/spot/{spotId}/review/list")
+    @Operation(summary = "스팟의 리뷰 리스트 조회",
+            description = "")
     public ReviewListRes reviewList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "spotId") Long spotId,
                                     Pageable pageable) {
@@ -44,6 +47,8 @@ public class ReviewController {
      * 작업 중
      */
     @GetMapping("/review/{reviewId}")
+    @Operation(summary = "스팟 상세 조회",
+            description = "")
     public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "reviewId") Long reviewId) {
         User user = getUserFromUserDetails(userDetails, false);
@@ -51,6 +56,8 @@ public class ReviewController {
     }
 
     @PostMapping("/review")
+    @Operation(summary = "리뷰 등록",
+            description = "")
     public void reviewSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
                            @RequestBody ReviewSaveReq reviewSaveReq,
@@ -60,6 +67,8 @@ public class ReviewController {
     }
 
     @PutMapping("/review/{reviewId}")
+    @Operation(summary = "리뷰 수정",
+            description = "")
     public void reviewModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId,
                              @RequestBody ReviewModifyReq reviewModifyReq,
@@ -69,6 +78,8 @@ public class ReviewController {
     }
 
     @DeleteMapping("/review/{reviewId}")
+    @Operation(summary = "리뷰 삭제",
+            description = "")
     public void reviewRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -76,6 +87,8 @@ public class ReviewController {
     }
 
     @PostMapping("/review/{reviewId}/like")
+    @Operation(summary = "리뷰 좋아요 등록",
+            description = "")
     public void reviewLikeSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "reviewId") Long reviewId) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -83,6 +96,8 @@ public class ReviewController {
     }
 
     @DeleteMapping("/review/{reviewId}/like")
+    @Operation(summary = "리뷰 좋아요 삭제",
+            description = "")
     public void reviewLikeRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
         User user = getUserFromUserDetails(userDetails, true);

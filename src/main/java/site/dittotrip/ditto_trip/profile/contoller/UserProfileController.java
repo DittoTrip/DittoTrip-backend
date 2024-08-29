@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.profile.contoller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +25,8 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
 
     @PutMapping
+    @Operation(summary = "내 프로필 수정하기",
+            description = "")
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
         User user = getUserFromUserDetails(userDetails, true);

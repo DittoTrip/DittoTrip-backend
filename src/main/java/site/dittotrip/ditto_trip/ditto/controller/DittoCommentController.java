@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.ditto.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ public class DittoCommentController {
     private final DittoCommentService dittoCommentService;
 
     @PostMapping
+    @Operation(summary = "디토 댓글 등록",
+            description = "")
     public void dittoCommentSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                  @PathVariable(name = "dittoId") Long dittoId,
                                  @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
@@ -32,6 +35,8 @@ public class DittoCommentController {
     }
 
     @PutMapping("/{commentId}")
+    @Operation(summary = "디토 댓글 수정",
+            description = "")
     public void dittoCommentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId,
                                    @RequestBody DittoCommentSaveReq saveReq) {
@@ -40,6 +45,8 @@ public class DittoCommentController {
     }
 
     @DeleteMapping("/{commentId}")
+    @Operation(summary = "디토 댓글 삭제",
+            description = "")
     public void dittoCommentRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                    @PathVariable(name = "commentId") Long commentId) {
         User user = getUserFromUserDetails(userDetails, true);

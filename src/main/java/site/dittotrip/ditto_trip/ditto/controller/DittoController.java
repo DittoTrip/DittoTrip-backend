@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.ditto.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,6 +39,8 @@ public class DittoController {
     private final DittoBookmarkService dittoBookmarkService;
 
     @GetMapping("/list")
+    @Operation(summary = "디토 리스트 조회 (디토 페이지)",
+            description = "")
     public DittoListRes dittoList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
         User user = getUserFromUserDetails(userDetails, false);
@@ -45,12 +48,16 @@ public class DittoController {
     }
 
     @GetMapping("/list/bookmark")
+    @Operation(summary = "내 북마크 디토 리스트 조회",
+            description = "")
     public DittoListRes dittoListInBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
         return dittoService.findDittoListInBookmark(user);
     }
 
     @GetMapping("/{dittoId}")
+    @Operation(summary = "디토 상세 조회",
+            description = "")
     public DittoDetailRes dittoDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                       @PathVariable(name = "dittoId") Long dittoId) {
         User user = getUserFromUserDetails(userDetails, false);
@@ -58,6 +65,8 @@ public class DittoController {
     }
 
     @PostMapping
+    @Operation(summary = "디토 등록",
+            description = "")
     public void dittoSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                           @RequestBody DittoSaveReq saveReq,
                           @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
@@ -66,6 +75,8 @@ public class DittoController {
     }
 
     @PutMapping("/{dittoId}")
+    @Operation(summary = "디토 수정",
+            description = "")
     public void dittoModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId,
                             @RequestBody DittoModifyReq modifyReq,
@@ -75,6 +86,8 @@ public class DittoController {
     }
 
     @DeleteMapping("/{dittoId}")
+    @Operation(summary = "디토 삭제",
+            description = "")
     public void dittoRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -85,6 +98,8 @@ public class DittoController {
      * DittoBookmark 기능
      */
     @PostMapping("/bookmark/{dittoId}")
+    @Operation(summary = "디토 북마크 추가",
+            description = "")
     public void dittoBookmarkSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable(name = "dittoId") Long dittoId) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -92,6 +107,8 @@ public class DittoController {
     }
 
     @DeleteMapping("/bookmark/{dittoId}")
+    @Operation(summary = "디토 북마크 삭제",
+            description = "")
     public void dittoBookmarkRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "dittoId") Long dittoId) {
         User user = getUserFromUserDetails(userDetails, true);
