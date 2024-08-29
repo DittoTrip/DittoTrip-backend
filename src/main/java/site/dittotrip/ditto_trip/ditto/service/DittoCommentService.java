@@ -49,7 +49,7 @@ public class DittoCommentService {
     public void modifyDittoComment(Long dittoCommentId, User user, DittoCommentSaveReq saveReq) {
         DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
-        if (!comment.getUser().equals(user)) {
+        if (comment.getUser().getId() != user.getId()) {
             throw new NoAuthorityException();
         }
 
@@ -58,13 +58,13 @@ public class DittoCommentService {
 
     @Transactional(readOnly = false)
     public void removeDittoComment(Long dittoCommentId, User user) {
-        DittoComment dittoComment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
+        DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
-        if (!dittoComment.getUser().equals(user)) {
+        if (comment.getUser().getId() != user.getId()) {
             throw new NoAuthorityException();
         }
 
-        dittoCommentRepository.delete(dittoComment);
+        dittoCommentRepository.delete(comment);
     }
 
 }
