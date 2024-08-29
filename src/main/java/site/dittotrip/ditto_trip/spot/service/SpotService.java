@@ -59,7 +59,7 @@ public class SpotService {
 
 
     public SpotListRes findSpotListBySearch(User user, String word, Pageable pageable) {
-        List<Spot> spots = spotRepository.findBySpotNameContaining(word, pageable);
+        List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
 
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
