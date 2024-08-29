@@ -16,7 +16,7 @@ public class FollowData {
     private UserData userData;
     private UserProfileData userProfileData;
 
-    private Boolean isMine = false;
+    private Boolean isMine;
 
     public static FollowData followingListFromEntity(Follow follow, User reqUser) {
         User followedUser = follow.getFollowedUser();
@@ -44,6 +44,8 @@ public class FollowData {
 
         if (followingUser.getId() == reqUser.getId()) {
             followData.setIsMine(Boolean.TRUE);
+        } else {
+            followData.setIsMine(Boolean.FALSE);
         }
 
         return followData;
