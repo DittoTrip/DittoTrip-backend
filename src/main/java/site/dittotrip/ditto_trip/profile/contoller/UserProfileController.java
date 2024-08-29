@@ -15,7 +15,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
  * 1. 프로필 수정 - item, badge
  */
 @RestController
-@RequestMapping("/user/{userId}/profile")
+@RequestMapping("/profile")
 @RequiredArgsConstructor
 public class UserProfileController {
 
