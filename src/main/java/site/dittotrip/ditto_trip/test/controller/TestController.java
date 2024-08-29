@@ -22,6 +22,11 @@ public class TestController {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
 
+    @GetMapping
+    public String test() {
+        return "server is ok";
+    }
+
     @GetMapping("/access-token")
     public String issueTestToken(@RequestParam(name = "userId") Long userId) {
         User user = userRepository.findById(userId).get();
