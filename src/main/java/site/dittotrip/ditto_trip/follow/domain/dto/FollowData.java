@@ -26,7 +26,7 @@ public class FollowData {
                 .userProfileData(UserProfileData.fromEntity(followedUser.getUserProfile()))
                 .build();
 
-        if (followedUser.equals(reqUser)) {
+        if (followedUser.getId() == reqUser.getId()) {
             followData.setIsMine(Boolean.TRUE);
         }
 
@@ -42,7 +42,7 @@ public class FollowData {
                 .userProfileData(UserProfileData.fromEntity(followingUser.getUserProfile()))
                 .build();
 
-        if (followingUser.equals(reqUser)) {
+        if (followingUser.getId() == reqUser.getId()) {
             followData.setIsMine(Boolean.TRUE);
         }
 

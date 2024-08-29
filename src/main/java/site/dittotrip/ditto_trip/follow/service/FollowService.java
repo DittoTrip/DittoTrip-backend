@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.follow.domain.dto.FollowListRes;
 import site.dittotrip.ditto_trip.follow.exception.ExistingFollowException;
+import site.dittotrip.ditto_trip.follow.exception.FollowSelfException;
 import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -41,6 +42,10 @@ public class FollowService {
     public void saveFollow(User reqUser, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
+        if (user.getId() == reqUser.getId()) {
+            throw new FollowSelfException();
+        }
+
         followRepository.findByFollowingUserAndFollowedUser(reqUser, user).ifPresent(m -> {
             throw new ExistingFollowException();
         });
@@ -53,7 +58,8 @@ public class FollowService {
     public void removeFollow(User reqUser, Long followId) {
         Follow follow = followRepository.findById(followId).orElseThrow(NoSuchElementException::new);
 
-        if (!follow.getFollowingUser().equals(reqUser) && !follow.getFollowedUser().equals(reqUser)) {
+        if (follow.getFollowingUser().getId() != reqUser.getId() &&
+                follow.getFollowedUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 

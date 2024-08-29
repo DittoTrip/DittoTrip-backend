@@ -13,6 +13,7 @@ import java.util.List;
 public class FollowListRes {
 
     private Integer followCount;
+    @Builder.Default
     private List<FollowData> followDataList = new ArrayList<>();
 
     public static FollowListRes fromEntities(List<Follow> follows, User reqUser, Boolean isFollowingList) {

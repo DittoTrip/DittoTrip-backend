@@ -73,7 +73,7 @@ public class DittoService {
                             List<MultipartFile> multipartFiles) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
-        if(!ditto.getUser().equals(user)) {
+        if (ditto.getUser().getId() != user.getId()) {
             throw new NoAuthorityException();
         }
 
@@ -91,7 +91,7 @@ public class DittoService {
     public void removeDitto(Long dittoId, User user) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
 
-        if(!ditto.getUser().equals(user)) {
+        if (ditto.getUser().getId() != user.getId()) {
             throw new NoAuthorityException();
         }
 
