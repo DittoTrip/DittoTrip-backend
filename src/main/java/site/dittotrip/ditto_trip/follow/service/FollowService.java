@@ -58,7 +58,8 @@ public class FollowService {
     public void removeFollow(User reqUser, Long followId) {
         Follow follow = followRepository.findById(followId).orElseThrow(NoSuchElementException::new);
 
-        if (!follow.getFollowingUser().equals(reqUser) && !follow.getFollowedUser().equals(reqUser)) {
+        if (follow.getFollowingUser().getId() != reqUser.getId() &&
+                follow.getFollowedUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 
