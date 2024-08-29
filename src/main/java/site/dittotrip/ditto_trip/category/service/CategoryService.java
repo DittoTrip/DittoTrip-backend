@@ -56,7 +56,7 @@ public class CategoryService {
      *  검색 조회 방식 확인 후 작업 ...
      */
     public CategoryListRes findCategoryListBySearch(String word) {
-        List<Category> categories = categoryRepository.findByCategoryNameContaining(word);
+        List<Category> categories = categoryRepository.findByNameContaining(word);
         return fromEntities(categories);
     }
 
