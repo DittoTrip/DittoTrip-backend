@@ -21,6 +21,7 @@ public class SpotData {
     private String imagePath;
     private Float rating;
 
+    @Builder.Default
     private List<HashtagData> hashtagData = new ArrayList<>();
     private Long bookmarkId;
 

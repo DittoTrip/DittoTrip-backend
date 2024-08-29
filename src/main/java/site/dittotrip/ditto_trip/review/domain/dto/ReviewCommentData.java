@@ -22,7 +22,7 @@ public class ReviewCommentData {
     @Builder.Default
     private List<ReviewCommentData> childrenCommentsData = new ArrayList<>();
 
-    private Boolean isMine = Boolean.FALSE;
+    private Boolean isMine;
 
     public static ReviewCommentData parentFromEntity(ReviewComment reviewComment, User requestUser) {
         ReviewCommentData reviewCommentData = fromEntity(reviewComment, requestUser);
@@ -53,8 +53,10 @@ public class ReviewCommentData {
     }
 
     private void putIsMine(User requestUser) {
-        if (this.userData.getUserId().equals(requestUser.getId())) {
+        if (this.userData.getUserId() == requestUser.getId()) {
             this.isMine = Boolean.TRUE;
+        } else {
+            this.isMine = Boolean.FALSE;
         }
     }
 
