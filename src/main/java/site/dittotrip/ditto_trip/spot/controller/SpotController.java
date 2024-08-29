@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.spot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,6 +33,8 @@ public class SpotController {
     private final SpotApplyService spotApplyService;
 
     @GetMapping("/category/{categoryId}/spot/list")
+    @Operation(summary = "지도기반 스팟 리스트 조회 (카테고리 선택 후)",
+            description = "왼쪽 아래 좌표(start)와 오른쪽 위(end) 좌표를 쿼리로 주세요.")
     public SpotListInMapRes spotListInMap(@PathVariable(name = "categoryId") Long categoryId,
                                           @AuthenticationPrincipal CustomUserDetails userDetails,
                                           @RequestParam(name = "startX") Double startX, @RequestParam(name = "endX") Double endX,
@@ -41,12 +44,16 @@ public class SpotController {
     }
 
     @GetMapping("/spot/list/bookmark")
+    @Operation(summary = "내 북마크 스팟 리스트 조회",
+            description = "")
     public SpotListRes spotListByBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
         return spotService.findSpotListByBookmark(user);
     }
 
     @GetMapping("/spot/list/search")
+    @Operation(summary = "스팟 리스트 검색 조회",
+            description = "")
     public SpotListRes spotListBySearch(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @RequestParam(name = "query") String query,
                                         Pageable pageable) {
@@ -58,21 +65,27 @@ public class SpotController {
      * 마이페이지 기능인가 ?
      */
     @GetMapping("/user/{userId}/visited")
+    @Operation(summary = "한 유저의 방문 스팟 리스트 조회",
+            description = "")
     public SpotVisitListRes spotVisitList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                           @PathVariable(name = "userId") Long userId,
                                           Pageable pageable) {
-        User reqUser = getUserFromUserDetails(userDetails, true);
+        User reqUser = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotVisitList(userId, reqUser, pageable);
     }
 
     @GetMapping("/spot/{spotId}")
-    public SpotDetailRes categoryDetail(@PathVariable(name = "spotId") Long spotId,
+    @Operation(summary = "스팟 상세 조회",
+            description = "")
+    public SpotDetailRes spotDetail(@PathVariable(name = "spotId") Long spotId,
                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotDetail(spotId, user);
     }
 
     @PostMapping("/spot/apply")
+    @Operation(summary = "스팟 등록 신청",
+            description = "image는 대표이미지입니다.")
     public void spotApplySave(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @RequestBody SpotApplySaveReq saveReq,
                               @RequestParam(name = "image") MultipartFile multipartFile,
@@ -85,6 +98,8 @@ public class SpotController {
      * SpotBookmark
      */
     @PostMapping("/spot/{spotId}/bookmark")
+    @Operation(summary = "스팟 북마크 추가",
+            description = "")
     public void spotBookmarkAdd(@PathVariable(name = "spotId") Long spotId,
                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);
@@ -92,6 +107,8 @@ public class SpotController {
     }
 
     @DeleteMapping("/spot/{spotId}/bookmark/{bookmarkId}")
+    @Operation(summary = "스팟 북마크 삭제",
+            description = "")
     public void spotBookmarkRemove(@PathVariable(name = "bookmarkId") Long bookmarkId,
                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, true);

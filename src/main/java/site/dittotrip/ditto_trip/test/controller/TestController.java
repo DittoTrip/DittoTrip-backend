@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.test.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +24,15 @@ public class TestController {
     private final UserRepository userRepository;
 
     @GetMapping
+    @Operation(summary = "서버 정상 여부 확인",
+            description = "")
     public String test() {
         return "server is ok";
     }
 
     @GetMapping("/access-token")
+    @Operation(summary = "테스트를 위한 액세스 토큰 발급",
+            description = "")
     public String issueTestToken(@RequestParam(name = "userId") Long userId) {
         User user = userRepository.findById(userId).get();
         return jwtProvider.generateToken(user.getEmail(), user.getAuthorities());

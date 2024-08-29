@@ -55,7 +55,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list/add")
-    @Operation(summary = "",
+    @Operation(summary = "삭제 예정",
             description = "")
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             @RequestParam(name = "page") Integer page) {

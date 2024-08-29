@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.userpage.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,8 @@ public class UserPageController {
     private final UserPageService userPageService;
 
     @GetMapping
+    @Operation(summary = "유저 페이지 조회",
+            description = "")
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
         User reqUser = getUserFromUserDetails(userDetails, false);
