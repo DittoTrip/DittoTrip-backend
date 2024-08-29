@@ -14,7 +14,7 @@ import java.util.List;
 public class SpotData {
 
     private Long spotId;
-    private String spotName;
+    private String name;
     private String address;
     private Double pointX;
     private Double pointY;
@@ -28,7 +28,7 @@ public class SpotData {
     public static SpotData fromEntity(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
-                .spotName(spot.getSpotName())
+                .name(spot.getName())
                 .address(spot.getAddress())
                 .pointX(spot.getPointX())
                 .pointY(spot.getPointY())

@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
@@ -59,9 +60,8 @@ public class CategoryService {
         return fromEntities(categories);
     }
 
-    public CategoryPageRes findCategoryPage(CategorySubType subType, Integer pageNumber) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, PAGE_SIZE);
-        Page<Category> page = categoryRepository.findBySubType(subType, pageRequest);
+    public CategoryPageRes findCategoryPage(CategorySubType subType, Pageable pageable) {
+        Page<Category> page = categoryRepository.findBySubType(subType, pageable);
 
         return CategoryPageRes.fromEntities(page);
     }

@@ -11,14 +11,14 @@ import site.dittotrip.ditto_trip.category.domain.Category;
 public class CategoryData {
 
     private Long categoryId;
-    private String categoryName;
+    private String name;
     private String imageFilePath;
 
     public static CategoryData fromEntity(Category category) {
 
         return CategoryData.builder()
                 .categoryId(category.getId())
-                .categoryName(category.getCategoryName())
+                .name(category.getName())
                 .imageFilePath(category.getImagePath())
                 .build();
     }

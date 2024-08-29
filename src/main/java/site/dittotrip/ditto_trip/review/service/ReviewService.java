@@ -73,7 +73,7 @@ public class ReviewService {
         Spot spot = review.getSpotVisit().getSpot();
 
         ReviewDetailRes reviewDetailRes = new ReviewDetailRes();
-        reviewDetailRes.setSpotName(spot.getSpotName());
+        reviewDetailRes.setSpotName(spot.getName());
 
         int commentsCount = reviewCommentRepository.countByReview(review).intValue();
         Boolean isMine = getIsMine(review, user);

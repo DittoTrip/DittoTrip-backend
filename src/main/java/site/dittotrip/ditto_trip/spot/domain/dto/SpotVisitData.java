@@ -24,7 +24,7 @@ public class SpotVisitData {
         return SpotVisitData.builder()
                 .spotVisitId(spotVisit.getId())
                 .spotId(spot.getId())
-                .spotName(spot.getSpotName())
+                .spotName(spot.getName())
                 .address(spot.getAddress())
                 .createdDateTime(spotVisit.getCreatedDateTime())
                 .bookmarkId(bookmarkId)
