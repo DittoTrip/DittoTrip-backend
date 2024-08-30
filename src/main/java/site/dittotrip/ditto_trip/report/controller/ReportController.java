@@ -35,7 +35,7 @@ public class ReportController {
     }
 
     @PostMapping("/{reportId}")
-    @Operation(summary = "신고 처리 (관리자 기능)",
+    @Operation(summary = "신고 처리 (관리자 기능) (기획 이후 작업 예정)",
             description = "")
     public void reportHandle() {
 
