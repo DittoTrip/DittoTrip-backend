@@ -1,7 +1,7 @@
 package site.dittotrip.ditto_trip.report.domain.enums;
 
 
-public enum ReportType {
+public enum ReportReasonType {
 
     BLAME,
     ILLEGAL_INFORMATION,

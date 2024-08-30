@@ -8,7 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.report.domain.enums.ReportTargetType;
-import site.dittotrip.ditto_trip.report.domain.enums.ReportType;
+import site.dittotrip.ditto_trip.report.domain.enums.ReportReasonType;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -27,7 +27,7 @@ public class Report {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ReportType reportType;
+    private ReportReasonType reportReasonType;
 
     @Enumerated(EnumType.STRING)
     private ReportTargetType reportTargetType;
@@ -37,7 +37,7 @@ public class Report {
     private Boolean isHandled = Boolean.FALSE;
 
     @CreationTimestamp
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdDateTime;
 
     // 신고자
     @ManyToOne(fetch = LAZY)
@@ -68,8 +68,8 @@ public class Report {
     @Setter
     private DittoComment dittoComment;
 
-    public Report(ReportType reportType, ReportTargetType reportTargetType, String body, User user) {
-        this.reportType = reportType;
+    public Report(ReportReasonType reportReasonType, ReportTargetType reportTargetType, String body, User user) {
+        this.reportReasonType = reportReasonType;
         this.reportTargetType = reportTargetType;
         this.body = body;
         this.user = user;

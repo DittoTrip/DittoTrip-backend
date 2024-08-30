@@ -6,8 +6,8 @@ import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.report.domain.Report;
 import site.dittotrip.ditto_trip.report.domain.enums.ReportTargetType;
-import site.dittotrip.ditto_trip.report.domain.enums.ReportType;
-import site.dittotrip.ditto_trip.report.exception.ReportTargetException;
+import site.dittotrip.ditto_trip.report.domain.enums.ReportReasonType;
+import site.dittotrip.ditto_trip.report.exception.ReportTargetTypeException;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -16,14 +16,14 @@ import site.dittotrip.ditto_trip.user.domain.User;
 @NoArgsConstructor
 public class ReportSaveReq {
 
-    private ReportType reportType;
+    private ReportReasonType reportReasonType;
     private ReportTargetType reportTargetType;
     private String body;
 
     private Long targetId;
 
     public Report toEntity(Object targetEntity, User user) {
-        Report report = new Report(reportType, reportTargetType, body, user);
+        Report report = new Report(reportReasonType, reportTargetType, body, user);
         putReportEntity(report, targetEntity);
         return report;
     }
@@ -43,7 +43,7 @@ public class ReportSaveReq {
                 report.setDittoComment((DittoComment) targetEntity);
                 break;
             default:
-                throw new ReportTargetException();
+                throw new ReportTargetTypeException();
         }
     }
 

@@ -2,9 +2,11 @@ package site.dittotrip.ditto_trip.report.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.report.domain.dto.ReportListRes;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportSaveReq;
 import site.dittotrip.ditto_trip.report.service.ReportService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -19,8 +21,8 @@ public class ReportController {
     @GetMapping("/list")
     @Operation(summary = "신고 리스트 조회 (관리자 기능)",
             description = "")
-    public void reportList() {
-
+    public ReportListRes reportList(Pageable pageable) {
+        return reportService.findReportList(pageable);
     }
 
     @PostMapping
