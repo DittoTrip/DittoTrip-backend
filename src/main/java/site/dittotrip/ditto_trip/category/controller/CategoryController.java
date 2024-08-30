@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryModifyReq;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategorySaveReq;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
@@ -53,6 +56,23 @@ public class CategoryController {
             description = "")
     public CategoryListRes categorySearchList(@RequestParam(name = "query") String query) {
         return categoryService.findCategoryListBySearch(query);
+    }
+
+    @PostMapping
+    @Operation(summary = "카테고리 저장 (관리자 기능)",
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")
+    public void categorySave(@RequestBody CategorySaveReq categorySaveReq,
+                             @RequestParam(name = "image") MultipartFile multipartFile) {
+        categoryService.saveCategory(categorySaveReq, multipartFile);
+    }
+
+    @PutMapping("/{categoryId}")
+    @Operation(summary = "카테고리 수정 (관리자 기능)",
+            description = "이미지는 필수가 아닙니다.")
+    public void categoryModify(@PathVariable(name = "categoryId") Long categoryId,
+                               @RequestBody CategoryModifyReq categoryModifyReq,
+                               @RequestParam(name = "image", required = false) MultipartFile multipartFile) {
+        categoryService.modifyCategory(categoryId, categoryModifyReq, multipartFile);
     }
 
     @PostMapping("/{categoryId}/bookmark")
