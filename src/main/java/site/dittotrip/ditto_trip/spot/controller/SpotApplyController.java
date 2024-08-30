@@ -23,7 +23,13 @@ public class SpotApplyController {
     @Operation(summary = "내 스팟 신청 리스트 조회 (디자인 나오고 작업 예정)",
             description = "")
     public void spotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    }
 
+    @GetMapping("/spot/apply/{spotApplyId}")
+    @Operation(summary = "스팟 신청 상세 조회 (디자인 나오고 작업 예정",
+            description = "등록한 유저와 관리자만 조회 가능합니다.")
+    public void spotApplyDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                @PathVariable(name = "spotApplyId") Long spotApplyId) {
     }
 
     @PostMapping("/spot/apply")
