@@ -40,6 +40,10 @@ public class SpotApplyService {
 
     }
 
-
+    @Transactional(readOnly = false)
+    public void removeSpotApply(Long spotApplyId) {
+        SpotApply spotApply = spotApplyRepository.findById(spotApplyId).orElseThrow(NoSuchElementException::new);
+        spotApplyRepository.delete(spotApply);
+    }
 
 }
