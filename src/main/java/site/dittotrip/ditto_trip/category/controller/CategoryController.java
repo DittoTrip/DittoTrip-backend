@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
-import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
@@ -38,15 +37,8 @@ public class CategoryController {
             description = "")
     public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
                                             Pageable pageable) {
-        return categoryService.findCategoryPage(subType, pageable);
+        return categoryService.findCategoryList(subType, pageable);
     }
-
-//    @GetMapping("/list")
-//    @Operation(summary = "카테고리 리스트 조회",
-//            description = "")
-//    public CategoryListRes categoryList(@RequestParam(name = "majorType") CategoryMajorType majorType) {
-//        return categoryService.findCategoryList(majorType);
-//    }
 
     @GetMapping("/list/bookmark")
     @Operation(summary = "내 북마크 카테고리 리스트 조회",
