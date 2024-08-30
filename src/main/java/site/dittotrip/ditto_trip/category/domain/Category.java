@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.category.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -20,15 +21,19 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
+    @Setter
     private String name;
+    @Setter
     private CategoryMajorType categoryMajorType;
+    @Setter
     private CategorySubType categorySubType;
+    @Setter
     private String imagePath;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.REMOVE)
     private List<Hashtag> hashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
     /**
