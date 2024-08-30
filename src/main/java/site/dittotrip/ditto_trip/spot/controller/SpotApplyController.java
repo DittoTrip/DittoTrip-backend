@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -20,9 +21,15 @@ public class SpotApplyController {
     private final SpotApplyService spotApplyService;
 
     @GetMapping("/spot/apply/list")
+    @Operation(summary = "스팟 신청 리스트 조회 (관리자 기능) (디자인 나오고 작업 예정)",
+            description = "")
+    public void spotApplyList(Pageable pageable) {
+    }
+
+    @GetMapping("/spot/apply/list/my")
     @Operation(summary = "내 스팟 신청 리스트 조회 (디자인 나오고 작업 예정)",
             description = "")
-    public void spotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public void mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
     }
 
     @GetMapping("/spot/apply/{spotApplyId}")
