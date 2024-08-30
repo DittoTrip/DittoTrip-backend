@@ -1,6 +1,6 @@
 package site.dittotrip.ditto_trip.report.domain.enums;
 
-public enum ReportTarget {
+public enum ReportTargetType {
 
     REVIEW,
     REVIEW_COMMENT,
