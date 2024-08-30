@@ -83,17 +83,6 @@ public class SpotController {
         return spotService.findSpotDetail(spotId, user);
     }
 
-    @PostMapping("/spot/apply")
-    @Operation(summary = "스팟 등록 신청",
-            description = "image는 대표이미지입니다.")
-    public void spotApplySave(@AuthenticationPrincipal CustomUserDetails userDetails,
-                              @RequestBody SpotApplySaveReq saveReq,
-                              @RequestParam(name = "image") MultipartFile multipartFile,
-                              @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        User user = userDetails.getUser();
-        spotApplyService.saveSpotApply(user, saveReq, multipartFile, multipartFiles);
-    }
-
     /**
      * SpotBookmark
      */
