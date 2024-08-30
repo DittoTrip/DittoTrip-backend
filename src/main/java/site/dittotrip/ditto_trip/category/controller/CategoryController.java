@@ -68,11 +68,19 @@ public class CategoryController {
 
     @PutMapping("/{categoryId}")
     @Operation(summary = "카테고리 수정 (관리자 기능)",
-            description = "이미지는 필수가 아닙니다.")
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.\n" +
+                    "이미지는 필수가 아닙니다.")
     public void categoryModify(@PathVariable(name = "categoryId") Long categoryId,
                                @RequestBody CategoryModifyReq categoryModifyReq,
                                @RequestParam(name = "image", required = false) MultipartFile multipartFile) {
         categoryService.modifyCategory(categoryId, categoryModifyReq, multipartFile);
+    }
+
+    @DeleteMapping("{categoryId}")
+    @Operation(summary = "카테고리 삭제 (관리자 기능)",
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")
+    public void categoryRemove(@PathVariable(name = "categoryId") Long categoryId) {
+        categoryService.removeCategory(categoryId);
     }
 
     @PostMapping("/{categoryId}/bookmark")

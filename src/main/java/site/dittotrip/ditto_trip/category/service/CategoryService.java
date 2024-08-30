@@ -63,6 +63,7 @@ public class CategoryService {
         return fromEntities(categories);
     }
 
+    @Transactional(readOnly = false)
     public void saveCategory(CategorySaveReq categorySaveReq, MultipartFile multipartFile) {
 
         // 이미지 처리
@@ -80,6 +81,7 @@ public class CategoryService {
         // 해시태그 처리
     }
 
+    @Transactional(readOnly = false)
     public void modifyCategory(Long categoryId, CategoryModifyReq categoryModifyReq, MultipartFile multipartFile) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
@@ -102,6 +104,12 @@ public class CategoryService {
         }
 
         // 해시태그 처리
+    }
+
+    @Transactional(readOnly = false)
+    public void removeCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        categoryRepository.delete(category);
     }
 
 }
