@@ -2,26 +2,29 @@ package site.dittotrip.ditto_trip.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryDetailRes;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
+import site.dittotrip.ditto_trip.category.domain.dto.CategoryModifyReq;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
-import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
+import site.dittotrip.ditto_trip.category.domain.dto.CategorySaveReq;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
+import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.fromEntities;
 
@@ -31,16 +34,13 @@ import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.from
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategorySpotRepository categorySpotRepository;
     private final CategoryBookmarkRepository categoryBookmarkRepository;
+    private final CategorySpotRepository categorySpotRepository;
+    private final SpotRepository spotRepository;
 
-    private static final int PAGE_SIZE = 10;
-
-    public CategoryListRes findCategoryList(CategoryMajorType majorType) {
-        PageRequest pageRequest = PageRequest.of(0, PAGE_SIZE);
-        Page<Category> page = categoryRepository.findByMajorType(majorType, pageRequest);
-
-        return fromEntities(page.getContent());
+    public CategoryPageRes findCategoryList(CategorySubType subType, Pageable pageable) {
+        Page<Category> page = categoryRepository.findBySubType(subType, pageable);
+        return CategoryPageRes.fromEntities(page);
     }
 
     public CategoryListRes findCategoryListByBookmark(User user) {
@@ -56,37 +56,60 @@ public class CategoryService {
 
     /**
      * 카테고리 검색 조회
-     *  검색 조회 방식 확인 후 작업 ...
+     *  - 단순 문자열 포함 검색
      */
     public CategoryListRes findCategoryListBySearch(String word) {
-        List<Category> categories = categoryRepository.findByCategoryNameContaining(word);
+        List<Category> categories = categoryRepository.findByNameContaining(word);
         return fromEntities(categories);
     }
 
-    public CategoryPageRes findCategoryPage(CategorySubType subType, Integer pageNumber) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, PAGE_SIZE);
-        Page<Category> page = categoryRepository.findBySubType(subType, pageRequest);
+    @Transactional(readOnly = false)
+    public void saveCategory(CategorySaveReq categorySaveReq, MultipartFile multipartFile) {
 
-        return CategoryPageRes.fromEntities(page.getContent());
-    }
+        // 이미지 처리
+        String imagePath = null;
 
+        Category category = categorySaveReq.toEntity(imagePath);
+        categoryRepository.save(category);
 
-    /**
-     * 스팟 리스트 조회로 옮기기
-     */
-    public CategoryDetailRes findCategoryDetail(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        List<CategorySpot> categorySpots = categorySpotRepository.findByScope(category);
-
-        return CategoryDetailRes.fromEntity(category, convertSpotList(categorySpots));
-    }
-
-    private List<Spot> convertSpotList(List<CategorySpot> categorySpots) {
-        List<Spot> spots = new ArrayList<>();
-        for (CategorySpot categorySpot : categorySpots) {
-            spots.add(categorySpot.getSpot());
+        List<Long> spotIds = categorySaveReq.getSpotIds();
+        for (Long spotId : spotIds) {
+            Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+            categorySpotRepository.save(new CategorySpot(category, spot));
         }
-        return spots;
+
+        // 해시태그 처리
+    }
+
+    @Transactional(readOnly = false)
+    public void modifyCategory(Long categoryId, CategoryModifyReq categoryModifyReq, MultipartFile multipartFile) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+
+        String imagePath = null;
+        if (multipartFile != null) {
+            // 이미지 처리
+        }
+
+        categoryModifyReq.modifyEntity(category, imagePath);
+
+        for (Long removeSpotId : categoryModifyReq.getRemoveSpotIds()) {
+            Spot spot = spotRepository.findById(removeSpotId).orElseThrow(NoSuchElementException::new);
+            CategorySpot categorySpot = categorySpotRepository.findByCategoryAndSpot(category, spot).orElseThrow(NoSuchElementException::new);
+            categorySpotRepository.delete(categorySpot);
+        }
+
+        for (Long newSpotId : categoryModifyReq.getNewSpotIds()) {
+            Spot spot = spotRepository.findById(newSpotId).orElseThrow(NoSuchElementException::new);
+            categorySpotRepository.save(new CategorySpot(category, spot));
+        }
+
+        // 해시태그 처리
+    }
+
+    @Transactional(readOnly = false)
+    public void removeCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        categoryRepository.delete(category);
     }
 
 }

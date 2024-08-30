@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class ReviewData {
 
+    private Long reviewId;
     private Float rating;
     private String reviewBody;
     private Integer likes;
@@ -27,6 +28,7 @@ public class ReviewData {
 
     public static ReviewData fromEntity(Review review, Boolean isMine, Boolean myLike, Integer commentsCount) {
         ReviewData reviewData = ReviewData.builder()
+                .reviewId(review.getId())
                 .rating(review.getRating())
                 .reviewBody(review.getBody())
                 .likes(review.getLikes())

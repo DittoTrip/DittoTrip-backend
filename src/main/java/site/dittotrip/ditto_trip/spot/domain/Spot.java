@@ -3,7 +3,7 @@ package site.dittotrip.ditto_trip.spot.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import lombok.Setter;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
 import java.time.LocalTime;
@@ -19,18 +19,23 @@ public class Spot {
     @Column(name = "spot_id")
     private Long id;
 
-    private String spotName;
+    private String name;
     private String intro;
     private String address;
     private LocalTime startTime;
     private LocalTime endTime;
     private String phoneNumber;
     private String homeUri;
-    private Point point;
+    private Double pointX;
+    private Double pointY;
     private String imagePath;
+    @Setter
+    private Integer reviewCount = 0;
+    @Setter
+    private Float rating = 0.0f;
 
     @OneToMany(mappedBy = "spot")
-    private List<CategorySpot> categorySpots;
+    private List<CategorySpot> categorySpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot")
     private List<SpotImage> spotImages = new ArrayList<>();
@@ -38,4 +43,19 @@ public class Spot {
     @ManyToMany(mappedBy = "spots")
     private List<Hashtag> hashtags = new ArrayList<>();
 
+    /**
+     * for test
+     */
+    public Spot(String name, String intro, String address, LocalTime startTime, LocalTime endTime, String phoneNumber, String homeUri, Double pointX, Double pointY, String imagePath) {
+        this.name = name;
+        this.intro = intro;
+        this.address = address;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.phoneNumber = phoneNumber;
+        this.homeUri = homeUri;
+        this.pointX = pointX;
+        this.pointY = pointY;
+        this.imagePath = imagePath;
+    }
 }
