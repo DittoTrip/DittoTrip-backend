@@ -30,10 +30,10 @@ public class Category {
     @Setter
     private String imagePath;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.REMOVE)
     private List<Hashtag> hashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
     /**
