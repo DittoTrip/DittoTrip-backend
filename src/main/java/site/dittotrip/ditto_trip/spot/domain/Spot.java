@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,9 @@ public class Spot {
     private Integer reviewCount = 0;
     @Setter
     private Float rating = 0.0f;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "spot")
     private List<CategorySpot> categorySpots = new ArrayList<>();
