@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.domain.DittoBookmark;
+import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.ditto.domain.dto.*;
 import site.dittotrip.ditto_trip.ditto.repository.DittoBookmarkRepository;
+import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
@@ -27,6 +29,7 @@ public class DittoService {
 
     private final DittoRepository dittoRepository;
     private final DittoBookmarkRepository dittoBookmarkRepository;
+    private final DittoCommentRepository dittoCommentRepository;
 
     public DittoListRes findDittoList(User user, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -44,13 +47,16 @@ public class DittoService {
         return DittoListRes.fromEntities(dittos);
     }
 
-    public DittoDetailRes findDittoDetail(Long dittoId, User user) {
+    public DittoDetailRes findDittoDetail(Long dittoId, User reqUser) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
-        Boolean isMine = getIsMine(ditto, user);
-        Long myBookmarkId = getMyBookmarkId(ditto, user);
+        List<DittoComment> dittoComments = dittoCommentRepository.findParentCommentByDitto(ditto);
+        Long dittoCount = dittoCommentRepository.countByDitto(ditto);
 
-        return DittoDetailRes.fromEntity(ditto, isMine, myBookmarkId);
+        Boolean isMine = getIsMine(ditto, reqUser);
+        Long myBookmarkId = getMyBookmarkId(ditto, reqUser);
+
+        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser);
     }
 
     @Transactional(readOnly = false)

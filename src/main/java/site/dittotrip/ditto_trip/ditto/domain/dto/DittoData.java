@@ -3,6 +3,7 @@ package site.dittotrip.ditto_trip.ditto.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
+import site.dittotrip.ditto_trip.ditto.domain.DittoComment;
 import site.dittotrip.ditto_trip.ditto.domain.DittoImage;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
@@ -41,6 +42,7 @@ public class DittoData {
         dittoData.putImageDataList(ditto.getDittoImages());
         return dittoData;
     }
+
 
     private void putImageDataList(List<DittoImage> dittoImages) {
         for (DittoImage dittoImage : dittoImages) {
