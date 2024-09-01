@@ -32,8 +32,6 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportTargetType reportTargetType;
 
-    private String body;
-
     private Boolean isHandled = Boolean.FALSE;
 
     @CreationTimestamp
@@ -71,7 +69,6 @@ public class Report {
     public Report(ReportReasonType reportReasonType, ReportTargetType reportTargetType, String body, User user) {
         this.reportReasonType = reportReasonType;
         this.reportTargetType = reportTargetType;
-        this.body = body;
         this.user = user;
     }
 

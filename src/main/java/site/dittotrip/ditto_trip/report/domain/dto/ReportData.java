@@ -17,7 +17,6 @@ public class ReportData {
     private Long reportId;
     private ReportReasonType reportReasonType;
     private ReportTargetType reportTargetType;
-    private String body;
     private Boolean isHandled;
     private LocalDateTime createdDateTime;
 
@@ -29,7 +28,6 @@ public class ReportData {
                 .reportId(report.getId())
                 .reportReasonType(report.getReportReasonType())
                 .reportTargetType(report.getReportTargetType())
-                .body(report.getBody())
                 .isHandled(report.getIsHandled())
                 .createdDateTime(report.getCreatedDateTime())
                 .userData(UserData.fromEntity(report.getUser()))
