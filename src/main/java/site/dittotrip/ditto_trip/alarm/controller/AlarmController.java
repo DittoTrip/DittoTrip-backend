@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.alarm.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +23,8 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     @GetMapping("/list")
+    @Operation(summary = "알림 리스트 조회",
+            description = "")
     public AlarmListRes alarmList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
         User user = getUserFromUserDetails(userDetails, true);
