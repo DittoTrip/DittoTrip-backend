@@ -66,7 +66,7 @@ public class Report {
     @Setter
     private DittoComment dittoComment;
 
-    public Report(ReportReasonType reportReasonType, ReportTargetType reportTargetType, String body, User user) {
+    public Report(ReportReasonType reportReasonType, ReportTargetType reportTargetType, User user) {
         this.reportReasonType = reportReasonType;
         this.reportTargetType = reportTargetType;
         this.user = user;

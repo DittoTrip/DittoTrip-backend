@@ -18,12 +18,11 @@ public class ReportSaveReq {
 
     private ReportReasonType reportReasonType;
     private ReportTargetType reportTargetType;
-    private String body;
 
     private Long targetId;
 
     public Report toEntity(Object targetEntity, User user) {
-        Report report = new Report(reportReasonType, reportTargetType, body, user);
+        Report report = new Report(reportReasonType, reportTargetType,  user);
         putReportEntity(report, targetEntity);
         return report;
     }
