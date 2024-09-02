@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
+import site.dittotrip.ditto_trip.review.domain.dto.ReviewCommentSaveReq;
 import site.dittotrip.ditto_trip.review.service.ReviewCommentService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -29,9 +29,9 @@ public class ReviewCommentController {
     public void commentSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "reviewId") Long reviewId,
                             @RequestParam(name = "parentCommentId", required = false) Long parentCommentId,
-                            @RequestBody CommentSaveReq commentSaveReq) {
+                            @RequestBody ReviewCommentSaveReq reviewCommentSaveReq) {
         User user = getUserFromUserDetails(userDetails, true);
-        reviewCommentService.saveComment(reviewId, parentCommentId, user, commentSaveReq);
+        reviewCommentService.saveComment(reviewId, parentCommentId, user, reviewCommentSaveReq);
     }
 
     @PutMapping("/{commentId}")
@@ -39,9 +39,9 @@ public class ReviewCommentController {
             description = "")
     public void commentModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "commentId") Long commentId,
-                              @RequestBody CommentSaveReq commentSaveReq) {
+                              @RequestBody ReviewCommentSaveReq reviewCommentSaveReq) {
         User user = getUserFromUserDetails(userDetails, true);
-        reviewCommentService.modifyComment(commentId, user, commentSaveReq);
+        reviewCommentService.modifyComment(commentId, user, reviewCommentSaveReq);
     }
 
     @DeleteMapping("/{commentId}")
