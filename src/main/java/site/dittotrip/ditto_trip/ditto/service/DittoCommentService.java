@@ -33,7 +33,7 @@ public class DittoCommentService {
      *  target : 디토 작성자
      */
     @Transactional(readOnly = false)
-    public void saveDittoComment(Long dittoId, Long parentCommentId, User user,
+    public void saveDittoComment(Long dittoId, Long parentCommentId, User reqUser,
                                  DittoCommentSaveReq saveReq) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
 
@@ -49,17 +49,17 @@ public class DittoCommentService {
             }
         }
 
-        processAlarmInSaveDittoComment(saveReq, ditto);
+        processAlarmInSaveDittoComment(saveReq, ditto, reqUser);
 
-        DittoComment dittoComment = saveReq.toEntity(ditto, user, parentComment);
+        DittoComment dittoComment = saveReq.toEntity(ditto, reqUser, parentComment);
         dittoCommentRepository.save(dittoComment);
     }
 
     @Transactional(readOnly = false)
-    public void modifyDittoComment(Long dittoCommentId, User user, DittoCommentSaveReq saveReq) {
+    public void modifyDittoComment(Long dittoCommentId, User reqUser, DittoCommentSaveReq saveReq) {
         DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
-        if (comment.getUser().getId() != user.getId()) {
+        if (comment.getUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 
@@ -67,17 +67,21 @@ public class DittoCommentService {
     }
 
     @Transactional(readOnly = false)
-    public void removeDittoComment(Long dittoCommentId, User user) {
+    public void removeDittoComment(Long dittoCommentId, User reqUser) {
         DittoComment comment = dittoCommentRepository.findById(dittoCommentId).orElseThrow(NoSuchElementException::new);
 
-        if (comment.getUser().getId() != user.getId()) {
+        if (comment.getUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 
         dittoCommentRepository.delete(comment);
     }
 
-    private void processAlarmInSaveDittoComment(DittoCommentSaveReq saveReq, Ditto ditto) {
+    private void processAlarmInSaveDittoComment(DittoCommentSaveReq saveReq, Ditto ditto, User reqUser) {
+        if (ditto.getUser().getId() == reqUser.getId()) {
+            return;
+        }
+
         String title = "작성하신 디토에 댓글이 달렸어요 !!";
         String body = saveReq.getBody();
         String path = "/ditto/" + ditto.getId();

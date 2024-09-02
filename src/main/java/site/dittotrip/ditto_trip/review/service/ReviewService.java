@@ -6,6 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
+import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
 import site.dittotrip.ditto_trip.review.exception.AlreadyWriteReviewException;
@@ -43,6 +46,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final AlarmRepository alarmRepository;
 
     private final int REVIEW_WRITE_PERIOD = 604800;
 
@@ -112,8 +116,9 @@ public class ReviewService {
         // image 처리
 
         modifySpot(spotVisit.getSpot(), review.getRating(), null);
-
         reviewRepository.save(review);
+
+        processAlarmInSaveReview(review);
     }
 
     @Transactional(readOnly = false)
@@ -193,6 +198,19 @@ public class ReviewService {
 
         spot.setReviewCount(reviewCount);
         spot.setRating(newRating);
+    }
+
+    private void processAlarmInSaveReview(Review review) {
+        String title = "새로운 리뷰가 있어요 !!";
+        String body = review.getUser() + " 님이 리뷰를 작성했어요 !!";
+        String path = "/review/" + review.getId();
+        List<User> targets = new ArrayList<>();
+        List<Follow> followeds = review.getUser().getFolloweds();
+        for (Follow followed : followeds) {
+            targets.add(followed.getFollowingUser());
+        }
+
+        alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets));
     }
 
 }
