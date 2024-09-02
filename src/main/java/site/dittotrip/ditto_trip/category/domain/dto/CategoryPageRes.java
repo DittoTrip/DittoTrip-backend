@@ -13,16 +13,4 @@ public class CategoryPageRes {
     private List<CategoryData> categoryDataList = new ArrayList<>();
     private Integer totalPages;
 
-    public static CategoryPageRes fromEntities(Page<Category> page) {
-        List<Category> categories = page.getContent();
-        CategoryPageRes categoryPageRes = new CategoryPageRes();
-        categoryPageRes.setTotalPages(page.getTotalPages());
-
-        for (Category category : categories) {
-            categoryPageRes.getCategoryDataList().add(CategoryData.fromEntity(category));
-        }
-
-        return categoryPageRes;
-    }
-
 }

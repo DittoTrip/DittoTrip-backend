@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 
 @Data
 @AllArgsConstructor
@@ -14,13 +15,23 @@ public class CategoryData {
     private String name;
     private String imageFilePath;
 
-    public static CategoryData fromEntity(Category category) {
+    private Long myBookmarkId;
 
-        return CategoryData.builder()
+    public static CategoryData fromEntity(Category category, CategoryBookmark bookmark) {
+        CategoryData categoryData = CategoryData.builder()
                 .categoryId(category.getId())
                 .name(category.getName())
                 .imageFilePath(category.getImagePath())
                 .build();
+
+        categoryData.putMyBookmarkId(bookmark);
+        return categoryData;
+    }
+
+    private void putMyBookmarkId(CategoryBookmark bookmark) {
+        if (bookmark != null) {
+            this.myBookmarkId = bookmark.getId();
+        }
     }
 
 }

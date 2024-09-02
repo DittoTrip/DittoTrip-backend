@@ -11,12 +11,4 @@ public class CategoryListNoTypeRes {
 
     private List<CategoryData> categoryDataList = new ArrayList<>();
 
-    public static CategoryListNoTypeRes fromEntities(List<Category> categories) {
-        CategoryListNoTypeRes categoryListNoTypeRes = new CategoryListNoTypeRes();
-        for (Category category : categories) {
-            categoryListNoTypeRes.getCategoryDataList().add(CategoryData.fromEntity(category));
-        }
-        return categoryListNoTypeRes;
-    }
-
 }

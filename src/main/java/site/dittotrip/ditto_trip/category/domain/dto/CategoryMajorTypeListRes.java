@@ -18,15 +18,4 @@ public class CategoryMajorTypeListRes {
     private List<CategoryData> categoryDataList = new ArrayList<>();
     private Integer totalPages;
 
-    public static CategoryMajorTypeListRes fromEntities(List<Category> categories, Integer totalPages) {
-        CategoryMajorTypeListRes listRes = new CategoryMajorTypeListRes();
-        listRes.setTotalPages(totalPages);
-
-        for (Category category : categories) {
-            listRes.getCategoryDataList().add(CategoryData.fromEntity(category));
-        }
-
-        return listRes;
-    }
-
 }
