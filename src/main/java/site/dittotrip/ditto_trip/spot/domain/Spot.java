@@ -23,12 +23,7 @@ public class Spot {
     private Long id;
 
     private String name;
-    private String intro;
     private String address;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String phoneNumber;
-    private String homeUri;
     private Double pointX;
     private Double pointY;
     private String imagePath;
@@ -40,26 +35,21 @@ public class Spot {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<SpotImage> spotImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
     /**
      * for test
      */
-    public Spot(String name, String intro, String address, LocalTime startTime, LocalTime endTime, String phoneNumber, String homeUri, Double pointX, Double pointY, String imagePath) {
+    public Spot(String name, String address, Double pointX, Double pointY, String imagePath) {
         this.name = name;
-        this.intro = intro;
         this.address = address;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.phoneNumber = phoneNumber;
-        this.homeUri = homeUri;
         this.pointX = pointX;
         this.pointY = pointY;
         this.imagePath = imagePath;

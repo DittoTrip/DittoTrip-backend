@@ -3,17 +3,18 @@ package site.dittotrip.ditto_trip.hashtag.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.spot.domain.SpotApply;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class HashtagCategory {
+public class HashtagSpotApply {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_category_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hashtag_spot_apply_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -21,12 +22,12 @@ public class HashtagCategory {
     private Hashtag hashtag;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "spot_apply_id")
+    private SpotApply spotApply;
 
-    public HashtagCategory(Hashtag hashtag, Category category) {
+    public HashtagSpotApply(Hashtag hashtag, SpotApply spotApply) {
         this.hashtag = hashtag;
-        this.category = category;
+        this.spotApply = spotApply;
     }
 
 }

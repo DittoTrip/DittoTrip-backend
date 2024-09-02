@@ -3,8 +3,10 @@ package site.dittotrip.ditto_trip.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
-import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
+import site.dittotrip.ditto_trip.review.domain.dto.ReviewCommentSaveReq;
 import site.dittotrip.ditto_trip.review.exception.DoubleChildReviewCommentException;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.NotMatchedRelationException;
@@ -13,6 +15,8 @@ import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,10 +27,15 @@ public class ReviewCommentService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
+    private final AlarmRepository alarmRepository;
 
+    /**
+     * 알림 발생
+     *  target : 리뷰 작성자
+     */
     @Transactional(readOnly = false)
     public void saveComment(Long reviewId, Long parentCommentId, User user,
-                            CommentSaveReq commentSaveReq) {
+                            ReviewCommentSaveReq saveReq) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
         ReviewComment parentReviewComment = null;
@@ -41,19 +50,21 @@ public class ReviewCommentService {
             }
         }
 
-        ReviewComment reviewComment = new ReviewComment(commentSaveReq.getBody(), user, review, parentReviewComment);
+        processAlarmInSaveReviewComment(saveReq, review);
+
+        ReviewComment reviewComment = new ReviewComment(saveReq.getBody(), user, review, parentReviewComment);
         reviewCommentRepository.save(reviewComment);
     }
 
     @Transactional(readOnly = false)
-    public void modifyComment(Long commentId, User user, CommentSaveReq commentSaveReq) {
+    public void modifyComment(Long commentId, User user, ReviewCommentSaveReq reviewCommentSaveReq) {
         ReviewComment reviewComment = reviewCommentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
 
         if (reviewComment.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
-        reviewComment.setBody(commentSaveReq.getBody());
+        reviewComment.setBody(reviewCommentSaveReq.getBody());
     }
 
     @Transactional(readOnly = false)
@@ -79,6 +90,14 @@ public class ReviewCommentService {
         } else {
             return Boolean.TRUE;
         }
+    }
+
+    private void processAlarmInSaveReviewComment(ReviewCommentSaveReq saveReq, Review review) {
+        String title = "작성하신 리뷰에 댓글이 달렸어요 !!";
+        String body = saveReq.getBody();
+        String path = "/review/" + review.getId();
+        List<User> targets = new ArrayList<>(List.of(review.getUser()));
+        alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets));
     }
 
 }

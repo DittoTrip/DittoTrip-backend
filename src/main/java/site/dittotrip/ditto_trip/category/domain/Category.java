@@ -31,19 +31,19 @@ public class Category {
     @Setter
     private String imagePath;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<HashtagCategory> hashtagCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
     /**
      * for CategoryListRes test
      */
-    public Category(String name, CategoryMajorType categoryMajorType, CategorySubType categorySubType, String imagePath) {
+    public Category(String name, CategoryMajorType categoryMajorType, CategorySubType categorySubType) {
         this.name = name;
         this.categoryMajorType = categoryMajorType;
         this.categorySubType = categorySubType;
-        this.imagePath = imagePath;
     }
+
 }

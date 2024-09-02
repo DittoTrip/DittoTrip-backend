@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.hashtag.domain;
+package site.dittotrip.ditto_trip.spot.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,23 +10,24 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class HashtagCategory {
+public class CategorySpotApply {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_category_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_spot_id")
     private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "hashtag_id")
-    private Hashtag hashtag;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public HashtagCategory(Hashtag hashtag, Category category) {
-        this.hashtag = hashtag;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "spot_apply_id")
+    private SpotApply spotApply;
+
+    public CategorySpotApply(Category category, SpotApply spotApply) {
         this.category = category;
+        this.spotApply = spotApply;
     }
 
 }
