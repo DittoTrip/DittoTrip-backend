@@ -35,13 +35,13 @@ public class Spot {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<SpotImage> spotImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
     /**
