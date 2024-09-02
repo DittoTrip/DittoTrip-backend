@@ -24,4 +24,9 @@ public class HashtagCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public HashtagCategory(Hashtag hashtag, Category category) {
+        this.hashtag = hashtag;
+        this.category = category;
+    }
+
 }

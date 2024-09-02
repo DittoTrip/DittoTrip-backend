@@ -108,7 +108,7 @@ public class TestDataConfig {
         return user;
     }
     private Category createCategory(String name, CategoryMajorType majorType, CategorySubType subType) {
-        Category category = new Category(name, majorType, subType, null);
+        Category category = new Category(name, majorType, subType);
         categoryRepository.save(category);
         return category;
     }

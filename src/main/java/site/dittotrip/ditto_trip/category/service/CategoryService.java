@@ -13,6 +13,9 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagCategory;
+import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
@@ -33,6 +36,7 @@ public class CategoryService {
     private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategorySpotRepository categorySpotRepository;
     private final SpotRepository spotRepository;
+    private final HashtagRepository hashtagRepository;
 
     public CategoryPageRes findCategoryList(User reqUser, CategorySubType subType, Pageable pageable) {
         Page<Category> page = categoryRepository.findBySubType(subType, pageable);
@@ -96,21 +100,31 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = false)
-    public void saveCategory(CategorySaveReq categorySaveReq, MultipartFile multipartFile) {
-
-        // 이미지 처리
-        String imagePath = null;
-
-        Category category = categorySaveReq.toEntity(imagePath);
+    public void saveCategory(CategorySaveReq saveReq, MultipartFile multipartFile) {
+        Category category = saveReq.toEntity();
         categoryRepository.save(category);
 
-        List<Long> spotIds = categorySaveReq.getSpotIds();
+        List<Long> spotIds = saveReq.getSpotIds();
         for (Long spotId : spotIds) {
             Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
-            categorySpotRepository.save(new CategorySpot(category, spot));
+            category.getCategorySpots().add(new CategorySpot(category, spot));
         }
 
         // 해시태그 처리
+        for (String hashtagName : saveReq.getHashtagNames()) {
+            Optional<Hashtag> optionalHashtag = hashtagRepository.findByName(hashtagName);
+            Hashtag hashtag = null;
+            if (optionalHashtag.isEmpty()) {
+                hashtag = new Hashtag(hashtagName);
+                hashtagRepository.save(hashtag);
+            } else {
+                hashtag = optionalHashtag.get();
+            }
+            category.getHashtagCategories().add(new HashtagCategory(hashtag, category));
+        }
+
+        // 이미지 처리
+
     }
 
     @Transactional(readOnly = false)
