@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SpotRepository extends JpaRepository<Spot, Long> {
 
-    List<Spot> findBySpotNameContaining(String word, Pageable pageable);
+    List<Spot> findByNameContaining(String word, Pageable pageable);
 
 }

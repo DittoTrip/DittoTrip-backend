@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.geo.Point;
-import site.dittotrip.ditto_trip.category.domain.Category;
+import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,8 @@ public class Spot {
     @Column(name = "spot_id")
     private Long id;
 
-    private String spotName;
-    private String intro;
+    private String name;
     private String address;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String phoneNumber;
-    private String homeUri;
     private Double pointX;
     private Double pointY;
     private String imagePath;
@@ -36,13 +32,26 @@ public class Spot {
     @Setter
     private Float rating = 0.0f;
 
-    @OneToMany(mappedBy = "spot")
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
+
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot")
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<SpotImage> spotImages = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "spots")
-    private List<Hashtag> hashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
+    /**
+     * for test
+     */
+    public Spot(String name, String address, Double pointX, Double pointY, String imagePath) {
+        this.name = name;
+        this.address = address;
+        this.pointX = pointX;
+        this.pointY = pointY;
+        this.imagePath = imagePath;
+    }
 }

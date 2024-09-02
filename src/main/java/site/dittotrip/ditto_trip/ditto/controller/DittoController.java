@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.ditto.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,8 @@ import site.dittotrip.ditto_trip.ditto.service.DittoService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
+
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. Ditto 랜덤 리스트 조회
@@ -36,46 +39,58 @@ public class DittoController {
     private final DittoBookmarkService dittoBookmarkService;
 
     @GetMapping("/list")
+    @Operation(summary = "디토 리스트 조회 (디토 페이지)",
+            description = "")
     public DittoListRes dittoList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, false);
         return dittoService.findDittoList(user, pageable);
     }
 
     @GetMapping("/list/bookmark")
+    @Operation(summary = "내 북마크 디토 리스트 조회",
+            description = "")
     public DittoListRes dittoListInBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         return dittoService.findDittoListInBookmark(user);
     }
 
     @GetMapping("/{dittoId}")
+    @Operation(summary = "디토 상세 조회",
+            description = "")
     public DittoDetailRes dittoDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                       @PathVariable(name = "dittoId") Long dittoId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, false);
         return dittoService.findDittoDetail(dittoId, user);
     }
 
     @PostMapping
+    @Operation(summary = "디토 등록",
+            description = "")
     public void dittoSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                           @RequestBody DittoSaveReq saveReq,
                           @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         dittoService.saveDitto(user, saveReq, multipartFiles);
     }
 
     @PutMapping("/{dittoId}")
+    @Operation(summary = "디토 수정",
+            description = "")
     public void dittoModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId,
                             @RequestBody DittoModifyReq modifyReq,
                             @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         dittoService.modifyDitto(dittoId, user, modifyReq, multipartFiles);
     }
 
     @DeleteMapping("/{dittoId}")
+    @Operation(summary = "디토 삭제",
+            description = "")
     public void dittoRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         dittoService.removeDitto(dittoId, user);
     }
 
@@ -83,16 +98,20 @@ public class DittoController {
      * DittoBookmark 기능
      */
     @PostMapping("/bookmark/{dittoId}")
+    @Operation(summary = "디토 북마크 추가",
+            description = "")
     public void dittoBookmarkSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable(name = "dittoId") Long dittoId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         dittoBookmarkService.saveDittoBookmark(dittoId, user);
     }
 
     @DeleteMapping("/bookmark/{dittoId}")
+    @Operation(summary = "디토 북마크 삭제",
+            description = "")
     public void dittoBookmarkRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "dittoId") Long dittoId) {
-        User user = userDetails.getUser();
+        User user = getUserFromUserDetails(userDetails, true);
         dittoBookmarkService.removeDittoBookmark(dittoId, user);
     }
 

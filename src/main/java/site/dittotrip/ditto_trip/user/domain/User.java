@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 
@@ -36,5 +37,11 @@ public class User {
 
   @OneToOne(mappedBy = "user")
   private UserProfile userProfile;
+
+  @OneToMany(mappedBy = "followingUser")
+  private List<Follow> followings = new ArrayList<>();
+
+  @OneToMany(mappedBy = "followedUser")
+  private List<Follow> followeds = new ArrayList<>();
 
 }

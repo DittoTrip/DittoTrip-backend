@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.item.domain.UserBadge;
 import site.dittotrip.ditto_trip.item.domain.UserItem;
+import site.dittotrip.ditto_trip.item.domain.dto.UserBadgeListRes;
 import site.dittotrip.ditto_trip.item.domain.dto.UserItemListRes;
 import site.dittotrip.ditto_trip.item.repository.ItemRepository;
 import site.dittotrip.ditto_trip.item.repository.UserBadgeRepository;
@@ -24,12 +25,17 @@ public class ItemService {
     private final UserItemRepository userItemRepository;
     private final UserBadgeRepository userBadgeRepository;
 
-    public UserItemListRes findUsersItemList(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+    public UserItemListRes findUsersItemList(User user) {
         List<UserItem> userItems = userItemRepository.findByUser(user);
+
+        return UserItemListRes.fromEntities(userItems);
+    }
+
+    public UserBadgeListRes findUsersBadgeList(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<UserBadge> userBadges = userBadgeRepository.findByUser(user);
 
-        return UserItemListRes.fromEntities(userItems, userBadges);
+        return UserBadgeListRes.fromEntities(userBadges);
     }
 
 }

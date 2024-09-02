@@ -17,17 +17,17 @@ public class SpotVisitData {
     private String address;
     private LocalDateTime createdDateTime;
 
-    private Boolean isBookmark;
+    private Long bookmarkId;
 
-    public static SpotVisitData fromEntity(SpotVisit spotVisit, Boolean isBookmark) {
+    public static SpotVisitData fromEntity(SpotVisit spotVisit, Long bookmarkId) {
         Spot spot = spotVisit.getSpot();
         return SpotVisitData.builder()
                 .spotVisitId(spotVisit.getId())
                 .spotId(spot.getId())
-                .spotName(spot.getSpotName())
+                .spotName(spot.getName())
                 .address(spot.getAddress())
                 .createdDateTime(spotVisit.getCreatedDateTime())
-                .isBookmark(isBookmark)
+                .bookmarkId(bookmarkId)
                 .build();
     }
 

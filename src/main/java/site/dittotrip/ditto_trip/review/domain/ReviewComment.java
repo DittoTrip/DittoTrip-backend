@@ -40,7 +40,7 @@ public class ReviewComment {
     @JoinColumn(name = "parent_review_comment_id")
     private ReviewComment parentReviewComment = null;
 
-    @OneToMany(mappedBy = "parentReviewComment")
+    @OneToMany(mappedBy = "parentReviewComment", cascade = CascadeType.REMOVE)
     private List<ReviewComment> childReviewComments = new ArrayList<>();
 
     public ReviewComment(String body, User user, Review review, ReviewComment parentReviewComment) {

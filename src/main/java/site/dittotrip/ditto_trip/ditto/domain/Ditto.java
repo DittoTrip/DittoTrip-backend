@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -35,11 +35,11 @@ public class Ditto {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "ditto", orphanRemoval = true)
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
     private List<DittoImage> dittoImages = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "dittos")
-    private List<Hashtag> hashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
+    private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
     public Ditto(String title, String body, User user) {
         this.title = title;

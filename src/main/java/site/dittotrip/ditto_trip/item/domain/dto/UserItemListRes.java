@@ -1,9 +1,6 @@
 package site.dittotrip.ditto_trip.item.domain.dto;
 
-import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.item.domain.Badge;
-import site.dittotrip.ditto_trip.item.domain.Item;
 import site.dittotrip.ditto_trip.item.domain.UserBadge;
 import site.dittotrip.ditto_trip.item.domain.UserItem;
 import site.dittotrip.ditto_trip.item.domain.enums.ItemType;
@@ -17,12 +14,10 @@ import java.util.Map;
 public class UserItemListRes {
 
     Map<ItemType, List<UserItemData>> userItemDataMap = new HashMap<>();
-    List<UserBadgeData> userBadgeDataList = new ArrayList<>();
 
-    public static UserItemListRes fromEntities(List<UserItem> userItems, List<UserBadge> userBadges) {
+    public static UserItemListRes fromEntities(List<UserItem> userItems) {
         UserItemListRes userItemListRes = new UserItemListRes();
         Map<ItemType, List<UserItemData>> map = userItemListRes.getUserItemDataMap();
-        List<UserBadgeData> list = userItemListRes.getUserBadgeDataList();
 
         ItemType[] types = ItemType.values();
         for (ItemType type : types) {
@@ -31,10 +26,6 @@ public class UserItemListRes {
 
         for (UserItem userItem : userItems) {
             map.get(userItem.getItem().getItemType()).add(UserItemData.fromEntity(userItem));
-        }
-
-        for (UserBadge userBadge : userBadges) {
-            list.add(UserBadgeData.fromEntity(userBadge));
         }
 
         return userItemListRes;

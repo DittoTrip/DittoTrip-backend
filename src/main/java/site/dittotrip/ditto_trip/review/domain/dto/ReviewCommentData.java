@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,9 +19,10 @@ public class ReviewCommentData {
     private LocalDateTime createdDateTime;
 
     private UserData userData;
-    private List<ReviewCommentData> childrenCommentsData;
+    @Builder.Default
+    private List<ReviewCommentData> childrenCommentsDataList = new ArrayList<>();
 
-    private Boolean isMine = Boolean.FALSE;
+    private Boolean isMine;
 
     public static ReviewCommentData parentFromEntity(ReviewComment reviewComment, User requestUser) {
         ReviewCommentData reviewCommentData = fromEntity(reviewComment, requestUser);
@@ -46,13 +48,19 @@ public class ReviewCommentData {
 
     private void putChildrenCommentData(ReviewComment reviewComment, User requestUser) {
         for (ReviewComment childReviewComment : reviewComment.getChildReviewComments()) {
-            this.childrenCommentsData.add(childFromEntity(childReviewComment, requestUser));
+            this.childrenCommentsDataList.add(childFromEntity(childReviewComment, requestUser));
         }
     }
 
     private void putIsMine(User requestUser) {
-        if (this.userData.getUserId().equals(requestUser.getId())) {
+        if (requestUser == null) {
+            this.isMine = Boolean.FALSE;
+        }
+
+        if (this.userData.getUserId() == requestUser.getId()) {
             this.isMine = Boolean.TRUE;
+        } else {
+            this.isMine = Boolean.FALSE;
         }
     }
 

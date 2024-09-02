@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CommentSaveReq {
+public class ReviewCommentSaveReq {
 
     private String body;
 

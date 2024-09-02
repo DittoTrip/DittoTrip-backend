@@ -1,16 +1,20 @@
 package site.dittotrip.ditto_trip.category.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
+import site.dittotrip.ditto_trip.category.domain.dto.*;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
 import site.dittotrip.ditto_trip.user.domain.User;
+
+import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. 카테고리 탐색 첫 페이지 (majorType 별 리스트 -> PERSON / CONTENT)
@@ -30,38 +34,85 @@ public class CategoryController {
     private final CategoryBookmarkService categoryBookmarkService;
 
     @GetMapping("/list")
-    public CategoryListRes categoryList(@RequestParam(name = "majorType") CategoryMajorType majorType) {
-        return categoryService.findCategoryList(majorType);
+    @Operation(summary = "카테고리 리스트 조회",
+            description = "")
+    public CategoryPageRes categoryPageList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @RequestParam(name = "subType") CategorySubType subType,
+                                            Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryList(user, subType, pageable);
     }
 
     @GetMapping("/list/bookmark")
-    public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
-        return categoryService.findCategoryListByBookmark(user);
+    @Operation(summary = "내 북마크 카테고리 리스트 조회",
+            description = "")
+    public CategoryMajorTypeListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                         @RequestParam(name = "majorType") CategoryMajorType majorType,
+                                                         Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, true);
+        return categoryService.findCategoryListByBookmark(user, majorType, pageable);
     }
 
     @GetMapping("/list/search")
-    public CategoryListRes categorySearchList(@RequestParam(name = "query") String query) {
-        return categoryService.findCategoryListBySearch(query);
+    @Operation(summary = "카테고리 리스트 검색 조회",
+            description = "검색어(query)와 majorType에 의해 검색된 하나의 리스트를 반환합니다.")
+    public CategoryMajorTypeListRes categorySearchList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                       @RequestParam(name = "query") String query,
+                                                       @RequestParam(name = "majorType") CategoryMajorType majorType,
+                                                       Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryListBySearch(user, query, majorType, pageable);
     }
 
-    @GetMapping("/list/add")
-    public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
-                                            @RequestParam(name = "page") Integer page) {
-        return categoryService.findCategoryPage(subType, page);
+    @GetMapping("/list/search/typeless")
+    @Operation(summary = "카테고리 리스트 검색 조회",
+            description = "타입에 상관없이 하나의 리스트를 반환합니다.")
+    public CategoryListNoTypeRes categorySearchNoTypeList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                          @RequestParam(name = "query") String query) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryNoTypeListBySearch(user, query);
+    }
+
+    @PostMapping
+    @Operation(summary = "카테고리 저장 (관리자 기능)",
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")
+    public void categorySave(@RequestBody CategorySaveReq categorySaveReq,
+                             @RequestParam(name = "image") MultipartFile multipartFile) {
+        categoryService.saveCategory(categorySaveReq, multipartFile);
+    }
+
+    @PutMapping("/{categoryId}")
+    @Operation(summary = "카테고리 수정 (관리자 기능)",
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.\n" +
+                    "이미지는 필수가 아닙니다.")
+    public void categoryModify(@PathVariable(name = "categoryId") Long categoryId,
+                               @RequestBody CategoryModifyReq categoryModifyReq,
+                               @RequestParam(name = "image", required = false) MultipartFile multipartFile) {
+        categoryService.modifyCategory(categoryId, categoryModifyReq, multipartFile);
+    }
+
+    @DeleteMapping("{categoryId}")
+    @Operation(summary = "카테고리 삭제 (관리자 기능)",
+            description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")
+    public void categoryRemove(@PathVariable(name = "categoryId") Long categoryId) {
+        categoryService.removeCategory(categoryId);
     }
 
     @PostMapping("/{categoryId}/bookmark")
+    @Operation(summary = "카테고리 북마크 추가",
+            description = "")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
-                                    @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.addCategoryBookmark(categoryId, user);
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
+    @Operation(summary = "카테고리 북마크 삭제",
+            description = "")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
-                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        User user = customUserDetails.getUser();
+                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = getUserFromUserDetails(userDetails, true);
         categoryBookmarkService.removeCategoryBookmark(categoryId, user);
     }
 

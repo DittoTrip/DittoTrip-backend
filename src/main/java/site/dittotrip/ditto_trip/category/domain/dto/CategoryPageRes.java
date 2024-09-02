@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.category.domain.dto;
 
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import site.dittotrip.ditto_trip.category.domain.Category;
 
 import java.util.ArrayList;
@@ -10,15 +11,6 @@ import java.util.List;
 public class CategoryPageRes {
 
     private List<CategoryData> categoryDataList = new ArrayList<>();
-
-    public static CategoryPageRes fromEntities(List<Category> categories) {
-        CategoryPageRes categoryPageRes = new CategoryPageRes();
-
-        for (Category category : categories) {
-            categoryPageRes.getCategoryDataList().add(CategoryData.fromEntity(category));
-        }
-
-        return categoryPageRes;
-    }
+    private Integer totalPages;
 
 }

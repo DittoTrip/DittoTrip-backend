@@ -10,5 +10,7 @@ public class SpotVisitListRes {
 
     private List<SpotVisitData> spotVisitDataList = new ArrayList<>();
     private Integer count;
+    private Integer totalPages;
+
 
 }

@@ -6,8 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
+import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
+import site.dittotrip.ditto_trip.review.exception.AlreadyWriteReviewException;
+import site.dittotrip.ditto_trip.review.exception.ReviewWritePeriodOverException;
 import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
@@ -21,6 +26,8 @@ import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,8 +46,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final AlarmRepository alarmRepository;
 
-    private static final int PAGE_SIZE = 10;
+    private final int REVIEW_WRITE_PERIOD = 604800;
 
     public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -69,7 +77,7 @@ public class ReviewService {
         Spot spot = review.getSpotVisit().getSpot();
 
         ReviewDetailRes reviewDetailRes = new ReviewDetailRes();
-        reviewDetailRes.setSpotName(spot.getSpotName());
+        reviewDetailRes.setSpotName(spot.getName());
 
         int commentsCount = reviewCommentRepository.countByReview(review).intValue();
         Boolean isMine = getIsMine(review, user);
@@ -90,6 +98,15 @@ public class ReviewService {
     public void saveReview(Long spotVisitId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         SpotVisit spotVisit = spotVisitRepository.findById(spotVisitId).orElseThrow(NoSuchElementException::new);
 
+        reviewRepository.findBySpotVisit(spotVisit).ifPresent(m -> {
+            throw new AlreadyWriteReviewException();
+        });
+
+        Duration duration = Duration.between(spotVisit.getCreatedDateTime(), LocalDateTime.now());
+        if (duration.getSeconds() > REVIEW_WRITE_PERIOD) {
+            throw new ReviewWritePeriodOverException();
+        }
+
         if (multipartFiles.size() > 10) {
             throw new TooManyImagesException();
         }
@@ -98,9 +115,10 @@ public class ReviewService {
 
         // image 처리
 
-        modifySpotRating(spotVisit.getSpot(), review.getRating(), null);
-
+        modifySpot(spotVisit.getSpot(), review.getRating(), null);
         reviewRepository.save(review);
+
+        processAlarmInSaveReview(review);
     }
 
     @Transactional(readOnly = false)
@@ -108,7 +126,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         Float oldRating = review.getRating();
 
-        if (!review.getUser().equals(user)) {
+        if (review.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
@@ -120,20 +138,20 @@ public class ReviewService {
 
         // image 처리
 
-        modifySpotRating(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
+        modifySpot(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
     }
 
     @Transactional(readOnly = false)
     public void removeReview(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
 
-        if (!review.getUser().equals(user)) {
+        if (review.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
         // image 처리
 
-        modifySpotRating(review.getSpotVisit().getSpot(), null, review.getRating());
+        modifySpot(review.getSpotVisit().getSpot(), null, review.getRating());
         reviewRepository.delete(review);
     }
 
@@ -142,7 +160,7 @@ public class ReviewService {
             return Boolean.FALSE;
         }
 
-        if (review.getUser().equals(user)) {
+        if (review.getUser().getId() == user.getId()) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
@@ -162,7 +180,7 @@ public class ReviewService {
         }
     }
 
-    private void modifySpotRating(Spot spot, Float add, Float sub) {
+    private void modifySpot(Spot spot, Float add, Float sub) {
         int reviewCount = spot.getReviewCount();
         float ratingSum = spot.getRating() * reviewCount;
 
@@ -180,6 +198,19 @@ public class ReviewService {
 
         spot.setReviewCount(reviewCount);
         spot.setRating(newRating);
+    }
+
+    private void processAlarmInSaveReview(Review review) {
+        String title = "새로운 리뷰가 있어요 !!";
+        String body = review.getUser() + " 님이 리뷰를 작성했어요 !!";
+        String path = "/review/" + review.getId();
+        List<User> targets = new ArrayList<>();
+        List<Follow> followeds = review.getUser().getFolloweds();
+        for (Follow followed : followeds) {
+            targets.add(followed.getFollowingUser());
+        }
+
+        alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets));
     }
 
 }

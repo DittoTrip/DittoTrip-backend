@@ -16,6 +16,7 @@ public class ReviewListRes {
 
     private Integer reviewsCount;
     private Float rating;
+    @Builder.Default
     private List<ReviewData> reviewDataList = new ArrayList<>();
     private Integer totalPage;
 
