@@ -23,7 +23,7 @@ public class SpotData {
 
     @Builder.Default
     private List<HashtagData> hashtagData = new ArrayList<>();
-    private Long bookmarkId;
+    private Long myBookmarkId;
 
     public static SpotData fromEntity(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
@@ -34,7 +34,7 @@ public class SpotData {
                 .pointY(spot.getPointY())
                 .imagePath(spot.getImagePath())
                 .rating(spot.getRating())
-                .bookmarkId(bookmarkId)
+                .myBookmarkId(bookmarkId)
                 .build();
 
         spotData.putHashtagData(spot);
