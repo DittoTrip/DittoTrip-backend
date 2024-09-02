@@ -35,10 +35,10 @@ public class Ditto {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
     private List<DittoImage> dittoImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
     private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
     public Ditto(String title, String body, User user) {

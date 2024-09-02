@@ -13,6 +13,9 @@ import site.dittotrip.ditto_trip.ditto.domain.dto.*;
 import site.dittotrip.ditto_trip.ditto.repository.DittoBookmarkRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
+import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -30,6 +33,7 @@ public class DittoService {
     private final DittoRepository dittoRepository;
     private final DittoBookmarkRepository dittoBookmarkRepository;
     private final DittoCommentRepository dittoCommentRepository;
+    private final HashtagRepository hashtagRepository;
 
     public DittoListRes findDittoList(User user, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -68,10 +72,22 @@ public class DittoService {
         }
 
         Ditto ditto = saveReq.toEntity(user);
+        dittoRepository.save(ditto);
+
+        for (String name : saveReq.getHashtagNames()) {
+            Optional<Hashtag> optionalHashtag = hashtagRepository.findByName(name);
+            Hashtag hashtag = null;
+            if (optionalHashtag.isEmpty()) {
+                hashtag = new Hashtag(name);
+                hashtagRepository.save(hashtag);
+            } {
+                hashtag = optionalHashtag.get();
+            }
+            ditto.getHashtagDittos().add(new HashtagDitto(hashtag, ditto));
+        }
 
         // image 처리
 
-        dittoRepository.save(ditto);
     }
 
     @Transactional(readOnly = false)

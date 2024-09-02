@@ -24,4 +24,9 @@ public class HashtagDitto {
     @JoinColumn(name = "ditto_id")
     private Ditto ditto;
 
+    public HashtagDitto(Hashtag hashtag, Ditto ditto) {
+        this.hashtag = hashtag;
+        this.ditto = ditto;
+    }
+
 }
