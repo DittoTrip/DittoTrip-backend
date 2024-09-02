@@ -111,7 +111,7 @@ public class ReviewService {
 
         // image 처리
 
-        modifySpotRating(spotVisit.getSpot(), review.getRating(), null);
+        modifySpot(spotVisit.getSpot(), review.getRating(), null);
 
         reviewRepository.save(review);
     }
@@ -133,7 +133,7 @@ public class ReviewService {
 
         // image 처리
 
-        modifySpotRating(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
+        modifySpot(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
     }
 
     @Transactional(readOnly = false)
@@ -146,7 +146,7 @@ public class ReviewService {
 
         // image 처리
 
-        modifySpotRating(review.getSpotVisit().getSpot(), null, review.getRating());
+        modifySpot(review.getSpotVisit().getSpot(), null, review.getRating());
         reviewRepository.delete(review);
     }
 
@@ -175,7 +175,7 @@ public class ReviewService {
         }
     }
 
-    private void modifySpotRating(Spot spot, Float add, Float sub) {
+    private void modifySpot(Spot spot, Float add, Float sub) {
         int reviewCount = spot.getReviewCount();
         float ratingSum = spot.getRating() * reviewCount;
 

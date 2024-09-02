@@ -2,7 +2,6 @@ package site.dittotrip.ditto_trip.spot.domain.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.spot.domain.SpotApply;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -25,10 +24,10 @@ public class SpotApplySaveReq {
     private Double pointY;
 
     private List<Long> categoryIds = new ArrayList<>();
-    // 해시태그 리스트
+    private List<String> hashtagNames = new ArrayList<>();
 
-     public SpotApply toEntity(User user, List<Category> categories) {
-         return new SpotApply(name, intro, address, startTime, endTime, phoneNumber, homeUri, pointX, pointY, user, categories);
+     public SpotApply toEntity(User user) {
+         return new SpotApply(name, address, pointX, pointY, user);
      }
 
 }

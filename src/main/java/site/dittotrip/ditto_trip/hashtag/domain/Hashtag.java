@@ -30,4 +30,8 @@ public class Hashtag {
     @OneToMany(mappedBy = "hashtag")
     private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
+    public Hashtag(String name) {
+        this.name = name;
+    }
+
 }
