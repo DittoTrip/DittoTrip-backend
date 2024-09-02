@@ -1,32 +1,31 @@
-package site.dittotrip.ditto_trip.ditto.domain;
+package site.dittotrip.ditto_trip.alarm.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class Ditto {
+public class Alarm {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ditto_id")
+    @Column(name = "alarm_id")
     private Long id;
 
-    @Setter
     private String title;
-    @Setter
     private String body;
+    private String path;
+
+    @Setter
+    private Boolean isChecked = Boolean.FALSE;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;
@@ -35,15 +34,10 @@ public class Ditto {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.REMOVE)
-    private List<DittoImage> dittoImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.REMOVE)
-    private List<HashtagDitto> hashtagDittos = new ArrayList<>();
-
-    public Ditto(String title, String body, User user) {
+    public Alarm(String title, String body, String path, User user) {
         this.title = title;
         this.body = body;
+        this.path = path;
         this.user = user;
     }
 

@@ -137,7 +137,7 @@ public class TestDataConfig {
     }
 
     private Review createReview(String body, Float rating, User user, SpotVisit spotVisit) {
-        Review review = new Review(body, rating, null, user, spotVisit);
+        Review review = new Review(body, rating, user, spotVisit);
         reviewRepository.save(review);
         Spot spot = spotVisit.getSpot();
         modifySpotRating(spot, 3.0f, null);

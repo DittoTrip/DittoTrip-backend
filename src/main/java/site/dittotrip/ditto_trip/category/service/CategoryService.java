@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryModifyReq;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategorySaveReq;
+import site.dittotrip.ditto_trip.category.domain.dto.*;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
@@ -26,8 +24,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.fromEntities;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,29 +34,65 @@ public class CategoryService {
     private final CategorySpotRepository categorySpotRepository;
     private final SpotRepository spotRepository;
 
-    public CategoryPageRes findCategoryList(CategorySubType subType, Pageable pageable) {
+    public CategoryPageRes findCategoryList(User reqUser, CategorySubType subType, Pageable pageable) {
         Page<Category> page = categoryRepository.findBySubType(subType, pageable);
-        return CategoryPageRes.fromEntities(page);
-    }
 
-    public CategoryListRes findCategoryListByBookmark(User user) {
-        List<CategoryBookmark> bookmarks = categoryBookmarkRepository.findByUser(user);
+        CategoryPageRes res = new CategoryPageRes();
+        res.setTotalPages(page.getTotalPages());
 
-        List<Category> categories = new ArrayList<>();
-        for (CategoryBookmark bookmark : bookmarks) {
-            categories.add(bookmark.getCategory());
+        for (Category category : page.getContent()) {
+            CategoryBookmark reqUsersBookmark = getReqUsersBookmark(reqUser, category);
+            res.getCategoryDataList().add(CategoryData.fromEntity(category, reqUsersBookmark));
         }
 
-        return fromEntities(categories);
+        return res;
+    }
+
+
+    public CategoryMajorTypeListRes findCategoryListByBookmark(User reqUser, CategoryMajorType majorType, Pageable pageable) {
+        Page<CategoryBookmark> page = categoryBookmarkRepository.findByUserAndMajorType(reqUser, majorType, pageable);
+
+        CategoryMajorTypeListRes res = new CategoryMajorTypeListRes();
+        res.setTotalPages(page.getTotalPages());
+
+        for (CategoryBookmark bookmark : page.getContent()) {
+            res.getCategoryDataList().add(CategoryData.fromEntity(bookmark.getCategory(), bookmark));
+        }
+
+        return res;
     }
 
     /**
      * 카테고리 검색 조회
      *  - 단순 문자열 포함 검색
      */
-    public CategoryListRes findCategoryListBySearch(String word) {
+    public CategoryMajorTypeListRes findCategoryListBySearch(User reqUser, String word, CategoryMajorType majorType, Pageable pageable) {
+        Page<Category> page = categoryRepository.findBySearchAndMajorType(word, majorType, pageable);
+
+        CategoryMajorTypeListRes res = new CategoryMajorTypeListRes();
+        res.setTotalPages(page.getTotalPages());
+
+        for (Category category : page.getContent()) {
+            CategoryBookmark reqUsersBookmark = getReqUsersBookmark(reqUser, category);
+            res.getCategoryDataList().add(CategoryData.fromEntity(category, reqUsersBookmark));
+        }
+
+        return res;
+    }
+
+    /**
+     * 카테고리 타입마다 나누지 않고 하나의 리스트로 반환합니다.
+     */
+    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(User reqUser, String word) {
         List<Category> categories = categoryRepository.findByNameContaining(word);
-        return fromEntities(categories);
+
+        CategoryListNoTypeRes res = new CategoryListNoTypeRes();
+        for (Category category : categories) {
+            CategoryBookmark reqUsersBookmark = getReqUsersBookmark(reqUser, category);
+            res.getCategoryDataList().add(CategoryData.fromEntity(category, reqUsersBookmark));
+        }
+
+        return res;
     }
 
     @Transactional(readOnly = false)
@@ -110,6 +142,15 @@ public class CategoryService {
     public void removeCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         categoryRepository.delete(category);
+    }
+
+    private CategoryBookmark getReqUsersBookmark(User reqUser, Category category) {
+        if (reqUser == null) {
+            return null;
+        } else {
+            Optional<CategoryBookmark> categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, reqUser);
+            return categoryBookmark.orElse(null);
+        }
     }
 
 }

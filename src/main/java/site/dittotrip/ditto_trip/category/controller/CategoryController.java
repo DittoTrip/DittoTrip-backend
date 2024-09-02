@@ -7,10 +7,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryModifyReq;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategorySaveReq;
+import site.dittotrip.ditto_trip.category.domain.dto.*;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
@@ -38,24 +36,41 @@ public class CategoryController {
     @GetMapping("/list")
     @Operation(summary = "카테고리 리스트 조회",
             description = "")
-    public CategoryPageRes categoryPageList(@RequestParam(name = "subType") CategorySubType subType,
+    public CategoryPageRes categoryPageList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @RequestParam(name = "subType") CategorySubType subType,
                                             Pageable pageable) {
-        return categoryService.findCategoryList(subType, pageable);
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryList(user, subType, pageable);
     }
 
     @GetMapping("/list/bookmark")
     @Operation(summary = "내 북마크 카테고리 리스트 조회",
             description = "")
-    public CategoryListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public CategoryMajorTypeListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                         @RequestParam(name = "majorType") CategoryMajorType majorType,
+                                                         Pageable pageable) {
         User user = getUserFromUserDetails(userDetails, true);
-        return categoryService.findCategoryListByBookmark(user);
+        return categoryService.findCategoryListByBookmark(user, majorType, pageable);
     }
 
     @GetMapping("/list/search")
     @Operation(summary = "카테고리 리스트 검색 조회",
-            description = "")
-    public CategoryListRes categorySearchList(@RequestParam(name = "query") String query) {
-        return categoryService.findCategoryListBySearch(query);
+            description = "검색어(query)와 majorType에 의해 검색된 하나의 리스트를 반환합니다.")
+    public CategoryMajorTypeListRes categorySearchList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                       @RequestParam(name = "query") String query,
+                                                       @RequestParam(name = "majorType") CategoryMajorType majorType,
+                                                       Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryListBySearch(user, query, majorType, pageable);
+    }
+
+    @GetMapping("/list/search/typeless")
+    @Operation(summary = "카테고리 리스트 검색 조회",
+            description = "타입에 상관없이 하나의 리스트를 반환합니다.")
+    public CategoryListNoTypeRes categorySearchNoTypeList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                          @RequestParam(name = "query") String query) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return categoryService.findCategoryNoTypeListBySearch(user, query);
     }
 
     @PostMapping

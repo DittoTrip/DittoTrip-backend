@@ -3,7 +3,7 @@ package site.dittotrip.ditto_trip.spot.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
-import site.dittotrip.ditto_trip.hashtag.domain.dto.HashtagData;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class SpotData {
     private Float rating;
 
     @Builder.Default
-    private List<HashtagData> hashtagData = new ArrayList<>();
-    private Long bookmarkId;
+    private List<String> hashtags = new ArrayList<>();
+    private Long myBookmarkId;
 
     public static SpotData fromEntity(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
@@ -34,17 +34,17 @@ public class SpotData {
                 .pointY(spot.getPointY())
                 .imagePath(spot.getImagePath())
                 .rating(spot.getRating())
-                .bookmarkId(bookmarkId)
+                .myBookmarkId(bookmarkId)
                 .build();
 
-        spotData.putHashtagData(spot);
+        spotData.putHashtags(spot);
 
         return spotData;
     }
 
-    private void putHashtagData(Spot spot) {
-        for (Hashtag hashtag : spot.getHashtags()) {
-            hashtagData.add(HashtagData.fromEntity(hashtag));
+    private void putHashtags(Spot spot) {
+        for (HashtagSpot hashtagSpot : spot.getHashtagSpots()) {
+            this.hashtags.add(hashtagSpot.getHashtag().getName());
         }
     }
 

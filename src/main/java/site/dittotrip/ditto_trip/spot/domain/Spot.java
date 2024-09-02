@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -39,14 +40,14 @@ public class Spot {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "spot")
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spot")
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
     private List<SpotImage> spotImages = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "spots")
-    private List<Hashtag> hashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.REMOVE)
+    private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
     /**
      * for test

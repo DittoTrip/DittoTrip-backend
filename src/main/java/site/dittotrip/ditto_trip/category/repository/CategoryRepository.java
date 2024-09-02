@@ -16,10 +16,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByNameContaining(String word);
 
-
-    @Query("select c from Category c where c.categoryMajorType= :majorType")
-    Page<Category> findByMajorType(@Param("majorType") CategoryMajorType majorType,
-                                 Pageable pageable);
+    @Query("select c from Category c where c.name like %:word% and c.categoryMajorType= :majorType")
+    Page<Category> findBySearchAndMajorType(@Param("word") String word,
+                                            @Param("majorType") CategoryMajorType majorType,
+                                            Pageable pageable);
 
     @Query("select c from Category c where c.categorySubType= :subType")
     Page<Category> findBySubType(@Param("subType") CategorySubType subType,

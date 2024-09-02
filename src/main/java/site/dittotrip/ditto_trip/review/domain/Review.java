@@ -44,16 +44,12 @@ public class Review {
     @JoinColumn(name = "spot_visit_id")
     private SpotVisit spotVisit;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
-//    private List<ReviewComment> reviewComments = new ArrayList<>();
-
-    public Review(String body, Float rating, LocalDateTime createdDateTime, User user, SpotVisit spotVisit) {
+    public Review(String body, Float rating, User user, SpotVisit spotVisit) {
         this.body = body;
         this.rating = rating;
-        this.createdDateTime = createdDateTime;
         this.user = user;
         this.spotVisit = spotVisit;
     }

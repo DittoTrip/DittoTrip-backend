@@ -19,18 +19,15 @@ public class Hashtag {
     @Column(name = "hashtag_id")
     private Long id;
 
-    private String hashtagName;
+    private String name;
 
-    @ManyToMany
-    @JoinTable(name = "hashtag_category")
-    private List<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "hashtag")
+    private List<HashtagCategory> hashtagCategories = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "hashtag_spot")
-    private List<Spot> spots = new ArrayList<>();
+    @OneToMany(mappedBy = "hashtag")
+    private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "hashtag_ditto")
-    private List<Ditto> dittos = new ArrayList<>();
+    @OneToMany(mappedBy = "hashtag")
+    private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
 }
