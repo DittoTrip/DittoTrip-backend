@@ -19,7 +19,7 @@ public class Hashtag {
     @Column(name = "hashtag_id")
     private Long id;
 
-    private String hashtagName;
+    private String name;
 
     @OneToMany(mappedBy = "hashtag")
     private List<HashtagCategory> hashtagCategories = new ArrayList<>();
