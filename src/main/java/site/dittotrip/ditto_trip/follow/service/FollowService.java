@@ -57,7 +57,7 @@ public class FollowService {
         Follow follow = new Follow(reqUser, user);
         followRepository.save(follow);
 
-        // 알림 처리
+        processAlarmInSaveFollow(follow);
     }
 
     @Transactional(readOnly = false)
