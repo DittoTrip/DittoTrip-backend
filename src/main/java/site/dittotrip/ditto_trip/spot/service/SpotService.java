@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
+import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
@@ -28,6 +30,7 @@ public class SpotService {
 
     private final SpotRepository spotRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategorySpotRepository categorySpotRepository;
     private final StillCutRepository stillCutRepository;
     private final ReviewRepository reviewRepository;
@@ -41,7 +44,9 @@ public class SpotService {
         List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
 
         SpotListInMapRes spotListInMapRes = new SpotListInMapRes();
-        spotListInMapRes.setCategoryData(CategoryData.fromEntity(category));
+        CategoryBookmark reqUsersBookmark = getReqUsersBookmark(user, category);
+        spotListInMapRes.setCategoryData(CategoryData.fromEntity(category, reqUsersBookmark));
+
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
             Long bookmarkId = getBookmarkId(spot, user);
@@ -105,6 +110,15 @@ public class SpotService {
         }
         Optional<SpotBookmark> findBookmark = spotBookmarkRepository.findBySpotAndUser(spot, user);
         return findBookmark.map(SpotBookmark::getId).orElse(null);
+    }
+
+    private CategoryBookmark getReqUsersBookmark(User reqUser, Category category) {
+        if (reqUser == null) {
+            return null;
+        } else {
+            Optional<CategoryBookmark> categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, reqUser);
+            return categoryBookmark.orElse(null);
+        }
     }
 
 }
