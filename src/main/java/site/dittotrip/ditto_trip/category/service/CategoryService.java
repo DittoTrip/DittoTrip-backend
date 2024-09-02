@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryModifyReq;
-import site.dittotrip.ditto_trip.category.domain.dto.CategoryPageRes;
-import site.dittotrip.ditto_trip.category.domain.dto.CategorySaveReq;
+import site.dittotrip.ditto_trip.category.domain.dto.*;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
@@ -24,9 +22,6 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import static site.dittotrip.ditto_trip.category.domain.dto.CategoryListRes.fromEntities;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,24 +38,33 @@ public class CategoryService {
         return CategoryPageRes.fromEntities(page);
     }
 
-    public CategoryListRes findCategoryListByBookmark(User user) {
-        List<CategoryBookmark> bookmarks = categoryBookmarkRepository.findByUser(user);
+
+    public CategoryMajorTypeListRes findCategoryListByBookmark(User user, CategoryMajorType majorType, Pageable pageable) {
+        Page<CategoryBookmark> page = categoryBookmarkRepository.findByUserAndMajorType(user, majorType, pageable);
 
         List<Category> categories = new ArrayList<>();
-        for (CategoryBookmark bookmark : bookmarks) {
+        for (CategoryBookmark bookmark : page.getContent()) {
             categories.add(bookmark.getCategory());
         }
 
-        return fromEntities(categories);
+        return CategoryMajorTypeListRes.fromEntities(categories, page.getTotalPages());
     }
 
     /**
      * 카테고리 검색 조회
      *  - 단순 문자열 포함 검색
      */
-    public CategoryListRes findCategoryListBySearch(String word) {
+    public CategoryMajorTypeListRes findCategoryListBySearch(String word, CategoryMajorType majorType, Pageable pageable) {
+        Page<Category> page = categoryRepository.findBySearchAndMajorType(word, majorType, pageable);
+        return CategoryMajorTypeListRes.fromEntities(page.getContent(), page.getTotalPages());
+    }
+
+    /**
+     * 카테고리 타입마다 나누지 않고 하나의 리스트로 반환합니다.
+     */
+    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(String word) {
         List<Category> categories = categoryRepository.findByNameContaining(word);
-        return fromEntities(categories);
+        return CategoryListNoTypeRes.fromEntities(categories);
     }
 
     @Transactional(readOnly = false)
