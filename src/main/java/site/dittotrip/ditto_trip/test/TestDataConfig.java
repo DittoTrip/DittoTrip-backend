@@ -3,7 +3,6 @@ package site.dittotrip.ditto_trip.test;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,31 +50,37 @@ public class TestDataConfig {
     @EventListener(ApplicationReadyEvent.class)
     public void testDataInit() {
         log.info("===== TEST DATA INIT START =====");
+
         User user1 = createUser("순재", "won9619v@naver.com", "1234", "haus");
         User user2 = createUser("인주", "huhhuh@naver.com", "12345", "YH486");
         User user3 = createUser("윤하", "yunha@naver.com", "123456", "realYH");
 
-        Category category1 = createCategory("이상한 변호사 우영우", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
-        Category category2 = createCategory("동백꽃 필 무렵", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
-        Category category3 = createCategory("눈물의 여왕", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
-        Category category4 = createCategory("서울의 봄", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
-        Category category5 = createCategory("기생충", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
-        Category category6 = createCategory("올드보이", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
-        Category category7 = createCategory("고딩엄빠", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
-        Category category8 = createCategory("라디오 스타", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
-        Category category9 = createCategory("하트 시그널", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
+        Category category101 = createCategory("이상한 변호사 우영우", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category102 = createCategory("동백꽃 필 무렵", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category103 = createCategory("눈물의 여왕", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category104 = createCategory("카지노", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category105 = createCategory("응답하라 1988", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category106 = createCategory("마스크걸", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
+        Category category107 = createCategory("나의 아저씨", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
 
-        Category category10 = createCategory("김수현", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
-        Category category11 = createCategory("김지원", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
-        Category category12 = createCategory("공유", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
-        Category category13 = createCategory("윤지영", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
-        Category category14 = createCategory("윤하", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
-        Category category15 = createCategory("최유리", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
+        Category category201 = createCategory("서울의 봄", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
+        Category category202 = createCategory("기생충", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
+        Category category203 = createCategory("올드보이", CategoryMajorType.CONTENT, CategorySubType.CONTENT_MOVIE);
+        Category category301 = createCategory("고딩엄빠", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
+        Category category302 = createCategory("라디오 스타", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
+        Category category303 = createCategory("하트 시그널", CategoryMajorType.CONTENT, CategorySubType.CONTENT_ENTERTAINMENT);
 
-        Spot spot1 = createSpot("소소주점", "강원도 강릉시 주문진읍", 127.0, 36.9, null, List.of(category2, category12));
-        Spot spot2 = createSpot("소덕동 팽나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", 126.9, 36.7, null, List.of(category1, category12));
-        Spot spot3 = createSpot("순재네 집", "서울 광진구", 126.8, 36.6, null, List.of(category13, category15));
-        Spot spot4 = createSpot("인주네 집", "교대역쪽", 126.7, 36.5, null, List.of(category14));
+        Category category401 = createCategory("김수현", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
+        Category category402 = createCategory("김지원", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
+        Category category403 = createCategory("공유", CategoryMajorType.PERSON, CategorySubType.PERSON_ACTOR);
+        Category category501 = createCategory("윤지영", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
+        Category category502 = createCategory("윤하", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
+        Category category503 = createCategory("최유리", CategoryMajorType.PERSON, CategorySubType.PERSON_SINGER);
+
+        Spot spot1 = createSpot("소소주점", "강원도 강릉시 주문진읍", 127.0, 36.9, null, List.of(category102, category101));
+        Spot spot2 = createSpot("소덕동 팽나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", 126.9, 36.7, null, List.of(category101, category102));
+        Spot spot3 = createSpot("순재네 집", "서울 광진구", 126.8, 36.6, null, List.of(category103, category105));
+        Spot spot4 = createSpot("인주네 집", "교대역쪽", 126.7, 36.5, null, List.of(category104));
 
         SpotVisit spotVisit1 = createSpotVisit(spot1, user1);
         SpotVisit spotVisit2 = createSpotVisit(spot2, user2);
