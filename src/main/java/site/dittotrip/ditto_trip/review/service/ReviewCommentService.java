@@ -3,6 +3,8 @@ package site.dittotrip.ditto_trip.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.dto.CommentSaveReq;
 import site.dittotrip.ditto_trip.review.exception.DoubleChildReviewCommentException;
@@ -13,6 +15,8 @@ import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,7 +27,12 @@ public class ReviewCommentService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
+    private final AlarmRepository alarmRepository;
 
+    /**
+     * 알림 발생
+     *  target : 리뷰 작성자 및 댓글 작성자
+     */
     @Transactional(readOnly = false)
     public void saveComment(Long reviewId, Long parentCommentId, User user,
                             CommentSaveReq commentSaveReq) {
@@ -40,6 +49,8 @@ public class ReviewCommentService {
                 throw new NotMatchedRelationException();
             }
         }
+
+        processAlarmInSaveReviewComment(commentSaveReq, review);
 
         ReviewComment reviewComment = new ReviewComment(commentSaveReq.getBody(), user, review, parentReviewComment);
         reviewCommentRepository.save(reviewComment);
@@ -79,6 +90,14 @@ public class ReviewCommentService {
         } else {
             return Boolean.TRUE;
         }
+    }
+
+    private void processAlarmInSaveReviewComment(CommentSaveReq saveReq, Review review) {
+        String title = "댓글이 달렸어요 !!";
+        String body = saveReq.getBody();
+        String path = "/review/" + review.getId();
+        List<User> targets = new ArrayList<>(List.of(review.getUser()));
+        alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets));
     }
 
 }

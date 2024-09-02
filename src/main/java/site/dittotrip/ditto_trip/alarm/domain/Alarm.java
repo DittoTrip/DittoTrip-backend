@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -39,6 +41,14 @@ public class Alarm {
         this.body = body;
         this.path = path;
         this.user = user;
+    }
+
+    public static List<Alarm> createAlarms(String title, String body, String path, List<User> targets) {
+        List<Alarm> alarms = new ArrayList<>();
+        for (User target : targets) {
+            alarms.add(new Alarm(title, body, path, target));
+        }
+        return alarms;
     }
 
 }
