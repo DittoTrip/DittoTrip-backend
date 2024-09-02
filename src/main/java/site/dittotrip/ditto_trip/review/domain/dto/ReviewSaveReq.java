@@ -18,7 +18,6 @@ public class ReviewSaveReq {
     public Review toEntity(User user, SpotVisit spotVisit) {
         return new Review(this.getReviewBody(),
                 this.getRating(),
-                LocalDateTime.now(),
                 user,
                 spotVisit);
     }
