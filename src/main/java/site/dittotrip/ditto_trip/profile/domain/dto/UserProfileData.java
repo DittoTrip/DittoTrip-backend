@@ -2,8 +2,8 @@ package site.dittotrip.ditto_trip.profile.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.item.domain.Badge;
-import site.dittotrip.ditto_trip.item.domain.Item;
+import site.dittotrip.ditto_trip.reward.domain.Badge;
+import site.dittotrip.ditto_trip.reward.domain.Item;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 
 @Data

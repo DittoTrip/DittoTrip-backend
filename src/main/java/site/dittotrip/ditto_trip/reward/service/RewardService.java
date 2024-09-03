@@ -1,15 +1,14 @@
-package site.dittotrip.ditto_trip.item.service;
+package site.dittotrip.ditto_trip.reward.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.dittotrip.ditto_trip.item.domain.UserBadge;
-import site.dittotrip.ditto_trip.item.domain.UserItem;
-import site.dittotrip.ditto_trip.item.domain.dto.UserBadgeListRes;
-import site.dittotrip.ditto_trip.item.domain.dto.UserItemListRes;
-import site.dittotrip.ditto_trip.item.repository.ItemRepository;
-import site.dittotrip.ditto_trip.item.repository.UserBadgeRepository;
-import site.dittotrip.ditto_trip.item.repository.UserItemRepository;
+import site.dittotrip.ditto_trip.reward.domain.UserBadge;
+import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.domain.dto.UserBadgeListRes;
+import site.dittotrip.ditto_trip.reward.domain.dto.UserItemListRes;
+import site.dittotrip.ditto_trip.reward.repository.UserBadgeRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserItemRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -19,7 +18,7 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ItemService {
+public class RewardService {
 
     private final UserRepository userRepository;
     private final UserItemRepository userItemRepository;
