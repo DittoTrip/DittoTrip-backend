@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.report.domain.dto.ReportHandleReq;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportListRes;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportSaveReq;
 import site.dittotrip.ditto_trip.report.service.ReportService;
@@ -35,10 +36,14 @@ public class ReportController {
     }
 
     @PostMapping("/{reportId}")
-    @Operation(summary = "신고 처리 (관리자 기능) (기획 이후 작업 예정)",
-            description = "")
-    public void reportHandle() {
-
+    @Operation(summary = "신고 처리 (관리자 기능)",
+            description = "요청 바디 \n" +
+                    "1. 타겟 컨텐츠 삭제 여부 (boolean) \n" +
+                    "2. 타겟 유저 영구정지 여부 (boolean) \n" +
+                    "3. 타겟 유저 일시 정지 기간 (int)")
+    public void reportHandle(@PathVariable(name = "reportId") Long reportId,
+                             @RequestBody ReportHandleReq handleReq) {
+        reportService.handleReport(reportId, handleReq);
     }
 
 }
