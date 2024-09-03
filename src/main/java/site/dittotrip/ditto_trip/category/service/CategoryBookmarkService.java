@@ -24,6 +24,13 @@ public class CategoryBookmarkService {
     private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategoryRepository categoryRepository;
 
+    public Boolean findCategoryBookmark(User user, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        Optional<CategoryBookmark> optionalBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, user);
+
+        return optionalBookmark.isPresent();
+    }
+
     public void addCategoryBookmark(Long categoryId, User user) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
@@ -41,5 +48,7 @@ public class CategoryBookmarkService {
         CategoryBookmark categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, user).orElseThrow(NoSuchElementException::new);
         categoryBookmarkRepository.delete(categoryBookmark);
     }
+
+
 
 }
