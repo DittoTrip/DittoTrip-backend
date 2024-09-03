@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
+import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,10 @@ public class User {
   private String email;
   private String password;
   private String nickname;
+
+  @Enumerated(EnumType.STRING)
+  private UserStatus userStatus = UserStatus.NORMAL;
+  private LocalDateTime suspendedDateTime = null;
 
   @ElementCollection(fetch = FetchType.EAGER)
   private Set<GrantedAuthority> authorities = new HashSet<>();
