@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
@@ -12,8 +14,10 @@ import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
+import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
 import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
@@ -36,6 +40,7 @@ public class SpotService {
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
 
 
     public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId, Pageable pageable) {
@@ -50,7 +55,7 @@ public class SpotService {
 
         for (CategorySpot categorySpot : page.getContent()) {
             Spot spot = categorySpot.getSpot();
-            Long spotBookmarkId = spotBookmarkId(spot, user);
+            Long spotBookmarkId = getReqUsersSpotBookmarkId(spot, user);
             spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId));
         }
 
@@ -68,7 +73,7 @@ public class SpotService {
 
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
-            Long bookmarkId = spotBookmarkId(spot, user);
+            Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
             spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
 
@@ -87,7 +92,7 @@ public class SpotService {
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
-            Long bookmarkId = spotBookmarkId(spot, user);
+            Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
             spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
 
@@ -105,7 +110,7 @@ public class SpotService {
         spotVisitListRes.setTotalPages(page.getTotalPages());
 
         for (SpotVisit spotVisit : spotVisits) {
-            Long bookmarkId = spotBookmarkId(spotVisit.getSpot(), reqUser);
+            Long bookmarkId = getReqUsersSpotBookmarkId(spotVisit.getSpot(), reqUser);
             spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, bookmarkId));
         }
 
@@ -117,12 +122,36 @@ public class SpotService {
 
         List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
-        Long bookmarkId = spotBookmarkId(spot, user);
+        Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
     }
 
-    private Long spotBookmarkId(Spot spot, User user) {
+    @Transactional(readOnly = false)
+    public void visitSpot(User user, Long spotId, Double userX, Double userY) {
+        Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+
+        double distance = DistanceCalculator.getDistanceBetweenUserAndSpot(userX, userY, spot.getPointX(), spot.getPointY());
+        if (distance > 20.0) {
+            throw new SpotVisitDistanceException();
+        }
+
+        spotVisitRepository.save(new SpotVisit(spot, user));
+
+        // 알림 처리
+        processAlarmInVisitSpot(user, spot);
+    }
+
+    private void processAlarmInVisitSpot(User user, Spot spot) {
+        alarmRepository.saveAll(Alarm.createAlarms(
+                "방문한 스팟에 리뷰를 남겨보세요 !!",
+                spot.getName() + "에 " + user.getNickname() + "님의 소중한 리뷰를 남겨주세요.",
+                "/spot/" + spot.getId(),
+                List.of(user))
+        );
+    }
+
+    private Long getReqUsersSpotBookmarkId(Spot spot, User user) {
         if (user == null) {
             return null;
         }
@@ -138,6 +167,5 @@ public class SpotService {
             return categoryBookmark.orElse(null);
         }
     }
-
 
 }

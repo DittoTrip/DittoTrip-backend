@@ -86,9 +86,22 @@ public class SpotController {
     @Operation(summary = "스팟 상세 조회",
             description = "")
     public SpotDetailRes spotDetail(@PathVariable(name = "spotId") Long spotId,
-                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotDetail(spotId, user);
+    }
+
+    @PostMapping("/spot/{spotId}")
+    @Operation(summary = "스팟 방문",
+            description = "params \n" +
+                    "userX : 경도 \n" +
+                    "userY : 위도")
+    public void SpotVisit(@AuthenticationPrincipal CustomUserDetails userDetails,
+                          @PathVariable(name = "spotId") Long spotId,
+                          @RequestParam(name = "userX") Double userX,
+                          @RequestParam(name = "userY") Double userY) {
+        User user = getUserFromUserDetails(userDetails, true);
+        spotService.visitSpot(user, spotId, userX, userY);
     }
 
     /**
