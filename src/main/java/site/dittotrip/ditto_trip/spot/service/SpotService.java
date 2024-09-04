@@ -2,7 +2,6 @@ package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,23 +37,42 @@ public class SpotService {
     private final SpotVisitRepository spotVisitRepository;
     private final UserRepository userRepository;
 
-    public SpotListInMapRes findSpotListInMap(Long categoryId, User user,
-                                              Double startX, Double endX, Double startY, Double endY) {
+
+    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId, Pageable pageable) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        Page<CategorySpot> page = categorySpotRepository.findByCategory(category, pageable);
+
+        SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
+        spotCategoryListRes.setTotalPages(page.getTotalPages());
+
+        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(user, category);
+        spotCategoryListRes.setCategoryData(CategoryData.fromEntity(category, categoryBookmark));
+
+        for (CategorySpot categorySpot : page.getContent()) {
+            Spot spot = categorySpot.getSpot();
+            Long spotBookmarkId = spotBookmarkId(spot, user);
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId));
+        }
+
+        return spotCategoryListRes;
+    }
+
+    public SpotCategoryListRes findSpotListInMap(Long categoryId, User user,
+                                                 Double startX, Double endX, Double startY, Double endY) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
 
-        SpotListInMapRes spotListInMapRes = new SpotListInMapRes();
-        CategoryBookmark reqUsersBookmark = getReqUsersBookmark(user, category);
-        spotListInMapRes.setCategoryData(CategoryData.fromEntity(category, reqUsersBookmark));
+        SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
+        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(user, category);
+        spotCategoryListRes.setCategoryData(CategoryData.fromEntity(category, categoryBookmark));
 
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
-            Long bookmarkId = getBookmarkId(spot, user);
-            spotListInMapRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
+            Long bookmarkId = spotBookmarkId(spot, user);
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
-        spotListInMapRes.setSpotCount(categorySpots.size());
 
-        return spotListInMapRes;
+        return spotCategoryListRes;
     }
 
     public SpotListRes findSpotListByBookmark(User user) {
@@ -69,7 +87,7 @@ public class SpotService {
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
-            Long bookmarkId = getBookmarkId(spot, user);
+            Long bookmarkId = spotBookmarkId(spot, user);
             spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
         }
 
@@ -87,7 +105,7 @@ public class SpotService {
         spotVisitListRes.setTotalPages(page.getTotalPages());
 
         for (SpotVisit spotVisit : spotVisits) {
-            Long bookmarkId = getBookmarkId(spotVisit.getSpot(), reqUser);
+            Long bookmarkId = spotBookmarkId(spotVisit.getSpot(), reqUser);
             spotVisitListRes.getSpotVisitDataList().add(SpotVisitData.fromEntity(spotVisit, bookmarkId));
         }
 
@@ -99,12 +117,12 @@ public class SpotService {
 
         List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
-        Long bookmarkId = getBookmarkId(spot, user);
+        Long bookmarkId = spotBookmarkId(spot, user);
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
     }
 
-    private Long getBookmarkId(Spot spot, User user) {
+    private Long spotBookmarkId(Spot spot, User user) {
         if (user == null) {
             return null;
         }
@@ -112,7 +130,7 @@ public class SpotService {
         return findBookmark.map(SpotBookmark::getId).orElse(null);
     }
 
-    private CategoryBookmark getReqUsersBookmark(User reqUser, Category category) {
+    private CategoryBookmark getReqUsersCategoryBookmark(User reqUser, Category category) {
         if (reqUser == null) {
             return null;
         } else {
@@ -120,5 +138,6 @@ public class SpotService {
             return categoryBookmark.orElse(null);
         }
     }
+
 
 }

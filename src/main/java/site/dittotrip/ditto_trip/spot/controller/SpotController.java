@@ -5,15 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
 import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
 import site.dittotrip.ditto_trip.user.domain.User;
-
-import java.util.List;
 
 import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
 
@@ -33,12 +30,23 @@ public class SpotController {
     private final SpotApplyService spotApplyService;
 
     @GetMapping("/category/{categoryId}/spot/list")
+    @Operation(summary = "카테고리 스팟 리스트 조회 (카테고리 선택 후)",
+            description = "")
+    public SpotCategoryListRes spotListInCategory(@PathVariable(name = "categoryId") Long categoryId,
+                                                  @AuthenticationPrincipal CustomUserDetails userDetails,
+                                                  Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return spotService.findSpotListInCategory(user, categoryId, pageable);
+    }
+
+
+    @GetMapping("/category/{categoryId}/spot/list/map")
     @Operation(summary = "지도기반 스팟 리스트 조회 (카테고리 선택 후)",
             description = "왼쪽 아래 좌표(start)와 오른쪽 위(end) 좌표를 쿼리로 주세요.")
-    public SpotListInMapRes spotListInMap(@PathVariable(name = "categoryId") Long categoryId,
-                                          @AuthenticationPrincipal CustomUserDetails userDetails,
-                                          @RequestParam(name = "startX") Double startX, @RequestParam(name = "endX") Double endX,
-                                          @RequestParam(name = "startY") Double startY, @RequestParam(name = "endY") Double endY) {
+    public SpotCategoryListRes spotListInMap(@PathVariable(name = "categoryId") Long categoryId,
+                                             @AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @RequestParam(name = "startX") Double startX, @RequestParam(name = "endX") Double endX,
+                                             @RequestParam(name = "startY") Double startY, @RequestParam(name = "endY") Double endY) {
         User user = getUserFromUserDetails(userDetails, false);
         return spotService.findSpotListInMap(categoryId, user, startX, endX, startY, endY);
     }
