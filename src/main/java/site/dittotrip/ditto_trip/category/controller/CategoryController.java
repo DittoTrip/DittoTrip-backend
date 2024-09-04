@@ -98,7 +98,7 @@ public class CategoryController {
         categoryService.removeCategory(categoryId);
     }
 
-    @GetMapping("/{categoryId}/boomark")
+    @GetMapping("/{categoryId}/bookmark")
     @Operation(summary = "카테고리 북마크 조회",
             description = "Boolean 데이터를 반환")
     public Boolean CategoryBookmarkGet(@PathVariable(name = "categoryId") Long categoryId,

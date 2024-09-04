@@ -1,12 +1,8 @@
-package site.dittotrip.ditto_trip.item.domain.dto;
+package site.dittotrip.ditto_trip.reward.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.item.domain.Badge;
-import site.dittotrip.ditto_trip.item.domain.Item;
-import site.dittotrip.ditto_trip.item.domain.UserBadge;
-import site.dittotrip.ditto_trip.item.domain.UserItem;
-import site.dittotrip.ditto_trip.item.domain.enums.ItemType;
+import site.dittotrip.ditto_trip.reward.domain.UserBadge;
 
 import java.time.LocalDateTime;
 

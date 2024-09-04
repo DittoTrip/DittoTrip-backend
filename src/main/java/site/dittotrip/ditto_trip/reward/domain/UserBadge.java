@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.item.domain;
+package site.dittotrip.ditto_trip.reward.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,10 +13,10 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class UserItem {
+public class UserBadge {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_item_id")
+    @Column(name = "user_badge_id")
     private Long id;
 
     @CreationTimestamp
@@ -27,7 +27,7 @@ public class UserItem {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @JoinColumn(name = "reward_id")
+    private Badge badge;
 
 }

@@ -1,7 +1,7 @@
-package site.dittotrip.ditto_trip.item.domain.dto;
+package site.dittotrip.ditto_trip.reward.domain.dto;
 
 import lombok.Data;
-import site.dittotrip.ditto_trip.item.domain.UserBadge;
+import site.dittotrip.ditto_trip.reward.domain.UserBadge;
 
 import java.util.ArrayList;
 import java.util.List;

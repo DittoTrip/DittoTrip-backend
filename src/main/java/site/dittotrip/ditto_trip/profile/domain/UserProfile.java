@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.dittotrip.ditto_trip.item.domain.Badge;
-import site.dittotrip.ditto_trip.item.domain.Item;
+import site.dittotrip.ditto_trip.reward.domain.Badge;
+import site.dittotrip.ditto_trip.reward.domain.Item;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static jakarta.persistence.FetchType.LAZY;

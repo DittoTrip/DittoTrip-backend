@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.item.domain.enums;
+package site.dittotrip.ditto_trip.reward.domain.enums;
 
 public enum ItemType {
 
