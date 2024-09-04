@@ -42,6 +42,9 @@ public class SpotApply {
     private List<CategorySpotApply> categorySpotApplies = new ArrayList<>();
 
     @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL)
+    private List<SpotApplyImage> spotApplyImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL)
     private List<HashtagSpotApply> hashtagSpotApplies = new ArrayList<>();
 
     public SpotApply(String name, String address, Double pointX, Double pointY, User user) {
