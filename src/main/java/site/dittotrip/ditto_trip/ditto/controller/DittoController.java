@@ -97,7 +97,17 @@ public class DittoController {
     /**
      * DittoBookmark 기능
      */
-    @PostMapping("/bookmark/{dittoId}")
+    @GetMapping("/{dittoId}/bookmark")
+    @Operation(summary = "디토 북마크 조회",
+            description = "")
+    public Boolean dittoBookmarkGet(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                  @PathVariable(name = "dittoId") Long dittoId) {
+        User user = getUserFromUserDetails(userDetails, true);
+        return dittoBookmarkService.getDittoBookmark(dittoId, user);
+    }
+
+
+    @PostMapping("/{dittoId}/bookmark")
     @Operation(summary = "디토 북마크 추가",
             description = "")
     public void dittoBookmarkSave(@AuthenticationPrincipal CustomUserDetails userDetails,
@@ -106,7 +116,7 @@ public class DittoController {
         dittoBookmarkService.saveDittoBookmark(dittoId, user);
     }
 
-    @DeleteMapping("/bookmark/{dittoId}")
+    @DeleteMapping("/{dittoId}/bookmark")
     @Operation(summary = "디토 북마크 삭제",
             description = "")
     public void dittoBookmarkRemove(@AuthenticationPrincipal CustomUserDetails userDetails,

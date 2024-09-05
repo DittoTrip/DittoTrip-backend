@@ -24,4 +24,9 @@ public class HashtagSpot {
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
+    public HashtagSpot(Hashtag hashtag, Spot spot) {
+        this.hashtag = hashtag;
+        this.spot = spot;
+    }
+
 }

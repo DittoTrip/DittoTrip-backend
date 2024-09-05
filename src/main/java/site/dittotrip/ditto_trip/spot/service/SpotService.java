@@ -43,7 +43,8 @@ public class SpotService {
     private final AlarmRepository alarmRepository;
 
 
-    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId, Pageable pageable) {
+    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId,
+                                                      Double userX, Double userY,Pageable pageable) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         Page<CategorySpot> page = categorySpotRepository.findByCategory(category, pageable);
 
@@ -56,13 +57,16 @@ public class SpotService {
         for (CategorySpot categorySpot : page.getContent()) {
             Spot spot = categorySpot.getSpot();
             Long spotBookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId, distance));
         }
 
         return spotCategoryListRes;
     }
 
     public SpotCategoryListRes findSpotListInMap(Long categoryId, User user,
+                                                 Double userX, Double userY,
                                                  Double startX, Double endX, Double startY, Double endY) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
@@ -74,26 +78,32 @@ public class SpotService {
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
             Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
         }
 
         return spotCategoryListRes;
     }
 
-    public SpotListRes findSpotListByBookmark(User user) {
+    public SpotListRes findSpotListByBookmark(User user,
+                                              Double userX, Double userY) {
         List<SpotBookmark> spotBookmarks = spotBookmarkRepository.findByUser(user);
-        return SpotListRes.fromEntitiesByBookmark(spotBookmarks);
+        return SpotListRes.fromEntitiesByBookmark(spotBookmarks, userX, userY);
     }
 
 
-    public SpotListRes findSpotListBySearch(User user, String word, Pageable pageable) {
+    public SpotListRes findSpotListBySearch(User user, String word,
+                                            Double userX, Double userY, Pageable pageable) {
         List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
 
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
             Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
         }
 
         return spotListRes;
@@ -131,7 +141,7 @@ public class SpotService {
     public void visitSpot(User user, Long spotId, Double userX, Double userY) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        double distance = DistanceCalculator.getDistanceBetweenUserAndSpot(userX, userY, spot.getPointX(), spot.getPointY());
+        double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
         if (distance > 20.0) {
             throw new SpotVisitDistanceException();
         }
