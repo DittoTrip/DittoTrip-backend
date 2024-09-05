@@ -107,6 +107,17 @@ public class SpotController {
     /**
      * SpotBookmark
      */
+
+    @GetMapping("/spot/{spotId}/bookmark")
+    @Operation(summary = "스팟 북마크 조회",
+            description = "boolean 데이터 반환")
+    public Boolean spotBookmarkGet(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                @PathVariable(name = "spotId") Long spotId) {
+        User user = getUserFromUserDetails(userDetails, true);
+        return spotBookmarkService.findSpotBookmark(user, spotId);
+    }
+
+
     @PostMapping("/spot/{spotId}/bookmark")
     @Operation(summary = "스팟 북마크 추가",
             description = "")
