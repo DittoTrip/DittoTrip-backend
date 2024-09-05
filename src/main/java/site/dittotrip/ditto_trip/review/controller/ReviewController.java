@@ -86,6 +86,18 @@ public class ReviewController {
         reviewService.removeReview(reviewId, user);
     }
 
+    /**
+     * ReviewLike 기능
+     */
+    @GetMapping("/review/{reviewId}/like")
+    @Operation(summary = "리뷰 좋아요 조회",
+            description = "")
+    public Boolean reviewLikeGet(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               @PathVariable(name = "reviewId") Long reviewId) {
+        User user = getUserFromUserDetails(userDetails, true);
+        return reviewLikeService.getReviewLike(reviewId, user);
+    }
+
     @PostMapping("/review/{reviewId}/like")
     @Operation(summary = "리뷰 좋아요 등록",
             description = "")
