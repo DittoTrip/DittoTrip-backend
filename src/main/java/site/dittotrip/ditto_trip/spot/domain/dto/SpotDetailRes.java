@@ -23,7 +23,7 @@ public class SpotDetailRes {
     public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Long bookmarkId) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
-        spotDetailRes.setSpotData(SpotData.fromEntity(spot, bookmarkId));
+        spotDetailRes.setSpotData(SpotData.fromEntityForDetail(spot, bookmarkId));
         spotDetailRes.putImageDataList(SpotImages);
         spotDetailRes.putReviewDataList(reviews);
 

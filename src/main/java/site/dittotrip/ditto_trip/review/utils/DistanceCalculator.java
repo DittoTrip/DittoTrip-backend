@@ -1,14 +1,16 @@
 package site.dittotrip.ditto_trip.review.utils;
 
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-
 public class DistanceCalculator {
 
     /**
      * params : two point(x, y)
      * return distance (meter)
      */
-    public static double getDistanceBetweenUserAndSpot(double x1, double y1, double x2, double y2) {
+    public static Double getDistanceTwoPoints(Double x1, Double y1, Double x2, Double y2) {
+        if (x1 == null || y1 == null || x2 == null || y2 == null) {
+            return null;
+        }
+
         double theta = x1 - x2;
         double dist = Math.sin(deg2rad(y1)) * Math.sin(deg2rad(y2)) +
                 Math.cos(deg2rad(y1)) * Math.cos(deg2rad(y2)) * Math.cos(deg2rad(theta));
