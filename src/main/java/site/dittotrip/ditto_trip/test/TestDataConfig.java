@@ -90,6 +90,10 @@ public class TestDataConfig {
         Spot spot5 = createSpot("spot5", "spot5 주소", 128.0, 36.0, null, List.of(category101));
         Spot spot6 = createSpot("spot6", "spot6 주소", 129.0, 37.0, null, List.of(category101));
         Spot spot7 = createSpot("spot7", "spot7 주소", 130.0, 38.0, null, List.of(category101));
+        Spot spot8 = createSpot("spot8", "spot8 주소", 131.0, 39.0, null, List.of(category101));
+        Spot spot9 = createSpot("spot9", "spot9 주소", 132.0, 40.0, null, List.of(category101));
+        Spot spot10 = createSpot("spot10", "spot10 주소", 133.0, 41.0, null, List.of(category101));
+        Spot spot11 = createSpot("spot11", "spot11 주소", 134.0, 42.0, null, List.of(category101));
 
         Hashtag hashtag1 = createHashtag("우영우");
         Hashtag hashtag2 = createHashtag("동백꽃");
