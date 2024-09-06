@@ -40,7 +40,6 @@ public class SpotController {
         return spotService.findSpotListInCategory(user, categoryId, userX, userY, pageable);
     }
 
-
     @GetMapping("/category/{categoryId}/spot/list/map")
     @Operation(summary = "지도기반 스팟 리스트 조회 (카테고리 선택 후)",
             description = "왼쪽 아래 좌표(start)와 오른쪽 위(end) 좌표를 쿼리로 주세요.")

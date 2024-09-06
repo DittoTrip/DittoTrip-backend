@@ -87,6 +87,9 @@ public class TestDataConfig {
         Spot spot2 = createSpot("소덕동 팽나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", 126.9, 36.7, null, List.of(category101, category102));
         Spot spot3 = createSpot("순재네 집", "서울 광진구", 126.8, 36.6, null, List.of(category103, category105));
         Spot spot4 = createSpot("인주네 집", "교대역쪽", 126.7, 36.5, null, List.of(category104));
+        Spot spot5 = createSpot("spot5", "spot5 주소", 128.0, 36.0, null, List.of(category101));
+        Spot spot6 = createSpot("spot6", "spot6 주소", 129.0, 37.0, null, List.of(category101));
+        Spot spot7 = createSpot("spot7", "spot7 주소", 130.0, 38.0, null, List.of(category101));
 
         Hashtag hashtag1 = createHashtag("우영우");
         Hashtag hashtag2 = createHashtag("동백꽃");
