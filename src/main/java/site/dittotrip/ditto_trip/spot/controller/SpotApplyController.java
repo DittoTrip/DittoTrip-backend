@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -46,6 +47,10 @@ public class SpotApplyController {
                               @RequestBody SpotApplySaveReq saveReq,
                               @RequestParam(name = "image") MultipartFile multipartFile,
                               @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+        if (multipartFiles.size() > 3) {
+            throw new TooManyImagesException();
+        }
+
         User user = userDetails.getUser();
         spotApplyService.saveSpotApply(user, saveReq, multipartFile, multipartFiles);
     }
@@ -55,6 +60,13 @@ public class SpotApplyController {
             description = "")
     public void spotApplyRemove(@PathVariable(name = "spotApplyId") Long spotApplyId) {
         spotApplyService.removeSpotApply(spotApplyId);
+    }
+
+    @PostMapping("/spot/apply/{spotApplyId}/handle")
+    @Operation(summary = "스팟 신청 처리 (관리자 기능)",
+            description = "")
+    public void spotApplyHandle(@PathVariable(name = "spotApplyId") Long spotApplyId) {
+
     }
 
 }

@@ -27,4 +27,9 @@ public class SpotApplyImage {
     @JoinColumn(name = "spot_apply_id")
     private SpotApply spotApply;
 
+    public SpotApplyImage(String imagePath, SpotApply spotApply) {
+        this.imagePath = imagePath;
+        this.spotApply = spotApply;
+    }
+
 }
