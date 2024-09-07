@@ -27,4 +27,9 @@ public class ReviewImage {
     @JoinColumn(name = "review_id")
     private Review review;
 
+    public ReviewImage(String imagePath, Review review) {
+        this.imagePath = imagePath;
+        this.review = review;
+    }
+
 }

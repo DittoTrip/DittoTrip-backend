@@ -31,10 +31,12 @@ public class Category {
     @Setter
     private String imagePath;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<HashtagCategory> hashtagCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
     /**
