@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -44,7 +45,8 @@ public class Review {
     @JoinColumn(name = "spot_visit_id")
     private SpotVisit spotVisit;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
     public Review(String body, Float rating, User user, SpotVisit spotVisit) {
@@ -52,6 +54,26 @@ public class Review {
         this.rating = rating;
         this.user = user;
         this.spotVisit = spotVisit;
+    }
+
+    public static void modifySpotByReview(Spot spot, Float add, Float sub) {
+        int reviewCount = spot.getReviewCount();
+        float ratingSum = spot.getRating() * reviewCount;
+
+        if (add != null) {
+            reviewCount++;
+            ratingSum += add;
+        }
+
+        if (sub != null) {
+            reviewCount--;
+            ratingSum -= sub;
+        }
+
+        Float newRating = ratingSum / reviewCount;
+
+        spot.setReviewCount(reviewCount);
+        spot.setRating(newRating);
     }
 
 }

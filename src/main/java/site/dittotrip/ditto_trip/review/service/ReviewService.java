@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
+import site.dittotrip.ditto_trip.review.domain.ReviewImage;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
 import site.dittotrip.ditto_trip.review.exception.AlreadyWriteReviewException;
 import site.dittotrip.ditto_trip.review.exception.ReviewWritePeriodOverException;
@@ -25,6 +26,7 @@ import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -47,8 +49,9 @@ public class ReviewService {
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewLikeRepository reviewLikeRepository;
     private final AlarmRepository alarmRepository;
+    private final S3Service s3Service;
 
-    private final int REVIEW_WRITE_PERIOD = 604800;
+    private final int REVIEW_WRITE_PERIOD = 604800; // 1 week
 
     public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -107,22 +110,24 @@ public class ReviewService {
             throw new ReviewWritePeriodOverException();
         }
 
-        if (multipartFiles.size() > 10) {
-            throw new TooManyImagesException();
-        }
-
         Review review = reviewSaveReq.toEntity(user, spotVisit);
-
-        // image 처리
-
-        modifySpot(spotVisit.getSpot(), review.getRating(), null);
         reviewRepository.save(review);
 
+        // image 처리
+        for (MultipartFile multipartFile : multipartFiles) {
+            String imagePath = s3Service.uploadFile(multipartFile);
+            review.getReviewImages().add(new ReviewImage(imagePath, review));
+        }
+
+        // spot field 업데이트
+        Review.modifySpotByReview(spotVisit.getSpot(), review.getRating(), null);
+
+        // alarm 처리
         processAlarmInSaveReview(review);
     }
 
     @Transactional(readOnly = false)
-    public void modifyReview(Long reviewId, User user, ReviewModifyReq modifyReq, List<MultipartFile> multipartFiles) {
+    public void modifyReview(Long reviewId, User user, ReviewSaveReq saveReq, List<MultipartFile> multipartFiles) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         Float oldRating = review.getRating();
 
@@ -130,28 +135,35 @@ public class ReviewService {
              throw new NoAuthorityException();
         }
 
-        if (review.getReviewImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 10) {
-            throw new TooManyImagesException();
-        }
-
-        modifyReq.modifyEntity(review);
+        saveReq.modifyEntity(review);
 
         // image 처리
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            String imagePath = s3Service.uploadFile(multipartFile);
+            reviewImages.add(new ReviewImage(imagePath, review));
+        }
+        review.setReviewImages(reviewImages);
 
-        modifySpot(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
+        // spot field 업데이트
+        Review.modifySpotByReview(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
     }
 
     @Transactional(readOnly = false)
     public void removeReview(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-
         if (review.getUser().getId() != user.getId()) {
              throw new NoAuthorityException();
         }
 
         // image 처리
+        for (ReviewImage reviewImage : review.getReviewImages()) {
+            s3Service.deleteFile(reviewImage.getImagePath());
+        }
 
-        modifySpot(review.getSpotVisit().getSpot(), null, review.getRating());
+        // spot field 업데이트
+        Review.modifySpotByReview(review.getSpotVisit().getSpot(), null, review.getRating());
+
         reviewRepository.delete(review);
     }
 
@@ -178,26 +190,6 @@ public class ReviewService {
         } else {
             return Boolean.FALSE;
         }
-    }
-
-    private void modifySpot(Spot spot, Float add, Float sub) {
-        int reviewCount = spot.getReviewCount();
-        float ratingSum = spot.getRating() * reviewCount;
-
-        if (add != null) {
-            reviewCount++;
-            ratingSum += add;
-        }
-
-        if (sub != null) {
-            reviewCount--;
-            ratingSum -= sub;
-        }
-
-        Float newRating = ratingSum / reviewCount;
-
-        spot.setReviewCount(reviewCount);
-        spot.setRating(newRating);
     }
 
     private void processAlarmInSaveReview(Review review) {
