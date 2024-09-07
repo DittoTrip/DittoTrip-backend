@@ -7,12 +7,16 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
+import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
@@ -42,12 +46,14 @@ public class TestDataConfig {
     private final UserProfileRepository userProfileRepository;
     private final CategoryRepository categoryRepository;
     private final SpotRepository spotRepository;
+    private final HashtagRepository hashtagRepository;
     private final CategorySpotRepository categorySpotRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
     private final DittoRepository dittoRepository;
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public void testDataInit() {
         log.info("===== TEST DATA INIT START =====");
 
@@ -81,6 +87,21 @@ public class TestDataConfig {
         Spot spot2 = createSpot("소덕동 팽나무", "경상남도 창원시 의창구 대산면, 대산북로 899번길 43-5", 126.9, 36.7, null, List.of(category101, category102));
         Spot spot3 = createSpot("순재네 집", "서울 광진구", 126.8, 36.6, null, List.of(category103, category105));
         Spot spot4 = createSpot("인주네 집", "교대역쪽", 126.7, 36.5, null, List.of(category104));
+        Spot spot5 = createSpot("spot5", "spot5 주소", 128.0, 36.0, null, List.of(category101));
+        Spot spot6 = createSpot("spot6", "spot6 주소", 129.0, 37.0, null, List.of(category101));
+        Spot spot7 = createSpot("spot7", "spot7 주소", 130.0, 38.0, null, List.of(category101));
+        Spot spot8 = createSpot("spot8", "spot8 주소", 131.0, 39.0, null, List.of(category101));
+        Spot spot9 = createSpot("spot9", "spot9 주소", 132.0, 40.0, null, List.of(category101));
+        Spot spot10 = createSpot("spot10", "spot10 주소", 133.0, 41.0, null, List.of(category101));
+        Spot spot11 = createSpot("spot11", "spot11 주소", 134.0, 42.0, null, List.of(category101));
+
+        Hashtag hashtag1 = createHashtag("우영우");
+        Hashtag hashtag2 = createHashtag("동백꽃");
+
+        HashtagSpot hashtagSpot1 = new HashtagSpot(hashtag1, spot1);
+        HashtagSpot hashtagSpot2 = new HashtagSpot(hashtag2, spot1);
+        spot1.getHashtagSpots().add(hashtagSpot1);
+        spot1.getHashtagSpots().add(hashtagSpot2);
 
         SpotVisit spotVisit1 = createSpotVisit(spot1, user1);
         SpotVisit spotVisit2 = createSpotVisit(spot2, user2);
@@ -112,6 +133,13 @@ public class TestDataConfig {
 
         return user;
     }
+
+    private Hashtag createHashtag(String name) {
+        Hashtag hashtag = new Hashtag(name);
+        hashtagRepository.save(hashtag);
+        return hashtag;
+    }
+
     private Category createCategory(String name, CategoryMajorType majorType, CategorySubType subType) {
         Category category = new Category(name, majorType, subType);
         categoryRepository.save(category);

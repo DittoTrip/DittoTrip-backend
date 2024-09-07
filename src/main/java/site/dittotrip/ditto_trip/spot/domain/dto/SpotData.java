@@ -20,12 +20,31 @@ public class SpotData {
     private Double pointY;
     private String imagePath;
     private Float rating;
+    private Double distance;
 
     @Builder.Default
     private List<String> hashtags = new ArrayList<>();
     private Long myBookmarkId;
 
-    public static SpotData fromEntity(Spot spot, Long bookmarkId) {
+    public static SpotData fromEntity(Spot spot, Long bookmarkId, Double distance) {
+        SpotData spotData = SpotData.builder()
+                .spotId(spot.getId())
+                .name(spot.getName())
+                .address(spot.getAddress())
+                .pointX(spot.getPointX())
+                .pointY(spot.getPointY())
+                .imagePath(spot.getImagePath())
+                .rating(spot.getRating())
+                .myBookmarkId(bookmarkId)
+                .distance(distance)
+                .build();
+
+        spotData.putHashtags(spot);
+
+        return spotData;
+    }
+
+    public static SpotData fromEntityForDetail(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
                 .name(spot.getName())

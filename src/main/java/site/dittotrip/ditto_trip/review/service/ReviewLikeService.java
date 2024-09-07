@@ -11,6 +11,7 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * ReviewService 합치기
@@ -22,6 +23,12 @@ public class ReviewLikeService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+
+    public Boolean getReviewLike(Long reviewId, User user) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
+        Optional<ReviewLike> optionalLike = reviewLikeRepository.findByReviewAndUser(review, user);
+        return optionalLike.isPresent();
+    }
 
     @Transactional(readOnly = false)
     public void saveReviewLike(Long reviewId, User user) {

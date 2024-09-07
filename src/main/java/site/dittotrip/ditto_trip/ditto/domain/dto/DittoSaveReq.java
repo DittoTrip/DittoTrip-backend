@@ -19,4 +19,9 @@ public class DittoSaveReq {
         return new Ditto(title, body, user);
     }
 
+    public void modifyEntity(Ditto ditto) {
+        ditto.setTitle(title);
+        ditto.setBody(body);
+    }
+
 }

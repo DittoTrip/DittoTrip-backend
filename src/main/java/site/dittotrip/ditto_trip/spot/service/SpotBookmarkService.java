@@ -22,6 +22,12 @@ public class SpotBookmarkService {
     private final SpotRepository spotRepository;
     private final SpotBookmarkRepository spotBookmarkRepository;
 
+    public Boolean findSpotBookmark(User user, Long spotId) {
+        Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+        Optional<SpotBookmark> optionalBookmark = spotBookmarkRepository.findBySpotAndUser(spot, user);
+        return optionalBookmark.isPresent();
+    }
+
     @Transactional(readOnly = false)
     public void addSpotBookmark(Long spotId, User user) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);

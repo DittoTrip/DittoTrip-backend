@@ -1,8 +1,11 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
@@ -17,6 +20,8 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
 import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.exception.NoUserPointInfoException;
+import site.dittotrip.ditto_trip.spot.exception.NotMatchedSortException;
 import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -26,6 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -42,10 +48,27 @@ public class SpotService {
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
 
-
-    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId, Pageable pageable) {
+    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId,
+                                                      Double userX, Double userY,Pageable pageable) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        Page<CategorySpot> page = categorySpotRepository.findByCategory(category, pageable);
+
+        Page<CategorySpot> page = null;
+        PageRequest newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        String sortString = pageable.getSort().toString();
+
+        switch (sortString) {
+            case "createdDateTime: DESC" ->
+                    page = categorySpotRepository.findByCategoryOrderByCreated(category, newPageable);
+            case "rating: DESC" ->
+                    page = categorySpotRepository.findByCategoryOrderByRating(category, newPageable);
+            case "distance: ASC" -> {
+                if (userX == null || userY == null) {
+                    throw new NoUserPointInfoException();
+                }
+                page = categorySpotRepository.findByCategoryOrderByDistance(category, userX, userY, newPageable);
+            }
+            default -> throw new NotMatchedSortException();
+        }
 
         SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
         spotCategoryListRes.setTotalPages(page.getTotalPages());
@@ -56,13 +79,16 @@ public class SpotService {
         for (CategorySpot categorySpot : page.getContent()) {
             Spot spot = categorySpot.getSpot();
             Long spotBookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId, distance));
         }
 
         return spotCategoryListRes;
     }
 
     public SpotCategoryListRes findSpotListInMap(Long categoryId, User user,
+                                                 Double userX, Double userY,
                                                  Double startX, Double endX, Double startY, Double endY) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
@@ -74,26 +100,32 @@ public class SpotService {
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
             Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
         }
 
         return spotCategoryListRes;
     }
 
-    public SpotListRes findSpotListByBookmark(User user) {
+    public SpotListRes findSpotListByBookmark(User user,
+                                              Double userX, Double userY) {
         List<SpotBookmark> spotBookmarks = spotBookmarkRepository.findByUser(user);
-        return SpotListRes.fromEntitiesByBookmark(spotBookmarks);
+        return SpotListRes.fromEntitiesByBookmark(spotBookmarks, userX, userY);
     }
 
 
-    public SpotListRes findSpotListBySearch(User user, String word, Pageable pageable) {
+    public SpotListRes findSpotListBySearch(User user, String word,
+                                            Double userX, Double userY, Pageable pageable) {
         List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
 
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
             Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId));
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
         }
 
         return spotListRes;
@@ -131,7 +163,7 @@ public class SpotService {
     public void visitSpot(User user, Long spotId, Double userX, Double userY) {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        double distance = DistanceCalculator.getDistanceBetweenUserAndSpot(userX, userY, spot.getPointX(), spot.getPointY());
+        double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
         if (distance > 20.0) {
             throw new SpotVisitDistanceException();
         }

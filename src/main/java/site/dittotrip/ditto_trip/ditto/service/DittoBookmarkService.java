@@ -21,6 +21,14 @@ public class DittoBookmarkService {
     private final DittoRepository dittoRepository;
     private final DittoBookmarkRepository dittoBookmarkRepository;
 
+    public Boolean getDittoBookmark(Long dittoId, User user) {
+        Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
+        Optional<DittoBookmark> optionalBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user);
+        return optionalBookmark.isPresent();
+    }
+
+
+
     @Transactional(readOnly = false)
     public void saveDittoBookmark(Long dittoId, User user) {
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
@@ -39,5 +47,6 @@ public class DittoBookmarkService {
         DittoBookmark dittoBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user).orElseThrow(NoSuchElementException::new);
         dittoBookmarkRepository.delete(dittoBookmark);
     }
+
 
 }
