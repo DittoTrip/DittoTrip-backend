@@ -27,6 +27,8 @@ public class Ditto {
     private String title;
     @Setter
     private String body;
+    @Setter
+    private String imagePath;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;
@@ -35,10 +37,8 @@ public class Ditto {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
-    private List<DittoImage> dittoImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
     public Ditto(String title, String body, User user) {

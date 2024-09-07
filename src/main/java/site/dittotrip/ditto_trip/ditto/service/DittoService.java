@@ -22,6 +22,7 @@ import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class DittoService {
     private final DittoCommentRepository dittoCommentRepository;
     private final HashtagRepository hashtagRepository;
     private final AlarmRepository alarmRepository;
+    private final S3Service s3Service;
 
     public DittoListRes findDittoList(User reqUser, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -69,49 +71,57 @@ public class DittoService {
 
     @Transactional(readOnly = false)
     public void saveDitto(User reqUser, DittoSaveReq saveReq,
-                           List<MultipartFile> multipartFiles) {
-        // 최대 이미지 개수 수정할 수 있음
-        if (multipartFiles.size() > 20) {
-            throw new TooManyImagesException();
-        }
+                           MultipartFile multipartFile) {
 
         Ditto ditto = saveReq.toEntity(reqUser);
         dittoRepository.save(ditto);
 
+        // image 처리
+        String imagePath = s3Service.uploadFile(multipartFile);
+        ditto.setImagePath(imagePath);
+
+        // hashtag 처리
         for (String name : saveReq.getHashtagNames()) {
-            Optional<Hashtag> optionalHashtag = hashtagRepository.findByName(name);
-            Hashtag hashtag = null;
-            if (optionalHashtag.isEmpty()) {
+            Hashtag hashtag = hashtagRepository.findByName(name).orElse(null);
+            if (hashtag == null) {
                 hashtag = new Hashtag(name);
                 hashtagRepository.save(hashtag);
-            } {
-                hashtag = optionalHashtag.get();
             }
             ditto.getHashtagDittos().add(new HashtagDitto(hashtag, ditto));
         }
 
-        // image 처리
-
+        // 알림 처리
         processAlarmInSaveDitto(ditto);
     }
 
     @Transactional(readOnly = false)
-    public void modifyDitto(Long dittoId, User reqUser, DittoModifyReq modifyReq,
-                            List<MultipartFile> multipartFiles) {
+    public void modifyDitto(Long dittoId, User reqUser, DittoSaveReq saveReq,
+                            MultipartFile multipartFile) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
         if (ditto.getUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 
-        // 최대 이미지 개수 수정할 수 있음
-        if (ditto.getDittoImages().size() + multipartFiles.size() - modifyReq.getRemovedImageIds().size() > 20) {
-            throw new NoAuthorityException();
-        }
-
-        modifyReq.modifyEntity(ditto);
+        saveReq.modifyEntity(ditto);
 
         // image 처리
+        s3Service.deleteFile(ditto.getImagePath());
+        String imagePath = s3Service.uploadFile(multipartFile);
+        ditto.setImagePath(imagePath);
+
+        // hashtag 처리
+        List<HashtagDitto> hashtagDittos = new ArrayList<>();
+        for (String name : saveReq.getHashtagNames()) {
+            Hashtag hashtag = hashtagRepository.findByName(name).orElse(null);
+            if (hashtag == null) {
+                hashtag = new Hashtag(name);
+                hashtagRepository.save(hashtag);
+            }
+            hashtagDittos.add(new HashtagDitto(hashtag, ditto));
+        }
+        ditto.setHashtagDittos(hashtagDittos);
+
     }
 
     @Transactional(readOnly = false)
@@ -122,8 +132,7 @@ public class DittoService {
             throw new NoAuthorityException();
         }
 
-        // image 처리
-
+        s3Service.deleteFile(ditto.getImagePath());
         dittoRepository.delete(ditto);
     }
 
