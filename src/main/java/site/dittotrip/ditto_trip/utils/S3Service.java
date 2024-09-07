@@ -32,6 +32,10 @@ public class S3Service {
   }
 
   public String uploadFile(MultipartFile file) {
+    if (file == null) {
+      return null;
+    }
+
     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
     try {
       s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), null)
