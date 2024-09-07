@@ -16,7 +16,7 @@ import site.dittotrip.ditto_trip.review.exception.ReviewWritePeriodOverException
 import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
-import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
+import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.domain.ReviewLike;
 import site.dittotrip.ditto_trip.review.repository.ReviewLikeRepository;

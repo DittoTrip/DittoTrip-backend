@@ -20,7 +20,6 @@ import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
-import site.dittotrip.ditto_trip.review.exception.TooManyImagesException;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
