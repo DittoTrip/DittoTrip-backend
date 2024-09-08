@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
+import site.dittotrip.ditto_trip.spot.domain.enums.SpotApplyStatus;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,8 @@ public class SpotApply {
     @Setter
     private String imagePath;
 
+    private SpotApplyStatus spotApplyStatus = SpotApplyStatus.PENDING;
+
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
@@ -38,10 +41,13 @@ public class SpotApply {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategorySpotApply> categorySpotApplies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SpotApplyImage> spotApplyImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HashtagSpotApply> hashtagSpotApplies = new ArrayList<>();
 
     public SpotApply(String name, String address, Double pointX, Double pointY, User user) {
