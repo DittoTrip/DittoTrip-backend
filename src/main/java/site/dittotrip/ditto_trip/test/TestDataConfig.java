@@ -105,9 +105,21 @@ public class TestDataConfig {
 
         SpotVisit spotVisit1 = createSpotVisit(spot1, user1);
         SpotVisit spotVisit2 = createSpotVisit(spot2, user2);
+        SpotVisit spotVisit3 = createSpotVisit(spot1, user2);
+        SpotVisit spotVisit4 = createSpotVisit(spot1, user3);
+        SpotVisit spotVisit5 = createSpotVisit(spot1, user1);
+        SpotVisit spotVisit6 = createSpotVisit(spot1, user2);
+        SpotVisit spotVisit7 = createSpotVisit(spot1, user3);
+        SpotVisit spotVisit8 = createSpotVisit(spot1, user1);
 
         Review review1 = createReview("좋았슴", 4f, user2, spotVisit1);
         Review review2 = createReview("좋았습니다.", 3f, user2, spotVisit2);
+        Review review3 = createReview("review_body", 4f, user2, spotVisit3);
+        Review review4 = createReview("review_body", 4f, user3, spotVisit4);
+        Review review5 = createReview("review_body", 4f, user1, spotVisit5);
+        Review review6 = createReview("review_body", 4f, user2, spotVisit6);
+        Review review7 = createReview("review_body", 4f, user3, spotVisit7);
+        Review review8 = createReview("review_body", 4f, user1, spotVisit8);
 
         Ditto ditto1 = createDitto("제목1", "여기 좋아요1", user1);
         Ditto ditto2 = createDitto("제목2", "여기 좋아요2", user1);
