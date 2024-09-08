@@ -2,16 +2,17 @@ package site.dittotrip.ditto_trip.spot.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
 import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,9 @@ public class SpotApplyController {
     @GetMapping("/spot/apply/list/my")
     @Operation(summary = "내 스팟 신청 리스트 조회 (디자인 나오고 작업 예정)",
             description = "")
-    public void mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public SpotApplyListRes mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = CustomUserDetails.getUserFromUserDetails(userDetails, true);
+        return spotApplyService.findMySpotApplyList(user);
     }
 
     @GetMapping("/spot/apply/{spotApplyId}")
