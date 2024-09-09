@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.category.domain.dto.*;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
@@ -14,7 +14,7 @@ import site.dittotrip.ditto_trip.category.service.CategoryBookmarkService;
 import site.dittotrip.ditto_trip.category.service.CategoryService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. 카테고리 탐색 첫 페이지 (majorType 별 리스트 -> PERSON / CONTENT)

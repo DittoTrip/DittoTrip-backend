@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
 import site.dittotrip.ditto_trip.profile.service.UserProfileService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. 프로필 수정 - item, badge

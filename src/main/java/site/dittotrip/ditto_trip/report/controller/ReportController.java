@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportHandleReq;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportListRes;
 import site.dittotrip.ditto_trip.report.domain.dto.ReportSaveReq;

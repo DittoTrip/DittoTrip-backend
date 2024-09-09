@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoDetailRes;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoListRes;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoModifyReq;
@@ -17,7 +17,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. Ditto 랜덤 리스트 조회

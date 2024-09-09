@@ -3,18 +3,26 @@ package site.dittotrip.ditto_trip.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import site.dittotrip.ditto_trip.auth.contoroller.dto.SignupReq;
+import site.dittotrip.ditto_trip.auth.domain.dto.LoginReq;
+import site.dittotrip.ditto_trip.auth.domain.dto.SignupReq;
+import site.dittotrip.ditto_trip.auth.domain.dto.TokenRes;
+import site.dittotrip.ditto_trip.auth.domain.enums.TokenType;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.user.service.UserService;
 import site.dittotrip.ditto_trip.utils.EmailService;
+import site.dittotrip.ditto_trip.utils.JwtProvider;
 import site.dittotrip.ditto_trip.utils.RedisService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Service
@@ -28,7 +36,8 @@ public class AuthService {
   private final EmailService emailService;
   private final RedisService redisService;
   private final PasswordEncoder passwordEncoder;
-
+  private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final JwtProvider jwtProvider;
 
   public boolean duplicationCheck(String email, String nickname) {
     List<User> users = userService.findAllByEmailOrNickname(email, nickname);
@@ -67,6 +76,35 @@ public class AuthService {
     user.getAuthorities().add(authority);
 
     return userRepository.save(user);
+  }
+
+  public TokenRes login(LoginReq dto) {
+    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+    String accessToken = jwtProvider.generateToken(authentication, TokenType.ACCESS_TOKEN);
+    String refreshToken = jwtProvider.generateToken(authentication, TokenType.REFRESH_TOKEN);
+    jwtProvider.saveRefreshToken(authentication.getName(), refreshToken);
+
+    return new TokenRes(accessToken,refreshToken);
+  }
+
+  public TokenRes refresh(String refreshToken) {
+    if(!jwtProvider.validateToken(refreshToken)){
+      throw new RuntimeException("Invalid refresh token");
+    }
+
+    User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(refreshToken))).orElseThrow(NoSuchElementException::new);
+
+    if(!jwtProvider.getRefreshToken(user.getId().toString()).equals(refreshToken)) {
+      throw new RuntimeException("Invalid refresh token");
+    }
+
+    String newAccessToken = jwtProvider.generateToken(user.getId().toString(),user.getAuthorities(), TokenType.ACCESS_TOKEN);
+    String newRefreshToken = jwtProvider.generateToken(user.getId().toString(),user.getAuthorities(), TokenType.REFRESH_TOKEN);
+    jwtProvider.saveRefreshToken(user.getId().toString(), newRefreshToken);
+
+    return new TokenRes(newAccessToken, newRefreshToken);
   }
 
   private static String generateRandomNumber() {

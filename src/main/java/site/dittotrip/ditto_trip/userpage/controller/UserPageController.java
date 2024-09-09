@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 import site.dittotrip.ditto_trip.userpage.service.UserPageService;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
 
 /**
  * 타인의 유저 페이지와 내 유저 페이지 조회의 데이터가 다를 경우 수정 필요
