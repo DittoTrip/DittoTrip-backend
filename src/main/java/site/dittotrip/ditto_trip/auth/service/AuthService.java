@@ -44,10 +44,13 @@ public class AuthService {
     return users.isEmpty();
   }
 
-  public String sendCode(String email){
+  public String sendCode(String email) throws BadRequestException {
+    if(!duplicationCheck(email, null)){
+      throw new BadRequestException("이미 존재하는 이메일입니다.");
+    }
+
     String subject = "이메일 인증 코드";
     String code = generateRandomNumber();
-    System.out.println(code);
     emailService.sendSimpleMessage(email, subject, code);
     redisService.setex("code:" + email, code, REDIS_EXPIRE_TIME);
     return "Email sent successfully";

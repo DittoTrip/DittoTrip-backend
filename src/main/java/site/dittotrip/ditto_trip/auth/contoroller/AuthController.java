@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class AuthController {
   @GetMapping("/send-code")
   @Operation(summary = "인증 코드 전송",
       description = "")
-  public String sendCode(String email) {
+  public String sendCode(String email) throws BadRequestException {
     return authService.sendCode(email);
   }
 
