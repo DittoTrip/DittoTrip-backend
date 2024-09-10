@@ -6,13 +6,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserBadgeListRes;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserItemListRes;
 import site.dittotrip.ditto_trip.reward.service.RewardService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. 유저의 보유 아이템 리스트 조회 (자신의 아이템 리스트만 조회 가능 (수정 시))

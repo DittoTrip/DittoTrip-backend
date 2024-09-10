@@ -30,6 +30,8 @@ public class User {
   private String email;
   private String password;
   private String nickname;
+  private String provider;
+  private String providerId;
 
   @Enumerated(EnumType.STRING)
   private UserStatus userStatus = UserStatus.NORMAL;

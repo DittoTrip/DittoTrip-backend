@@ -9,9 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetailsService;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.io.IOException;
 
@@ -21,7 +24,7 @@ import static org.springframework.security.core.authority.AuthorityUtils.createA
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
   private final JwtProvider jwtProvider;
-  private final CustomUserDetailsService customUserDetailsService;
+  private final UserRepository userRepository;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -29,7 +32,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     String token = jwtProvider.resolveToken(request);
 
     if (jwtProvider.validateToken(token)) {
-      UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(jwtProvider.getUsername(token));
+      User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(token)))
+          .orElseThrow(() -> new UsernameNotFoundException("유효하지 않은 토큰입니다."));
+      UserDetails userDetails = new CustomUserDetails(user);
       Authentication authentication =  new UsernamePasswordAuthenticationToken(userDetails, "", createAuthorityList(jwtProvider.getRole(token)));
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }

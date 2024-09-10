@@ -7,10 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.alarm.domain.dto.AlarmListRes;
 import site.dittotrip.ditto_trip.alarm.service.AlarmService;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
 
 /**
  * 1. 알림 리스트 조회

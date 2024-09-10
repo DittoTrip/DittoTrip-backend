@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewCommentSaveReq;
 import site.dittotrip.ditto_trip.review.service.ReviewCommentService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 
 /**
  * 1. 댓글 등록 (대댓글 등록 포함)

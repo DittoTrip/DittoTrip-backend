@@ -5,14 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
-import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.service.CustomUserDetails.*;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
 
 /**
  * 1. Spot 리스트 지도 기반 조회 (카테고리 선택 후)
