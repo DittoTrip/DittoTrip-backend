@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import site.dittotrip.ditto_trip.auth.service.CustomUserDetails;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
