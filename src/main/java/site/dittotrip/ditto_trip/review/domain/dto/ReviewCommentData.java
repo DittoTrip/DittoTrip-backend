@@ -55,6 +55,7 @@ public class ReviewCommentData {
     private void putIsMine(User requestUser) {
         if (requestUser == null) {
             this.isMine = Boolean.FALSE;
+            return;
         }
 
         if (this.userData.getUserId() == requestUser.getId()) {
