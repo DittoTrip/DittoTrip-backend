@@ -110,6 +110,13 @@ public class AuthService {
     return new TokenRes(newAccessToken, newRefreshToken);
   }
 
+  public void logout(String refreshToken) {
+    if(jwtProvider.validateToken(refreshToken)){
+      User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(refreshToken))).orElseThrow(NoSuchElementException::new);
+      jwtProvider.deleteRefreshToken(user.getId().toString());
+    }
+  }
+
   private static String generateRandomNumber() {
     Random random = new Random();
     int randomNumber = 100000 + random.nextInt(900000); // 100000 ~ 999999 범위의 숫자 생성

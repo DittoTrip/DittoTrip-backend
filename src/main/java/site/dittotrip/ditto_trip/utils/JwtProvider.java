@@ -37,6 +37,10 @@ public class JwtProvider {
     return redisService.get("refreshToken:" + userId);
   }
 
+  public void deleteRefreshToken(String userId) {
+    redisService.delete("refreshToken:" + userId);
+  }
+
   public Key getSigningKey() {
     byte[] keyBytes = SECRET_KEY.getBytes();
     return Keys.hmacShaKeyFor(keyBytes);

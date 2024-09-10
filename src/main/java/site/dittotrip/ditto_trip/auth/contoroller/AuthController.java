@@ -70,4 +70,11 @@ public class AuthController {
   public TokenRes refreshToken(@RequestHeader("Authorization") String refreshToken) {
     return authService.refresh(refreshToken);
   }
+
+  @DeleteMapping("/logout")
+  @Operation(summary = "로그아웃",
+      description = "")
+  public void logout(@RequestHeader("Authorization") String refreshToken) {
+    authService.logout(refreshToken);
+  }
 }
