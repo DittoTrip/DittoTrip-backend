@@ -17,18 +17,13 @@ public class CategoryModifyReq {
     private CategoryMajorType categoryMajorType;
     private CategorySubType categorySubType;
 
-    List<String> removeHashtags = new ArrayList<>();
-    List<String> newHashtags = new ArrayList<>();
-    List<Long> removeSpotIds = new ArrayList<>();
-    List<Long> newSpotIds = new ArrayList<>();
+    List<String> hashtagNames = new ArrayList<>();
+    List<Long> spotIds = new ArrayList<>();
 
-    public void modifyEntity(Category category, String imagePath) {
+    public void modifyEntity(Category category) {
         category.setName(name);
         category.setCategoryMajorType(categoryMajorType);
         category.setCategorySubType(categorySubType);
-        if (imagePath != null) {
-            category.setImagePath(imagePath);
-        }
     }
 
 }

@@ -13,7 +13,6 @@ public class DittoModifyReq {
 
     private String title;
     private String body;
-    private List<Long> removedImageIds = new ArrayList<>();
 
     public void modifyEntity(Ditto ditto) {
         ditto.setTitle(title);

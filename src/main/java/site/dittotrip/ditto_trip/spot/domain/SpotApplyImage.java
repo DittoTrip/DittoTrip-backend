@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.ditto.domain;
+package site.dittotrip.ditto_trip.spot.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,11 +12,10 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class DittoImage {
+public class SpotApplyImage {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ditto_image_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "spot_apply_image_id")
     private Long id;
 
     private String imagePath;
@@ -25,7 +24,12 @@ public class DittoImage {
     private LocalDateTime createdDateTime;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ditto_id")
-    private Ditto ditto;
+    @JoinColumn(name = "spot_apply_id")
+    private SpotApply spotApply;
+
+    public SpotApplyImage(String imagePath, SpotApply spotApply) {
+        this.imagePath = imagePath;
+        this.spotApply = spotApply;
+    }
 
 }

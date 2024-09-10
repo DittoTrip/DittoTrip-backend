@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.exception.common.ImageUploadException;
 
 import java.io.IOException;
 
@@ -30,10 +31,18 @@ public class S3Service {
         .build();
   }
 
-  public String uploadFile(MultipartFile file) throws IOException {
+  public String uploadFile(MultipartFile file) {
+    if (file == null) {
+      return null;
+    }
+
     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-    s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), null)
-        .withCannedAcl(CannedAccessControlList.PublicRead));
+    try {
+      s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), null)
+              .withCannedAcl(CannedAccessControlList.PublicRead));
+    } catch (IOException e) {
+      throw new ImageUploadException();
+    }
 
     return s3Client.getUrl(bucketName, fileName).toString();
   }

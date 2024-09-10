@@ -14,12 +14,7 @@ import java.util.List;
 public class SpotApplySaveReq {
 
     private String name;
-    private String intro;
     private String address;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String phoneNumber;
-    private String homeUri;
     private Double pointX;
     private Double pointY;
 

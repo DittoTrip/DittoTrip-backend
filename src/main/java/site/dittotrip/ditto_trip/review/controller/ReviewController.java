@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
+import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.review.service.ReviewLikeService;
 import site.dittotrip.ditto_trip.review.service.ReviewService;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -60,10 +61,14 @@ public class ReviewController {
             description = "")
     public void reviewSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
-                           @RequestBody ReviewSaveReq reviewSaveReq,
+                           @RequestBody ReviewSaveReq saveReq,
                            @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+        if (multipartFiles.size() > 10) {
+            throw new TooManyImagesException();
+        }
+
         User user = getUserFromUserDetails(userDetails, true);
-        reviewService.saveReview(spotVisitId, user, reviewSaveReq, multipartFiles);
+        reviewService.saveReview(spotVisitId, user, saveReq, multipartFiles);
     }
 
     @PutMapping("/review/{reviewId}")
@@ -71,10 +76,14 @@ public class ReviewController {
             description = "")
     public void reviewModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId,
-                             @RequestBody ReviewModifyReq reviewModifyReq,
+                             @RequestBody ReviewSaveReq saveReq,
                              @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+        if (multipartFiles.size() > 10) {
+            throw new TooManyImagesException();
+        }
+
         User user = getUserFromUserDetails(userDetails, true);
-        reviewService.modifyReview(reviewId, user, reviewModifyReq, multipartFiles);
+        reviewService.modifyReview(reviewId, user, saveReq, multipartFiles);
     }
 
     @DeleteMapping("/review/{reviewId}")

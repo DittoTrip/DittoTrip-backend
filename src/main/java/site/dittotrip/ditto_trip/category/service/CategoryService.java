@@ -11,6 +11,7 @@ import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.*;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
+import site.dittotrip.ditto_trip.category.exception.AlreadyExistingCategorySpotException;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -21,6 +22,7 @@ import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class CategoryService {
     private final CategorySpotRepository categorySpotRepository;
     private final SpotRepository spotRepository;
     private final HashtagRepository hashtagRepository;
+    private final S3Service s3Service;
 
     public CategoryPageRes findCategoryList(User reqUser, CategorySubType subType, Pageable pageable) {
         Page<Category> page = categoryRepository.findBySubType(subType, pageable);
@@ -104,6 +107,11 @@ public class CategoryService {
         Category category = saveReq.toEntity();
         categoryRepository.save(category);
 
+        // 이미지 처리
+        String imagePath = s3Service.uploadFile(multipartFile);
+        category.setImagePath(imagePath);
+
+        // 스팟 처리
         List<Long> spotIds = saveReq.getSpotIds();
         for (Long spotId : spotIds) {
             Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
@@ -112,49 +120,52 @@ public class CategoryService {
 
         // 해시태그 처리
         for (String hashtagName : saveReq.getHashtagNames()) {
-            Optional<Hashtag> optionalHashtag = hashtagRepository.findByName(hashtagName);
-            Hashtag hashtag = null;
-            if (optionalHashtag.isEmpty()) {
+            Hashtag hashtag = hashtagRepository.findByName(hashtagName).orElse(null);
+            if (hashtag == null) {
                 hashtag = new Hashtag(hashtagName);
                 hashtagRepository.save(hashtag);
-            } else {
-                hashtag = optionalHashtag.get();
             }
             category.getHashtagCategories().add(new HashtagCategory(hashtag, category));
         }
 
-        // 이미지 처리
-
     }
 
     @Transactional(readOnly = false)
-    public void modifyCategory(Long categoryId, CategoryModifyReq categoryModifyReq, MultipartFile multipartFile) {
+    public void modifyCategory(Long categoryId, CategoryModifyReq modifyReq, MultipartFile multipartFile) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        modifyReq.modifyEntity(category);
 
-        String imagePath = null;
-        if (multipartFile != null) {
-            // 이미지 처리
+        // 이미지 처리
+        s3Service.deleteFile(category.getImagePath());
+        String imagePath = s3Service.uploadFile(multipartFile);
+        category.setImagePath(imagePath);
+
+        // 스팟 처리
+        List<CategorySpot> categorySpots = new ArrayList<>();
+        for (Long spotId : modifyReq.getSpotIds()) {
+            Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+            categorySpots.add(new CategorySpot(category, spot));
         }
-
-        categoryModifyReq.modifyEntity(category, imagePath);
-
-        for (Long removeSpotId : categoryModifyReq.getRemoveSpotIds()) {
-            Spot spot = spotRepository.findById(removeSpotId).orElseThrow(NoSuchElementException::new);
-            CategorySpot categorySpot = categorySpotRepository.findByCategoryAndSpot(category, spot).orElseThrow(NoSuchElementException::new);
-            categorySpotRepository.delete(categorySpot);
-        }
-
-        for (Long newSpotId : categoryModifyReq.getNewSpotIds()) {
-            Spot spot = spotRepository.findById(newSpotId).orElseThrow(NoSuchElementException::new);
-            categorySpotRepository.save(new CategorySpot(category, spot));
-        }
+        category.setCategorySpots(categorySpots);
 
         // 해시태그 처리
+        List<HashtagCategory> hashtagCategories = new ArrayList<>();
+        for (String hashtagName : modifyReq.getHashtagNames()) {
+            Hashtag hashtag = hashtagRepository.findByName(hashtagName).orElse(null);
+            if (hashtag == null) {
+                hashtag = new Hashtag(hashtagName);
+                hashtagRepository.save(hashtag);
+            }
+            hashtagCategories.add(new HashtagCategory(hashtag, category));
+        }
+        category.setHashtagCategories(hashtagCategories);
+
     }
 
     @Transactional(readOnly = false)
     public void removeCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        s3Service.deleteFile(category.getImagePath());
         categoryRepository.delete(category);
     }
 

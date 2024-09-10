@@ -3,7 +3,6 @@ package site.dittotrip.ditto_trip.ditto.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
-import site.dittotrip.ditto_trip.ditto.domain.DittoImage;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
@@ -18,11 +17,10 @@ public class DittoData {
     private Long dittoId;
     private String title;
     private String body;
+    private String imagePath;
     private LocalDateTime createdDateTime;
 
     private UserData userData;
-    @Builder.Default
-    private List<String> imagePaths = new ArrayList<>();
     @Builder.Default
     private List<String> hashtags = new ArrayList<>();
 
@@ -34,21 +32,15 @@ public class DittoData {
                 .dittoId(ditto.getId())
                 .title(ditto.getTitle())
                 .body(ditto.getBody())
+                .imagePath(ditto.getImagePath())
                 .createdDateTime(ditto.getCreatedDateTime())
                 .userData(UserData.fromEntity(ditto.getUser()))
                 .isMine(isMine)
                 .myBookmarkId(myBookmarkId)
                 .build();
 
-        dittoData.putImageDataList(ditto.getDittoImages());
         dittoData.putHashtags(ditto);
         return dittoData;
-    }
-
-    private void putImageDataList(List<DittoImage> dittoImages) {
-        for (DittoImage dittoImage : dittoImages) {
-            this.getImagePaths().add(dittoImage.getImagePath());
-        }
     }
 
     private void putHashtags(Ditto ditto) {

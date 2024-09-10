@@ -1,8 +1,11 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
@@ -17,6 +20,8 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
 import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
+import site.dittotrip.ditto_trip.spot.exception.NoUserPointInfoException;
+import site.dittotrip.ditto_trip.spot.exception.NotMatchedSortException;
 import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -26,6 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -42,11 +48,27 @@ public class SpotService {
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
 
-
     public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId,
                                                       Double userX, Double userY,Pageable pageable) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        Page<CategorySpot> page = categorySpotRepository.findByCategory(category, pageable);
+
+        Page<CategorySpot> page = null;
+        PageRequest newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        String sortString = pageable.getSort().toString();
+
+        switch (sortString) {
+            case "createdDateTime: DESC" ->
+                    page = categorySpotRepository.findByCategoryOrderByCreated(category, newPageable);
+            case "rating: DESC" ->
+                    page = categorySpotRepository.findByCategoryOrderByRating(category, newPageable);
+            case "distance: ASC" -> {
+                if (userX == null || userY == null) {
+                    throw new NoUserPointInfoException();
+                }
+                page = categorySpotRepository.findByCategoryOrderByDistance(category, userX, userY, newPageable);
+            }
+            default -> throw new NotMatchedSortException();
+        }
 
         SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
         spotCategoryListRes.setTotalPages(page.getTotalPages());
