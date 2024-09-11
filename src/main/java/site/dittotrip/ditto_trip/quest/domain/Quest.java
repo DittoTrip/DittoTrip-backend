@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
 import site.dittotrip.ditto_trip.reward.domain.Reward;
 
 import java.time.LocalDateTime;
@@ -19,11 +20,13 @@ public class Quest {
     @Column(name = "quest_id")
     private Long id;
 
+    private String title;
     private String body;
-    private String condition;
-    private String conditionCount;
+    private Integer conditionCount;
     @CreationTimestamp
     private LocalDateTime createdDateTime;
+
+    private QuestRewardType questRewardType;
 
     private Integer rewardExp;
 

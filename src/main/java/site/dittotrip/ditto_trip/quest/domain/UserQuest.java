@@ -20,7 +20,7 @@ public class UserQuest {
     private Long id;
 
     private UserQuestStatus userQuestStatus = UserQuestStatus.NOT_ACHIEVE;
-
+    private Integer nowCount = 0;
     private LocalDateTime achieveDateTime;
 
     @ManyToOne(fetch = LAZY)
