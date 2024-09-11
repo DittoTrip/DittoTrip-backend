@@ -31,4 +31,9 @@ public class UserQuest {
     @JoinColumn(name = "quest_id")
     private Quest quest;
 
+    public void achieveQuest() {
+        this.userQuestStatus = UserQuestStatus.ACHIEVE;
+        this.achieveDateTime = LocalDateTime.now();
+    }
+
 }
