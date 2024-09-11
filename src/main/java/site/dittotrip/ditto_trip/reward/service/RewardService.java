@@ -3,12 +3,10 @@ package site.dittotrip.ditto_trip.reward.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.dittotrip.ditto_trip.reward.domain.UserBadge;
-import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.domain.UserReward;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserBadgeListRes;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserItemListRes;
-import site.dittotrip.ditto_trip.reward.repository.UserBadgeRepository;
-import site.dittotrip.ditto_trip.reward.repository.UserItemRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserRewardRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -21,20 +19,17 @@ import java.util.NoSuchElementException;
 public class RewardService {
 
     private final UserRepository userRepository;
-    private final UserItemRepository userItemRepository;
-    private final UserBadgeRepository userBadgeRepository;
+    private final UserRewardRepository userRewardRepository;
 
-    public UserItemListRes findUsersItemList(User user) {
-        List<UserItem> userItems = userItemRepository.findByUser(user);
-
-        return UserItemListRes.fromEntities(userItems);
+    public UserItemListRes findUsersItemList(User reqUser) {
+        List<UserReward> userRewards = userRewardRepository.findUserItemByUser(reqUser);
+        return UserItemListRes.fromEntities(userRewards);
     }
 
     public UserBadgeListRes findUsersBadgeList(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<UserBadge> userBadges = userBadgeRepository.findByUser(user);
-
-        return UserBadgeListRes.fromEntities(userBadges);
+        List<UserReward> userRewards = userRewardRepository.findUserBadgeByUser(user);
+        return UserBadgeListRes.fromEntities(userRewards);
     }
 
 }
