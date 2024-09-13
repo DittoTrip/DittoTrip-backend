@@ -41,7 +41,7 @@ public class DittoComment {
     @JoinColumn(name = "parent_ditto_comment_id")
     private DittoComment parentDittoComment;
 
-    @OneToMany(mappedBy = "parentDittoComment")
+    @OneToMany(mappedBy = "parentDittoComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DittoComment> childDittoComments = new ArrayList<>();
 
     public DittoComment(String body, LocalDateTime createdDateTime, User user, Ditto ditto, DittoComment parentDittoComment) {
