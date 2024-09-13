@@ -1,5 +1,7 @@
 package site.dittotrip.ditto_trip.user.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -11,4 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByNickname(String nickname);
   List<User> findAllByEmailOrNickname(String email, String nickname);
   Optional<User> findByProviderAndProviderId(String provider, String providerId);
+
+  Page<User> findByNicknameContaining(String word, Pageable pageable);
+
 }
