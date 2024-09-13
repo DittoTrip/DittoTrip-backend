@@ -38,7 +38,7 @@ public class UserPageService {
         Integer followingCount = followRepository.countByFollowingUser(user);
         Integer followedCount = followRepository.countByFollowedUser(user);
 
-        return UserPageRes.fromEntities(user, userProfile, dittos, followingCount, followedCount);
+        return UserPageRes.fromEntities(reqUser, user, userProfile, dittos, followingCount, followedCount);
     }
 
 }
