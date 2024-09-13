@@ -9,12 +9,12 @@ import site.dittotrip.ditto_trip.user.domain.User;
 public class UserData {
 
     private Long userId;
-    private String userName;
+    private String nickname;
 
     public static UserData fromEntity(User user) {
         return UserData.builder()
                 .userId(user.getId())
-                .userName(user.getName())
+                .nickname(user.getNickname())
                 .build();
     }
 
