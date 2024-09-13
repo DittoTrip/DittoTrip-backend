@@ -110,17 +110,15 @@ public class DittoService {
         ditto.setImagePath(imagePath);
 
         // hashtag 처리
-        List<HashtagDitto> hashtagDittos = new ArrayList<>();
+        ditto.getHashtagDittos().clear();
         for (String name : saveReq.getHashtagNames()) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElse(null);
             if (hashtag == null) {
                 hashtag = new Hashtag(name);
                 hashtagRepository.save(hashtag);
             }
-            hashtagDittos.add(new HashtagDitto(hashtag, ditto));
+            ditto.getHashtagDittos().add(new HashtagDitto(hashtag, ditto));
         }
-        ditto.setHashtagDittos(hashtagDittos);
-
     }
 
     @Transactional(readOnly = false)
