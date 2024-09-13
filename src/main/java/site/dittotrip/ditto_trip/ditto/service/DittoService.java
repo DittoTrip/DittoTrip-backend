@@ -75,10 +75,6 @@ public class DittoService {
         Ditto ditto = saveReq.toEntity(reqUser);
         dittoRepository.save(ditto);
 
-        // image 처리
-        String imagePath = s3Service.uploadFile(multipartFile);
-        ditto.setImagePath(imagePath);
-
         // hashtag 처리
         for (String name : saveReq.getHashtagNames()) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElse(null);
@@ -89,8 +85,12 @@ public class DittoService {
             ditto.getHashtagDittos().add(new HashtagDitto(hashtag, ditto));
         }
 
+        // image 처리
+        String imagePath = s3Service.uploadFile(multipartFile);
+        ditto.setImagePath(imagePath);
+
         // 알림 처리
-        processAlarmInSaveDitto(ditto);
+//        processAlarmInSaveDitto(ditto);
     }
 
     @Transactional(readOnly = false)
