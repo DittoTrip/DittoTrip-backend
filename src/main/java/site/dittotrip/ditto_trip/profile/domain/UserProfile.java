@@ -61,4 +61,9 @@ public class UserProfile {
     public UserProfile(User user) {
         this.user = user;
     }
+
+    public void addExp(Integer exp) {
+        this.progressionBar += exp;
+    }
+
 }

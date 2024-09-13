@@ -13,10 +13,10 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class UserItem {
+public class UserReward {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_item_id")
+    @Column(name = "user_reward_id")
     private Long id;
 
     @CreationTimestamp
@@ -27,7 +27,12 @@ public class UserItem {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @JoinColumn(name = "reward_id")
+    private Reward reward;
+
+    public UserReward(User user, Reward reward) {
+        this.user = user;
+        this.reward = reward;
+    }
 
 }

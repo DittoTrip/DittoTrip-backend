@@ -1,10 +1,11 @@
-package site.dittotrip.ditto_trip.reward.domain;
+package site.dittotrip.ditto_trip.quest.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
+import site.dittotrip.ditto_trip.reward.domain.Reward;
 
 import java.time.LocalDateTime;
 
@@ -13,21 +14,24 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @Getter
-public class UserBadge {
+public class Quest {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_badge_id")
+    @Column(name = "quest_id")
     private Long id;
 
+    private String title;
+    private String body;
+    private Integer conditionCount;
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "users_id")
-    private User user;
+    private QuestRewardType questRewardType;
+
+    private Integer rewardExp;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "reward_id")
-    private Badge badge;
+    private Reward reward;
 
 }
