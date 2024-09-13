@@ -2,7 +2,7 @@ package site.dittotrip.ditto_trip.reward.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.reward.domain.UserBadge;
+import site.dittotrip.ditto_trip.reward.domain.UserReward;
 
 import java.time.LocalDateTime;
 
@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 @Builder
 public class UserBadgeData {
 
-    private Long badgeId;
+    private Long rewardId;
     private String imagePath;
-    private LocalDateTime acquiredDateTime;
+    private LocalDateTime createdDateTime;
 
-    public static UserBadgeData fromEntity(UserBadge userBadge) {
+    public static UserBadgeData fromEntity(UserReward userReward) {
         return UserBadgeData.builder()
-                .badgeId(userBadge.getBadge().getId())
-                .imagePath(userBadge.getBadge().getImagePath())
-                .acquiredDateTime(userBadge.getCreatedDateTime())
+                .rewardId(userReward.getReward().getId())
+                .imagePath(userReward.getReward().getImagePath())
+                .createdDateTime(userReward.getCreatedDateTime())
                 .build();
     }
 

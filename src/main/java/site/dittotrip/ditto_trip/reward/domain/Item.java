@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 
 import java.time.LocalDateTime;
 
@@ -16,12 +17,9 @@ public class Item extends Reward {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
-    private String etc;
-
     public Item(String imagePath, ItemType itemType, String etc) {
-        super(imagePath);
+        super(imagePath, RewardType.ITEM);
         this.itemType = itemType;
-        this.etc = etc;
     }
 
 }

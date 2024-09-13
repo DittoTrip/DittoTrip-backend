@@ -3,7 +3,9 @@ package site.dittotrip.ditto_trip.reward.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 
 import java.time.LocalDateTime;
 
@@ -17,12 +19,18 @@ public class Reward {
     @Column(name = "reward_id")
     private Long id;
 
+    @Setter
     private String imagePath;
+
+    @Enumerated(EnumType.STRING)
+    private RewardType rewardType;
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    public Reward(String imagePath) {
+    public Reward(String imagePath, RewardType rewardType) {
         this.imagePath = imagePath;
+        this.rewardType = rewardType;
     }
+
 }

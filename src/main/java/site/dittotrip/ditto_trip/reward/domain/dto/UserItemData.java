@@ -2,7 +2,8 @@ package site.dittotrip.ditto_trip.reward.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.domain.Item;
+import site.dittotrip.ditto_trip.reward.domain.UserReward;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
 
 import java.time.LocalDateTime;
@@ -11,17 +12,17 @@ import java.time.LocalDateTime;
 @Builder
 public class UserItemData {
 
-    private Long itemId;
+    private Long rewardId;
     private String imagePath;
     private ItemType itemType;
-    private LocalDateTime acquiredDateTime;
+    private LocalDateTime createdDateTime;
 
-    public static UserItemData fromEntity(UserItem userItem) {
+    public static UserItemData fromEntity(UserReward userReward) {
         return UserItemData.builder()
-                .itemId(userItem.getItem().getId())
-                .imagePath(userItem.getItem().getImagePath())
-                .itemType(userItem.getItem().getItemType())
-                .acquiredDateTime(userItem.getCreatedDateTime())
+                .rewardId(userReward.getId())
+                .imagePath(userReward.getReward().getImagePath())
+                .itemType(((Item) userReward.getReward()).getItemType())
+                .createdDateTime(userReward.getCreatedDateTime())
                 .build();
     }
 

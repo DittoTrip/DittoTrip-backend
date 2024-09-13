@@ -25,7 +25,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select r from Review r where r.spotVisit.spot= :spot order by r.createdDateTime desc limit 3")
     List<Review> findTop3BySpot(Spot spot);
 
-    @Query("select r from Review r where r.spotVisit.spot= :spot order by r.createdDateTime desc")
+    @Query("select r from Review r where r.spotVisit.spot= :spot")
     Page<Review> findBySpot(Spot spot, Pageable pageable);
 
     Optional<Review> findByUser(User user);

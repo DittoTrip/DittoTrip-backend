@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class Badge extends Reward {
 
     public Badge(String imagePath) {
-        super(imagePath);
+        super(imagePath, RewardType.BADGE);
     }
 
 }

@@ -22,16 +22,25 @@ public class UserPageRes {
 
     private Integer followingCount;
     private Integer followedCount;
+    private Boolean isMine;
 
-    public static UserPageRes fromEntities(User user, UserProfile userProfile, List<Ditto> dittos,
+    public static UserPageRes fromEntities(User reqUser, User user, UserProfile userProfile, List<Ditto> dittos,
                                            Integer followingCount, Integer followedCount) {
-        return UserPageRes.builder()
+        UserPageRes userPageRes = UserPageRes.builder()
                 .userData(UserData.fromEntity(user))
                 .userProfileData(UserProfileData.fromEntity(userProfile))
                 .dittoMiniDataList(DittoMiniData.listFromEntities(dittos))
                 .followingCount(followingCount)
                 .followedCount(followedCount)
                 .build();
+
+        if (reqUser.getId() == user.getId()) {
+            userPageRes.setIsMine(Boolean.TRUE);
+        } else {
+            userPageRes.setIsMine(Boolean.FALSE);
+        }
+
+        return userPageRes;
     }
 
 }
