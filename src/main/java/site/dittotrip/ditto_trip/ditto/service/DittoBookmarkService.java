@@ -47,6 +47,4 @@ public class DittoBookmarkService {
         DittoBookmark dittoBookmark = dittoBookmarkRepository.findByDittoAndUser(ditto, user).orElseThrow(NoSuchElementException::new);
         dittoBookmarkRepository.delete(dittoBookmark);
     }
-
-
 }

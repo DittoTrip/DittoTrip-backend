@@ -41,6 +41,12 @@ public class Ditto {
     @Setter
     private List<HashtagDitto> hashtagDittos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DittoBookmark> dittoBookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ditto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DittoComment> dittoComments = new ArrayList<>();
+
     public Ditto(String title, String body, User user) {
         this.title = title;
         this.body = body;
