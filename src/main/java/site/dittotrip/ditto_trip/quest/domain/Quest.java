@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.quest.domain.enums.QuestActionType;
 import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
 import site.dittotrip.ditto_trip.reward.domain.Reward;
 
@@ -23,6 +24,7 @@ public class Quest {
     private String title;
     private String body;
     private Integer conditionCount;
+    private QuestActionType questActionType;
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 

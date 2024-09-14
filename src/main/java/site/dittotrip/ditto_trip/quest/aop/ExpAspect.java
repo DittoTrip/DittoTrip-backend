@@ -12,19 +12,21 @@ import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class QuestAspect {
+public class ExpAspect {
 
-    private final QuestManager questManager;
+    private final ExpManager expManager;
 
-    @Pointcut("@annotation(QuestHandlingTargetMethod)")
-    private void questHandlingTarget() {}
+    @Pointcut("@annotation(ExpHandlingTargetMethod)")
+    private void expHandlingTarget() {}
 
-    @AfterReturning(pointcut = "questHandlingTarget()")
-    public void handleQuest(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "expHandlingTarget()")
+    public void handleExpAop(JoinPoint joinPoint) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String methodName = joinPoint.getSignature().getName();
 
-        questManager.handleQuests(userDetails, methodName);
+        expManager.handleExp(userDetails, methodName);
     }
+
+
 
 }
