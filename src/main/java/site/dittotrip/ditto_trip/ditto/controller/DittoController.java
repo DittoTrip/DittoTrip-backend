@@ -68,8 +68,8 @@ public class DittoController {
     @Operation(summary = "디토 등록",
             description = "")
     public void dittoSave(@AuthenticationPrincipal CustomUserDetails userDetails,
-                          @RequestBody DittoSaveReq saveReq,
-                          @RequestParam(name = "image") MultipartFile multipartFile) {
+                          @RequestPart(name = "saveReq") DittoSaveReq saveReq,
+                          @RequestPart(name = "image") MultipartFile multipartFile) {
         User user = getUserFromUserDetails(userDetails, true);
         dittoService.saveDitto(user, saveReq, multipartFile);
     }
@@ -79,8 +79,8 @@ public class DittoController {
             description = "")
     public void dittoModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId,
-                            @RequestBody DittoSaveReq saveReq,
-                            @RequestParam(name = "image") MultipartFile multipartFile) {
+                            @RequestPart(name = "saveReq") DittoSaveReq saveReq,
+                            @RequestPart(name = "image") MultipartFile multipartFile) {
         User user = getUserFromUserDetails(userDetails, true);
         dittoService.modifyDitto(dittoId, user, saveReq, multipartFile);
     }

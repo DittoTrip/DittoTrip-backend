@@ -38,7 +38,7 @@ public class TestController {
       description = "")
   public String issueTestToken(@RequestParam(name = "userId") Long userId) {
     User user = userRepository.findById(userId).get();
-    return jwtProvider.generateToken(user.getEmail(), user.getAuthorities(), TokenType.ACCESS_TOKEN);
+    return jwtProvider.generateToken(user.getId().toString(), user.getAuthorities(), TokenType.ACCESS_TOKEN);
   }
 
 
