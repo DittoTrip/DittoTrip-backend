@@ -20,12 +20,14 @@ public class DittoDetailRes {
     @Builder.Default
     private List<DittoCommentData> commentDataList = new ArrayList<>();
 
+    private Integer bookmarkCount;
     private Integer commentCount;
 
     public static DittoDetailRes fromEntity(Ditto ditto, List<DittoComment> parentDittoComments, Integer commentCount, Boolean isMine, Long myBookmarkId, User reqUser) {
         DittoDetailRes dittoDetailRes = DittoDetailRes.builder()
                 .dittoData(DittoData.fromEntity(ditto, isMine, myBookmarkId))
                 .commentCount(commentCount)
+                .bookmarkCount(ditto.getDittoBookmarks().size())
                 .build();
 
         dittoDetailRes.putParentCommentDataList(parentDittoComments, reqUser);

@@ -28,6 +28,8 @@ public class FollowData {
 
         if (followedUser.getId() == reqUser.getId()) {
             followData.setIsMine(Boolean.TRUE);
+        } else {
+            followData.setIsMine(Boolean.FALSE);
         }
 
         return followData;
