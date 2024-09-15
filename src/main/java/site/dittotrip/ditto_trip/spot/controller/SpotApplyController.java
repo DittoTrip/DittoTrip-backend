@@ -22,13 +22,13 @@ public class SpotApplyController {
 
     private final SpotApplyService spotApplyService;
 
-    @GetMapping("/spot/apply/list")
+    @GetMapping("/list")
     @Operation(summary = "스팟 신청 리스트 조회 (관리자 기능) (디자인 나오고 작업 예정)",
             description = "")
     public void spotApplyList(Pageable pageable) {
     }
 
-    @GetMapping("/spot/apply/list/my")
+    @GetMapping("/list/my")
     @Operation(summary = "내 스팟 신청 리스트 조회",
             description = "")
     public SpotApplyListRes mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -36,21 +36,21 @@ public class SpotApplyController {
         return spotApplyService.findMySpotApplyList(user);
     }
 
-    @GetMapping("/spot/apply/{spotApplyId}")
+    @GetMapping("/{spotApplyId}")
     @Operation(summary = "스팟 신청 상세 조회 (디자인 나오고 작업 예정)",
             description = "등록한 유저와 관리자만 조회 가능합니다.")
     public void spotApplyDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                 @PathVariable(name = "spotApplyId") Long spotApplyId) {
     }
 
-    @PostMapping("/spot/apply")
+    @PostMapping()
     @Operation(summary = "스팟 신청 등록",
             description = "image는 대표이미지입니다.")
     public void spotApplySave(@AuthenticationPrincipal CustomUserDetails userDetails,
-                              @RequestBody SpotApplySaveReq saveReq,
-                              @RequestParam(name = "image") MultipartFile multipartFile,
-                              @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
-        if (multipartFiles.size() > 3) {
+                              @RequestPart(name = "saveReq") SpotApplySaveReq saveReq,
+                              @RequestPart(name = "image") MultipartFile multipartFile,
+                              @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
+        if (multipartFiles.size() > 10) {
             throw new TooManyImagesException();
         }
 
@@ -58,14 +58,14 @@ public class SpotApplyController {
         spotApplyService.saveSpotApply(user, saveReq, multipartFile, multipartFiles);
     }
 
-    @DeleteMapping("/spot/apply/{spotApplyId}")
+    @DeleteMapping("/{spotApplyId}")
     @Operation(summary = "스팟 신청 삭제 (관리자 기능)",
             description = "")
     public void spotApplyRemove(@PathVariable(name = "spotApplyId") Long spotApplyId) {
         spotApplyService.removeSpotApply(spotApplyId);
     }
 
-    @PostMapping("/spot/apply/{spotApplyId}/handle")
+    @PostMapping("/{spotApplyId}/handle")
     @Operation(summary = "스팟 신청 처리 (관리자 기능)",
             description = "")
     public void spotApplyHandle(@PathVariable(name = "spotApplyId") Long spotApplyId) {
