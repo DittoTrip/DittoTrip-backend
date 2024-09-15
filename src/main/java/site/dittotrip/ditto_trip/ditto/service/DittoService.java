@@ -165,7 +165,6 @@ public class DittoService {
         String path = "/ditto/" + ditto.getId();
         List<User> targets = new ArrayList<>();
         List<Follow> followeds = ditto.getUser().getFolloweds();
-        log.info(" flloweds : {} ", followeds);
         for (Follow followed : followeds) {
             targets.add(followed.getFollowingUser());
         }
