@@ -12,6 +12,6 @@ public class ReviewDetailRes {
 
     private String spotName;
     private ReviewData reviewData;
-    private List<ReviewCommentData> reviewCommentDataList = new ArrayList<>();
+    private List<ReviewCommentData> commentDataList = new ArrayList<>();
 
 }

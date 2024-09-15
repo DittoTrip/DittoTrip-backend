@@ -20,7 +20,7 @@ public class ReviewCommentData {
 
     private UserData userData;
     @Builder.Default
-    private List<ReviewCommentData> childrenCommentsDataList = new ArrayList<>();
+    private List<ReviewCommentData> childCommentDataList = new ArrayList<>();
 
     private Boolean isMine;
 
@@ -48,7 +48,7 @@ public class ReviewCommentData {
 
     private void putChildrenCommentData(ReviewComment reviewComment, User requestUser) {
         for (ReviewComment childReviewComment : reviewComment.getChildReviewComments()) {
-            this.childrenCommentsDataList.add(childFromEntity(childReviewComment, requestUser));
+            this.childCommentDataList.add(childFromEntity(childReviewComment, requestUser));
         }
     }
 

@@ -92,7 +92,7 @@ public class ReviewService {
         for (ReviewComment parentComment : parentComments) {
             commentDataList.add(ReviewCommentData.parentFromEntity(parentComment, user));
         }
-        reviewDetailRes.setReviewCommentDataList(commentDataList);
+        reviewDetailRes.setCommentDataList(commentDataList);
 
         return reviewDetailRes;
     }
