@@ -18,7 +18,7 @@ public class DittoDetailRes {
 
     private DittoData dittoData;
     @Builder.Default
-    private List<DittoCommentData> parentDittoCommentDataList = new ArrayList<>();
+    private List<DittoCommentData> commentDataList = new ArrayList<>();
 
     private Integer commentCount;
 
@@ -34,7 +34,7 @@ public class DittoDetailRes {
 
     private void putParentCommentDataList(List<DittoComment> parentDittoComments, User reqUser) {
         for (DittoComment parentDittoComment : parentDittoComments) {
-            this.parentDittoCommentDataList.add(DittoCommentData.parentFromEntity(parentDittoComment, reqUser));
+            this.commentDataList.add(DittoCommentData.parentFromEntity(parentDittoComment, reqUser));
         }
     }
 
