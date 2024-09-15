@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.quest.domain.Quest;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
+import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.quest.exception.TooManyNowCountException;
 import site.dittotrip.ditto_trip.quest.repository.UserQuestRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -28,7 +29,7 @@ public class QuestManager {
                              String methodName) {
         User user = CustomUserDetails.getUserFromUserDetails(userDetails, true);
 
-        List<UserQuest> notAchievedUserQuests = userQuestRepository.findByUser(user);
+        List<UserQuest> notAchievedUserQuests = userQuestRepository.findByUserAndUserQuestStatus(user, UserQuestStatus.NOT_ACHIEVE);
         for (UserQuest userQuest : notAchievedUserQuests) {
             Quest quest = userQuest.getQuest();
             if (!methodName.equals(quest.getQuestActionType().getMethodName())) {

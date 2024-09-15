@@ -14,7 +14,6 @@ public interface UserQuestRepository extends JpaRepository<UserQuest, Long> {
 
     Page<UserQuest> findByUserAndUserQuestStatus(User user, UserQuestStatus userQuestStatus, Pageable pageable);
 
-    @Query("select uq from UserQuest uq where uq.user= :user and uq.userQuestStatus= 'NOT_ACHIEVE'")
-    List<UserQuest> findByUser(User user);
+    List<UserQuest> findByUserAndUserQuestStatus(User user, UserQuestStatus userQuestStatus);
 
 }
