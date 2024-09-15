@@ -7,6 +7,7 @@ import site.dittotrip.ditto_trip.review.domain.ReviewImage;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,7 +21,8 @@ public class ReviewData {
     private LocalDateTime createdDateTime;
 
     private UserData userData;
-    private List<String> imagePaths;
+    @Builder.Default
+    private List<String> imagePaths = new ArrayList<>();
 
     private Boolean isMine;
     private Boolean myLike;

@@ -48,7 +48,7 @@ public class ReviewController {
      * 작업 중
      */
     @GetMapping("/review/{reviewId}")
-    @Operation(summary = "스팟 상세 조회",
+    @Operation(summary = "리뷰 상세 조회",
             description = "")
     public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "reviewId") Long reviewId) {
@@ -61,8 +61,8 @@ public class ReviewController {
             description = "")
     public void reviewSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
-                           @RequestBody ReviewSaveReq saveReq,
-                           @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+                           @RequestPart(name = "saveReq") ReviewSaveReq saveReq,
+                           @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
         if (multipartFiles.size() > 10) {
             throw new TooManyImagesException();
         }
@@ -76,8 +76,8 @@ public class ReviewController {
             description = "")
     public void reviewModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId,
-                             @RequestBody ReviewSaveReq saveReq,
-                             @RequestParam(name = "images") List<MultipartFile> multipartFiles) {
+                             @RequestPart(name = "saveReq") ReviewSaveReq saveReq,
+                             @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
         if (multipartFiles.size() > 10) {
             throw new TooManyImagesException();
         }

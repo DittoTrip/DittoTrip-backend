@@ -26,6 +26,7 @@ import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.time.Duration;
@@ -43,6 +44,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final UserRepository userRepository;
     private final SpotRepository spotRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
@@ -99,6 +101,8 @@ public class ReviewService {
 
     @Transactional(readOnly = false)
     public void saveReview(Long spotVisitId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
+        user = userRepository.findById(user.getId()).get();
+
         SpotVisit spotVisit = spotVisitRepository.findById(spotVisitId).orElseThrow(NoSuchElementException::new);
 
         reviewRepository.findBySpotVisit(spotVisit).ifPresent(m -> {
