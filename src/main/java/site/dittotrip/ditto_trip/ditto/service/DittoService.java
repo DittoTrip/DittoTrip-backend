@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.ditto.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class DittoService {
     private final HashtagRepository hashtagRepository;
     private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
 
     public DittoListRes findDittoList(User reqUser, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -71,8 +75,9 @@ public class DittoService {
     @Transactional(readOnly = false)
     public void saveDitto(User reqUser, DittoSaveReq saveReq,
                            MultipartFile multipartFile) {
+        User user = userRepository.findById(reqUser.getId()).get();
 
-        Ditto ditto = saveReq.toEntity(reqUser);
+        Ditto ditto = saveReq.toEntity(user);
         dittoRepository.save(ditto);
 
         // hashtag 처리
@@ -90,7 +95,7 @@ public class DittoService {
         ditto.setImagePath(imagePath);
 
         // 알림 처리
-//        processAlarmInSaveDitto(ditto);
+        processAlarmInSaveDitto(ditto);
     }
 
     @Transactional(readOnly = false)
@@ -160,6 +165,7 @@ public class DittoService {
         String path = "/ditto/" + ditto.getId();
         List<User> targets = new ArrayList<>();
         List<Follow> followeds = ditto.getUser().getFolloweds();
+        log.info(" flloweds : {} ", followeds);
         for (Follow followed : followeds) {
             targets.add(followed.getFollowingUser());
         }
