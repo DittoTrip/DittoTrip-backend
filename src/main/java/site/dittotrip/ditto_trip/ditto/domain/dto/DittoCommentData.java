@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class DittoCommentData {
 
-    private Long dittoCommentId;
+    private Long commentId;
     private String body;
     private LocalDateTime createdDateTime;
 
@@ -38,7 +38,7 @@ public class DittoCommentData {
 
     private static DittoCommentData fromEntity(DittoComment dittoComment, User reqUser) {
         DittoCommentData dittoCommentData = DittoCommentData.builder()
-                .dittoCommentId(dittoComment.getId())
+                .commentId(dittoComment.getId())
                 .body(dittoComment.getBody())
                 .createdDateTime(dittoComment.getCreatedDateTime())
                 .userData(UserData.fromEntity(dittoComment.getUser()))
