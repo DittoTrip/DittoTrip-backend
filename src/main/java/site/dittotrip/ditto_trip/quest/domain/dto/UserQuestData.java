@@ -3,7 +3,6 @@ package site.dittotrip.ditto_trip.quest.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
-import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.reward.domain.dto.RewardData;
 
@@ -19,7 +18,6 @@ public class UserQuestData {
     private String body;
     private Integer conditionCount;
     private Integer nowCount;
-    private QuestRewardType questRewardType;
     private UserQuestStatus userQuestStatus;
 
     private RewardData rewardData;
@@ -39,7 +37,6 @@ public class UserQuestData {
                 .body(userQuest.getQuest().getBody())
                 .conditionCount(userQuest.getQuest().getConditionCount())
                 .nowCount(userQuest.getNowCount())
-                .questRewardType(userQuest.getQuest().getQuestRewardType())
                 .userQuestStatus(userQuest.getUserQuestStatus())
                 .rewardData(RewardData.fromEntity(userQuest.getQuest().getReward()))
                 .build();

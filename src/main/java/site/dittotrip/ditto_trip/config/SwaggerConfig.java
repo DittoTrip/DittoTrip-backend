@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.swagger;
+package site.dittotrip.ditto_trip.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

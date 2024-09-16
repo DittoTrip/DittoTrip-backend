@@ -10,9 +10,7 @@ import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserBadgeListRes;
 import site.dittotrip.ditto_trip.reward.domain.dto.UserItemListRes;
 import site.dittotrip.ditto_trip.reward.service.RewardService;
-import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
@@ -37,7 +35,7 @@ public class RewardController {
     @Operation(summary = "유저의 뱃지 리스트 조회",
             description = "")
     public UserBadgeListRes usersBadgeListRes(@PathVariable(name = "userId") Long userId) {
-        return rewardService.findUsersBadgeList(userId);
+        return rewardService.findBadgeList(userId);
     }
 
 }

@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.dittotrip.ditto_trip.reward.domain.Badge;
-import site.dittotrip.ditto_trip.reward.domain.Item;
+import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -29,34 +28,34 @@ public class UserProfile {
     private User user;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "item_skin_id")
+    @JoinColumn(name = "user_item_skin_id")
     @Setter
-    private Item itemSkin;
+    private UserItem userItemSkin;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "item_eyes_id")
+    @JoinColumn(name = "user_item_eyes_id")
     @Setter
-    private Item itemEyes;
+    private UserItem userItemEyes;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "item_mouse_id")
+    @JoinColumn(name = "user_item_mouse_id")
     @Setter
-    private Item itemMouse;
+    private UserItem userItemMouse;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "item_hair_id")
+    @JoinColumn(name = "user_item_hair_id")
     @Setter
-    private Item itemHair;
+    private UserItem userItemHair;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "item_accessory_id")
+    @JoinColumn(name = "user_item_accessory_id")
     @Setter
-    private Item itemAccessory;
+    private UserItem userItemAccessory;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_badge_id")
     @Setter
-    private Badge badge;
+    private UserBadge userBadge;
 
     public UserProfile(User user) {
         this.user = user;

@@ -19,6 +19,8 @@ public class Reward {
     @Column(name = "reward_id")
     private Long id;
 
+    private String name;
+
     @Setter
     private String imagePath;
 
@@ -28,7 +30,8 @@ public class Reward {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    public Reward(String imagePath, RewardType rewardType) {
+    public Reward(String name, String imagePath, RewardType rewardType) {
+        this.name = name;
         this.imagePath = imagePath;
         this.rewardType = rewardType;
     }

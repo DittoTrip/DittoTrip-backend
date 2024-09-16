@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.reward.domain.Reward;
 public class RewardData {
 
     private Long rewardId;
+    private String name;
     private String imagePath;
 
     public static RewardData fromEntity(Reward reward) {
@@ -17,6 +18,7 @@ public class RewardData {
         }
         return RewardData.builder()
                 .rewardId(reward.getId())
+                .name(reward.getName())
                 .imagePath(reward.getImagePath())
                 .build();
     }
