@@ -3,6 +3,8 @@ package site.dittotrip.ditto_trip.profile.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.profile.domain.dto.UserBadgeModifyReq;
+import site.dittotrip.ditto_trip.profile.domain.dto.UserNicknameModifyReq;
 import site.dittotrip.ditto_trip.reward.domain.Badge;
 import site.dittotrip.ditto_trip.reward.domain.Item;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
@@ -27,7 +29,13 @@ public class UserProfileService {
     private final ItemRepository itemRepository;
     private final BadgeRepository badgeRepository;
 
-    public void modifyUserProfile(Long reqUserId, UserProfileModifyReq modifyReq) {
+
+    public void modifyUserNickname(Long reqUserId, UserNicknameModifyReq modifyReq) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        reqUser.setNickname(modifyReq.getNickname());
+    }
+
+    public void modifyUserItem(Long reqUserId, UserProfileModifyReq modifyReq) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         UserProfile userProfile = userProfileRepository.findByUser(reqUser).orElseThrow(NoSuchElementException::new);
 
@@ -51,14 +59,18 @@ public class UserProfileService {
         if (!itemAccessory.getItemType().equals(ItemType.ACCESSORY)) {
             throw new NotMatchedItemTypeException();
         }
-        Badge badge = badgeRepository.findById(modifyReq.getBadgeId()).orElseThrow(NoSuchElementException::new);
 
         userProfile.setItemSkin(itemSkin);
         userProfile.setItemEyes(itemEyes);
         userProfile.setItemMouse(itemMouse);
         userProfile.setItemHair(itemHair);
         userProfile.setItemAccessory(itemAccessory);
-        userProfile.setBadge(badge);
+    }
+
+    public void modifyUserBadge(Long reqUserId, UserBadgeModifyReq modifyReq) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        Badge badge = badgeRepository.findById(modifyReq.getBadgeId()).orElseThrow(NoSuchElementException::new);
+        reqUser.getUserProfile().setBadge(badge);
     }
 
 }

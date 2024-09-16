@@ -13,6 +13,5 @@ public class UserProfileModifyReq {
     private Long itemMouseId;
     private Long itemHairId;
     private Long itemAccessoryId;
-    private Long badgeId;
 
 }
