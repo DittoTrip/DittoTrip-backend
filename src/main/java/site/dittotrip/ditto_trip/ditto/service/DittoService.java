@@ -17,6 +17,7 @@ import site.dittotrip.ditto_trip.ditto.repository.DittoBookmarkRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
+import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
@@ -43,6 +44,7 @@ public class DittoService {
     private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     public DittoListRes findDittoList(User reqUser, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -74,7 +76,10 @@ public class DittoService {
         Boolean isMine = getIsMine(ditto, reqUser);
         Long myBookmarkId = getMyBookmarkId(ditto, reqUser);
 
-        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser);
+        // 팔로잉 정보 조회
+        Boolean isMyFollowing = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser()).isPresent();
+
+        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, isMyFollowing);
     }
 
     @Transactional(readOnly = false)

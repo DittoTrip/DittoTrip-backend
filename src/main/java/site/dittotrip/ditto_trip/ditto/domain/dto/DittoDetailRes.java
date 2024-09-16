@@ -22,12 +22,15 @@ public class DittoDetailRes {
 
     private Integer bookmarkCount;
     private Integer commentCount;
+    private Boolean isMyFollowing;
 
-    public static DittoDetailRes fromEntity(Ditto ditto, List<DittoComment> parentDittoComments, Integer commentCount, Boolean isMine, Long myBookmarkId, User reqUser) {
+    public static DittoDetailRes fromEntity(Ditto ditto, List<DittoComment> parentDittoComments, Integer commentCount,
+                                            Boolean isMine, Long myBookmarkId, User reqUser, Boolean isMyFollowing) {
         DittoDetailRes dittoDetailRes = DittoDetailRes.builder()
                 .dittoData(DittoData.fromEntity(ditto, isMine, myBookmarkId))
                 .commentCount(commentCount)
                 .bookmarkCount(ditto.getDittoBookmarks().size())
+                .isMyFollowing(isMyFollowing)
                 .build();
 
         dittoDetailRes.putParentCommentDataList(parentDittoComments, reqUser);
