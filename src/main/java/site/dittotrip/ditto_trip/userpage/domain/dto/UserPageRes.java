@@ -23,15 +23,17 @@ public class UserPageRes {
     private Integer followingCount;
     private Integer followedCount;
     private Boolean isMine;
+    private Boolean isNotCheckedAlarm;
 
     public static UserPageRes fromEntities(User reqUser, User user, UserProfile userProfile, List<Ditto> dittos,
-                                           Integer followingCount, Integer followedCount) {
+                                           Integer followingCount, Integer followedCount, Boolean isNotCheckedAlarm) {
         UserPageRes userPageRes = UserPageRes.builder()
                 .userData(UserData.fromEntity(user))
                 .userProfileData(UserProfileData.fromEntity(userProfile))
                 .dittoMiniDataList(DittoMiniData.listFromEntities(dittos))
                 .followingCount(followingCount)
                 .followedCount(followedCount)
+                .isNotCheckedAlarm(isNotCheckedAlarm)
                 .build();
 
         if (reqUser.getId() == user.getId()) {
