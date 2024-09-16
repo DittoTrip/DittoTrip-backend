@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.quest.domain.enums.QuestActionType;
-import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
 import site.dittotrip.ditto_trip.reward.domain.Reward;
 
 import java.time.LocalDateTime;
@@ -28,12 +27,19 @@ public class Quest {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    private QuestRewardType questRewardType;
-
     private Integer rewardExp;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "reward_id")
     private Reward reward;
+
+    public Quest(String title, String body, Integer conditionCount, QuestActionType questActionType, Integer rewardExp, Reward reward) {
+        this.title = title;
+        this.body = body;
+        this.conditionCount = conditionCount;
+        this.questActionType = questActionType;
+        this.rewardExp = rewardExp;
+        this.reward = reward;
+    }
 
 }

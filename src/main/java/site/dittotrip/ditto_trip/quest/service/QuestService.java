@@ -13,9 +13,9 @@ import site.dittotrip.ditto_trip.quest.exception.AlreadyAchieveQuestException;
 import site.dittotrip.ditto_trip.quest.exception.NotAchieveQuestException;
 import site.dittotrip.ditto_trip.quest.repository.UserQuestRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
-import site.dittotrip.ditto_trip.reward.domain.Reward;
-import site.dittotrip.ditto_trip.reward.domain.UserReward;
-import site.dittotrip.ditto_trip.reward.repository.UserRewardRepository;
+import site.dittotrip.ditto_trip.reward.domain.*;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
+import site.dittotrip.ditto_trip.reward.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -28,7 +28,10 @@ public class QuestService {
 
     private final UserRepository userRepository;
     private final UserQuestRepository userQuestRepository;
-    private final UserRewardRepository userRewardRepository;
+    private final ItemRepository itemRepository;
+    private final BadgeRepository badgeRepository;
+    private final UserItemRepository userItemRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     public UserQuestListRes findQuestList(Long reqUserId, UserQuestStatus userQuestStatus, Pageable pageable) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
@@ -36,9 +39,6 @@ public class QuestService {
         return UserQuestListRes.fromEntities(page);
     }
 
-    /**
-     * UserReward 가 아닌 UserItem 및 UserBadge 로 저장하는 것으로 수정
-     */
     @Transactional(readOnly = false)
     public void achieveQuest(Long reqUserId, Long userQuestId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
@@ -64,7 +64,13 @@ public class QuestService {
         Integer rewardExp = quest.getRewardExp();
 
         if (reward != null) {
-            userRewardRepository.save(new UserReward(reqUser, reward));
+            if (reward.getRewardType().equals(RewardType.ITEM)) {
+                Item item = itemRepository.findById(reward.getId()).get();
+                userItemRepository.save(new UserItem(reqUser, item));
+            } else {
+                Badge badge = badgeRepository.findById(reward.getId()).get();
+                userBadgeRepository.save(new UserBadge(reqUser, badge));
+            }
         }
 
         if (rewardExp != null) {

@@ -19,11 +19,15 @@ import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
+import site.dittotrip.ditto_trip.quest.domain.Quest;
+import site.dittotrip.ditto_trip.quest.domain.UserQuest;
+import site.dittotrip.ditto_trip.quest.domain.enums.QuestActionType;
+import site.dittotrip.ditto_trip.quest.repository.QuestRepository;
+import site.dittotrip.ditto_trip.quest.repository.UserQuestRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
-import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 import site.dittotrip.ditto_trip.reward.repository.*;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
@@ -34,11 +38,7 @@ import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -61,6 +61,8 @@ public class TestDataConfig {
     private final UserRewardRepository userRewardRepository;
     private final UserItemRepository userItemRepository;
     private final UserBadgeRepository userBadgeRepository;
+    private final QuestRepository questRepository;
+    private final UserQuestRepository userQuestRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -181,6 +183,20 @@ public class TestDataConfig {
         userProfile1.setUserItemAccessory(userItem9);
         userProfile1.setUserBadge(userBadge1);
 
+        Quest quest1 = createQuest("quest1", "emptyBody", 10, QuestActionType.DITTO, 100, badge4);
+        Quest quest2 = createQuest("quest2", "emptyBody", 20, QuestActionType.FOLLOWING, 200, badge5);
+        Quest quest3 = createQuest("quest3", "emptyBody", 30, QuestActionType.REVIEW, 300, badge6);
+        Quest quest4 = createQuest("quest4", "emptyBody", 40, QuestActionType.VISIT, 400, item13);
+        Quest quest5 = createQuest("quest5", "emptyBody", 50, QuestActionType.DITTO, 500, item23);
+        Quest quest6 = createQuest("quest6", "emptyBody", 60, QuestActionType.DITTO, 600, item33);
+        createUserQuest(user1, quest1);
+        createUserQuest(user1, quest2);
+        createUserQuest(user1, quest3);
+        createUserQuest(user1, quest4);
+        createUserQuest(user1, quest5);
+        createUserQuest(user1, quest6);
+
+
         log.info("===== TEST DATA INIT END =====");
     }
 
@@ -245,12 +261,6 @@ public class TestDataConfig {
         return ditto;
     }
 
-//    private Reward createReward(String name, String imagePath, RewardType rewardType) {
-//        Reward reward = new Reward(name, imagePath, rewardType);
-//        rewardRepository.save(reward);
-//        return reward;
-//    }
-
     private Item createItem(String name, String imagePath, ItemType itemType) {
         Item item = new Item(name, imagePath, itemType);
         itemRepository.save(item);
@@ -273,6 +283,18 @@ public class TestDataConfig {
         UserBadge userBadge = new UserBadge(user, badge);
         userBadgeRepository.save(userBadge);
         return userBadge;
+    }
+
+    private Quest createQuest(String title, String body, Integer conditionCount, QuestActionType questActionType, Integer rewardExp, Reward reward) {
+        Quest quest = new Quest(title, body, conditionCount, questActionType, rewardExp, reward);
+        questRepository.save(quest);
+        return quest;
+    }
+
+    private UserQuest createUserQuest(User user, Quest quest) {
+        UserQuest userQuest = new UserQuest(user, quest);
+        userQuestRepository.save(userQuest);
+        return userQuest;
     }
 
     private void modifySpotRating(Spot spot, Float add, Float sub) {
