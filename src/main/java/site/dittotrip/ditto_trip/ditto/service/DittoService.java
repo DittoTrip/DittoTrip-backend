@@ -60,6 +60,11 @@ public class DittoService {
         return DittoListRes.fromEntities(dittos);
     }
 
+    public DittoListRes findDittoListBySearch(User reqUser, String word, Pageable pageable) {
+        Page<Ditto> page = dittoRepository.findByTitleContaining(word, pageable);
+        return DittoListRes.fromEntities(page);
+    }
+
     public DittoDetailRes findDittoDetail(Long dittoId, User reqUser) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
