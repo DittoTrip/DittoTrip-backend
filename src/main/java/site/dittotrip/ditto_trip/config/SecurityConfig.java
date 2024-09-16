@@ -2,6 +2,7 @@ package site.dittotrip.ditto_trip.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,6 +20,7 @@ import site.dittotrip.ditto_trip.utils.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
   private final JwtRequestFilter jwtRequestFilter;
   private final JwtProvider jwtProvider;
