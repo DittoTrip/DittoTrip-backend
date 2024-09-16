@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @Builder
 public class UserItemData {
 
-    private Long rewardId;
+    private Long userRewardId;
     private String imagePath;
     private ItemType itemType;
     private LocalDateTime createdDateTime;
 
     public static UserItemData fromEntity(UserReward userReward) {
         return UserItemData.builder()
-                .rewardId(userReward.getId())
+                .userRewardId(userReward.getId())
                 .imagePath(userReward.getReward().getImagePath())
                 .itemType(((Item) userReward.getReward()).getItemType())
                 .createdDateTime(userReward.getCreatedDateTime())
