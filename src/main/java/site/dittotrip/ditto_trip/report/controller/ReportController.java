@@ -31,8 +31,8 @@ public class ReportController {
             description = "")
     public void reportSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestBody ReportSaveReq reportSaveReq) {
-        User user = userDetails.getUser();
-        reportService.saveReport(user, reportSaveReq);
+        Long reqUserId = CustomUserDetails.getUserIdFromUserDetails(userDetails, true);
+        reportService.saveReport(reqUserId, reportSaveReq);
     }
 
     @PostMapping("/{reportId}")

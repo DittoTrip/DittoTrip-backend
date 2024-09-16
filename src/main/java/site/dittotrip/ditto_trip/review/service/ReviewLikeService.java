@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.review.exception.ExistingReviewLikeException;
 import site.dittotrip.ditto_trip.review.repository.ReviewLikeRepository;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,31 +22,35 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReviewLikeService {
 
+    private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
 
-    public Boolean getReviewLike(Long reviewId, User user) {
+    public Boolean getReviewLike(Long reqUserId, Long reviewId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-        Optional<ReviewLike> optionalLike = reviewLikeRepository.findByReviewAndUser(review, user);
+        Optional<ReviewLike> optionalLike = reviewLikeRepository.findByReviewAndUser(review, reqUser);
         return optionalLike.isPresent();
     }
 
     @Transactional(readOnly = false)
-    public void saveReviewLike(Long reviewId, User user) {
+    public void saveReviewLike(Long reqUserId, Long reviewId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-        reviewLikeRepository.findByReviewAndUser(review, user).ifPresent(m -> {
+        reviewLikeRepository.findByReviewAndUser(review, reqUser).ifPresent(m -> {
             throw new ExistingReviewLikeException();
         });
 
-        ReviewLike reviewLike = new ReviewLike(review, user);
+        ReviewLike reviewLike = new ReviewLike(review, reqUser);
         reviewLikeRepository.save(reviewLike);
         review.setLikes(review.getLikes() + 1);
     }
 
     @Transactional(readOnly = false)
-    public void removeReviewLike(Long reviewId, User user) {
+    public void removeReviewLike(Long reqUserId, Long reviewId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-        ReviewLike reviewLike = reviewLikeRepository.findByReviewAndUser(review, user).orElseThrow(NoSuchElementException::new);
+        ReviewLike reviewLike = reviewLikeRepository.findByReviewAndUser(review, reqUser).orElseThrow(NoSuchElementException::new);
         reviewLikeRepository.delete(reviewLike);
         review.setLikes(review.getLikes() - 1);
     }

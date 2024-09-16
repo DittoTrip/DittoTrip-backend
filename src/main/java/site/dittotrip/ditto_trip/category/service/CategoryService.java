@@ -22,6 +22,7 @@ import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryService {
 
+    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategorySpotRepository categorySpotRepository;
@@ -41,7 +43,12 @@ public class CategoryService {
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
 
-    public CategoryPageRes findCategoryList(User reqUser, CategorySubType subType, Pageable pageable) {
+    public CategoryPageRes findCategoryList(Long reqUserId, CategorySubType subType, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Page<Category> page = categoryRepository.findBySubType(subType, pageable);
 
         CategoryPageRes res = new CategoryPageRes();
@@ -55,8 +62,9 @@ public class CategoryService {
         return res;
     }
 
+    public CategoryMajorTypeListRes findCategoryListByBookmark(Long reqUserId, CategoryMajorType majorType, Pageable pageable) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
 
-    public CategoryMajorTypeListRes findCategoryListByBookmark(User reqUser, CategoryMajorType majorType, Pageable pageable) {
         Page<CategoryBookmark> page = categoryBookmarkRepository.findByUserAndMajorType(reqUser, majorType, pageable);
 
         CategoryMajorTypeListRes res = new CategoryMajorTypeListRes();
@@ -73,7 +81,12 @@ public class CategoryService {
      * 카테고리 검색 조회
      *  - 단순 문자열 포함 검색
      */
-    public CategoryMajorTypeListRes findCategoryListBySearch(User reqUser, String word, CategoryMajorType majorType, Pageable pageable) {
+    public CategoryMajorTypeListRes findCategoryListBySearch(Long reqUserId, String word, CategoryMajorType majorType, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Page<Category> page = categoryRepository.findBySearchAndMajorType(word, majorType, pageable);
 
         CategoryMajorTypeListRes res = new CategoryMajorTypeListRes();
@@ -90,7 +103,12 @@ public class CategoryService {
     /**
      * 카테고리 타입마다 나누지 않고 하나의 리스트로 반환합니다.
      */
-    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(User reqUser, String word) {
+    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(Long reqUserId, String word) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         List<Category> categories = categoryRepository.findByNameContaining(word);
 
         CategoryListNoTypeRes res = new CategoryListNoTypeRes();

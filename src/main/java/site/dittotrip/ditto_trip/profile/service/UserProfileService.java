@@ -13,21 +13,23 @@ import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
 import site.dittotrip.ditto_trip.reward.exception.NotMatchedItemTypeException;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class UserProfileService {
 
+    private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final ItemRepository itemRepository;
     private final BadgeRepository badgeRepository;
 
-
-    public void modifyUserProfile(User user, UserProfileModifyReq modifyReq) {
-        UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(NoSuchElementException::new);
+    public void modifyUserProfile(Long reqUserId, UserProfileModifyReq modifyReq) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        UserProfile userProfile = userProfileRepository.findByUser(reqUser).orElseThrow(NoSuchElementException::new);
 
         Item itemSkin = itemRepository.findById(modifyReq.getItemSkinId()).orElseThrow(NoSuchElementException::new);
         if (!itemSkin.getItemType().equals(ItemType.SKIN)) {

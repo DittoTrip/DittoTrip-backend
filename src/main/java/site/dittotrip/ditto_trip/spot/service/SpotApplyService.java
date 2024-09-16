@@ -18,6 +18,7 @@ import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SpotApplyService {
 
+    private final UserRepository userRepository;
     private final SpotRepository spotRepository;
     private final SpotApplyRepository spotApplyRepository;
     private final CategoryRepository categoryRepository;
@@ -37,14 +39,16 @@ public class SpotApplyService {
     public void findSpotApplyList(Pageable pageable) {
     }
 
-    public SpotApplyListRes findMySpotApplyList(User user) {
-        List<SpotApply> spotApplies = spotApplyRepository.findByUser(user);
+    public SpotApplyListRes findMySpotApplyList(Long reqUserId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        List<SpotApply> spotApplies = spotApplyRepository.findByUser(reqUser);
         return SpotApplyListRes.fromEntities(spotApplies);
     }
 
     @Transactional(readOnly = false)
-    public void saveSpotApply(User user, SpotApplySaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
-        SpotApply spotApply = saveReq.toEntity(user);
+    public void saveSpotApply(Long reqUserId, SpotApplySaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        SpotApply spotApply = saveReq.toEntity(reqUser);
         spotApplyRepository.save(spotApply);
 
         // image 처리

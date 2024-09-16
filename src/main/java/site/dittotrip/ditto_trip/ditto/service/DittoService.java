@@ -46,12 +46,18 @@ public class DittoService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public DittoListRes findDittoList(User reqUser, Pageable pageable) {
+    public DittoListRes findDittoList(Long reqUserId, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Page<Ditto> page = dittoRepository.findAll(pageable);
         return DittoListRes.fromEntities(page);
     }
 
-    public DittoListRes findDittoListInBookmark(User reqUser) {
+    public DittoListRes findDittoListInBookmark(Long reqUserId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         List<DittoBookmark> dittoBookmarks = dittoBookmarkRepository.findByUser(reqUser);
 
         List<Ditto> dittos = new ArrayList<>();
@@ -62,12 +68,17 @@ public class DittoService {
         return DittoListRes.fromEntities(dittos);
     }
 
-    public DittoListRes findDittoListBySearch(User reqUser, String word, Pageable pageable) {
+    public DittoListRes findDittoListBySearch(Long reqUserId, String word, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findByTitleContaining(word, pageable);
         return DittoListRes.fromEntities(page);
     }
 
-    public DittoDetailRes findDittoDetail(Long dittoId, User reqUser) {
+    public DittoDetailRes findDittoDetail(Long reqUserId, Long dittoId) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
         List<DittoComment> dittoComments = dittoCommentRepository.findParentCommentByDitto(ditto);
@@ -83,11 +94,11 @@ public class DittoService {
     }
 
     @Transactional(readOnly = false)
-    public void saveDitto(User reqUser, DittoSaveReq saveReq,
+    public void saveDitto(Long reqUserId, DittoSaveReq saveReq,
                            MultipartFile multipartFile) {
-        User user = userRepository.findById(reqUser.getId()).get();
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
 
-        Ditto ditto = saveReq.toEntity(user);
+        Ditto ditto = saveReq.toEntity(reqUser);
         dittoRepository.save(ditto);
 
         // hashtag 처리
@@ -109,8 +120,9 @@ public class DittoService {
     }
 
     @Transactional(readOnly = false)
-    public void modifyDitto(Long dittoId, User reqUser, DittoSaveReq saveReq,
+    public void modifyDitto(Long reqUserId, Long dittoId, DittoSaveReq saveReq,
                             MultipartFile multipartFile) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
         if (ditto.getUser().getId() != reqUser.getId()) {
@@ -137,7 +149,8 @@ public class DittoService {
     }
 
     @Transactional(readOnly = false)
-    public void removeDitto(Long dittoId, User reqUser) {
+    public void removeDitto(Long reqUserId, Long dittoId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Ditto ditto = dittoRepository.findById(dittoId).orElseThrow(NoSuchElementException::new);
 
         if (ditto.getUser().getId() != reqUser.getId()) {

@@ -15,6 +15,9 @@ import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
 
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
+
 @RestController
 @RequestMapping("/spot/apply")
 @RequiredArgsConstructor
@@ -32,8 +35,8 @@ public class SpotApplyController {
     @Operation(summary = "내 스팟 신청 리스트 조회",
             description = "")
     public SpotApplyListRes mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = CustomUserDetails.getUserFromUserDetails(userDetails, true);
-        return spotApplyService.findMySpotApplyList(user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return spotApplyService.findMySpotApplyList(reqUserId);
     }
 
     @GetMapping("/{spotApplyId}")
@@ -54,8 +57,8 @@ public class SpotApplyController {
             throw new TooManyImagesException();
         }
 
-        User user = userDetails.getUser();
-        spotApplyService.saveSpotApply(user, saveReq, multipartFile, multipartFiles);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        spotApplyService.saveSpotApply(reqUserId, saveReq, multipartFile, multipartFiles);
     }
 
     @DeleteMapping("/{spotApplyId}")

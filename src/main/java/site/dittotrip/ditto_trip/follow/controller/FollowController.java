@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.follow.service.FollowService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 팔로잉 리스트 조회
@@ -29,8 +30,8 @@ public class FollowController {
             description = "")
     public FollowListRes FollowingList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                        @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return followService.findFollowingList(user, userId);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return followService.findFollowingList(reqUserId, userId);
     }
 
     @GetMapping("/followed-list/{userId}")
@@ -38,8 +39,8 @@ public class FollowController {
             description = "")
     public FollowListRes followedList(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return followService.findFollowedList(user, userId);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return followService.findFollowedList(reqUserId, userId);
     }
 
     @PostMapping("/follow/{userId}")
@@ -47,8 +48,8 @@ public class FollowController {
             description = "")
     public void followSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @PathVariable(name = "userId") Long userId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        followService.saveFollow(user, userId);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        followService.saveFollow(reqUserId, userId);
     }
 
     @DeleteMapping("/follow/{followId}")
@@ -56,8 +57,9 @@ public class FollowController {
             description = "")
     public void followRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "followId") Long followId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        followService.removeFollow(user, followId);
+
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        followService.removeFollow(reqUserId, followId);
     }
 
 }

@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,34 +22,36 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryBookmarkService {
 
+    private final UserRepository userRepository;
     private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final CategoryRepository categoryRepository;
 
-    public Boolean findCategoryBookmark(User user, Long categoryId) {
+    public Boolean findCategoryBookmark(Long reqUserId, Long categoryId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        Optional<CategoryBookmark> optionalBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, user);
+        Optional<CategoryBookmark> optionalBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, reqUser);
 
         return optionalBookmark.isPresent();
     }
 
-    public void addCategoryBookmark(Long categoryId, User user) {
+    public void addCategoryBookmark(Long reqUserId, Long categoryId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
-        categoryBookmarkRepository.findByCategoryAndUser(category, user).ifPresent(m -> {
+        categoryBookmarkRepository.findByCategoryAndUser(category, reqUser).ifPresent(m -> {
             throw new ExistingCategoryDibsException();
         });
 
-        CategoryBookmark categoryBookmark = new CategoryBookmark(category, user);
+        CategoryBookmark categoryBookmark = new CategoryBookmark(category, reqUser);
         categoryBookmarkRepository.save(categoryBookmark);
     }
 
-    public void removeCategoryBookmark(Long categoryId, User user) {
+    public void removeCategoryBookmark(Long reqUserId, Long categoryId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
-        CategoryBookmark categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, user).orElseThrow(NoSuchElementException::new);
+        CategoryBookmark categoryBookmark = categoryBookmarkRepository.findByCategoryAndUser(category, reqUser).orElseThrow(NoSuchElementException::new);
         categoryBookmarkRepository.delete(categoryBookmark);
     }
-
-
 
 }

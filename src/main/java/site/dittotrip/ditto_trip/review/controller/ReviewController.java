@@ -16,6 +16,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import java.util.List;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 리뷰 리스트 조회
@@ -40,8 +41,8 @@ public class ReviewController {
     public ReviewListRes reviewList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "spotId") Long spotId,
                                     Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return reviewService.findReviewList(spotId, user, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return reviewService.findReviewList(reqUserId, spotId, pageable);
     }
 
     /**
@@ -52,8 +53,8 @@ public class ReviewController {
             description = "")
     public ReviewDetailRes reviewDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return reviewService.findReviewDetail(reviewId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return reviewService.findReviewDetail(reqUserId, reviewId);
     }
 
     @PostMapping("/review")
@@ -67,8 +68,8 @@ public class ReviewController {
             throw new TooManyImagesException();
         }
 
-        User user = getUserFromUserDetails(userDetails, true);
-        reviewService.saveReview(spotVisitId, user, saveReq, multipartFiles);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        reviewService.saveReview(reqUserId, spotVisitId, saveReq, multipartFiles);
     }
 
     @PutMapping("/review/{reviewId}")
@@ -82,8 +83,8 @@ public class ReviewController {
             throw new TooManyImagesException();
         }
 
-        User user = getUserFromUserDetails(userDetails, true);
-        reviewService.modifyReview(reviewId, user, saveReq, multipartFiles);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        reviewService.modifyReview(reqUserId, reviewId, saveReq, multipartFiles);
     }
 
     @DeleteMapping("/review/{reviewId}")
@@ -91,8 +92,9 @@ public class ReviewController {
             description = "")
     public void reviewRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        reviewService.removeReview(reviewId, user);
+
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        reviewService.removeReview(reqUserId, reviewId);
     }
 
     /**
@@ -103,8 +105,8 @@ public class ReviewController {
             description = "")
     public Boolean reviewLikeGet(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return reviewLikeService.getReviewLike(reviewId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return reviewLikeService.getReviewLike(reqUserId, reviewId);
     }
 
     @PostMapping("/review/{reviewId}/like")
@@ -112,8 +114,8 @@ public class ReviewController {
             description = "")
     public void reviewLikeSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        reviewLikeService.saveReviewLike(reviewId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        reviewLikeService.saveReviewLike(reqUserId, reviewId);
     }
 
     @DeleteMapping("/review/{reviewId}/like")
@@ -121,8 +123,8 @@ public class ReviewController {
             description = "")
     public void reviewLikeRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        reviewLikeService.removeReviewLike(reviewId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        reviewLikeService.removeReviewLike(reqUserId, reviewId);
     }
 
 }

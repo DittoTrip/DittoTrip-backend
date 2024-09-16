@@ -18,6 +18,7 @@ import site.dittotrip.ditto_trip.reward.domain.Reward;
 import site.dittotrip.ditto_trip.reward.domain.UserReward;
 import site.dittotrip.ditto_trip.reward.repository.UserRewardRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,17 +28,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestService {
 
-    private final QuestRepository questRepository;
+    private final UserRepository userRepository;
     private final UserQuestRepository userQuestRepository;
     private final UserRewardRepository userRewardRepository;
 
-    public UserQuestListRes findQuestList(User reqUser, UserQuestStatus userQuestStatus, Pageable pageable) {
+    public UserQuestListRes findQuestList(Long reqUserId, UserQuestStatus userQuestStatus, Pageable pageable) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Page<UserQuest> page = userQuestRepository.findByUserAndUserQuestStatus(reqUser, userQuestStatus, pageable);
         return UserQuestListRes.fromEntities(page);
     }
 
     @Transactional(readOnly = false)
-    public void achieveQuest(User reqUser, Long userQuestId) {
+    public void achieveQuest(Long reqUserId, Long userQuestId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         UserQuest userQuest = userQuestRepository.findById(userQuestId).orElseThrow(NoSuchElementException::new);
 
         if (reqUser.getId() != userQuest.getUser().getId()) {
