@@ -17,8 +17,8 @@ public class Item extends Reward {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
-    public Item(String imagePath, ItemType itemType, String etc) {
-        super(imagePath, RewardType.ITEM);
+    public Item(String name, String imagePath, ItemType itemType) {
+        super(name, imagePath, RewardType.ITEM);
         this.itemType = itemType;
     }
 

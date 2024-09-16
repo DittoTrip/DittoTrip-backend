@@ -10,16 +10,14 @@ import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
-/**
- * 삭제 예정
- */
 @Entity
 @NoArgsConstructor
 @Getter
-public class UserReward {
+public class UserBadge {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_reward_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_badge_id")
     private Long id;
 
     @CreationTimestamp
@@ -30,12 +28,12 @@ public class UserReward {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "reward_id")
-    private Reward reward;
+    @JoinColumn(name = "badge_id")
+    private Badge badge;
 
-    public UserReward(User user, Reward reward) {
+    public UserBadge(User user, Badge badge) {
         this.user = user;
-        this.reward = reward;
+        this.badge = badge;
     }
 
 }

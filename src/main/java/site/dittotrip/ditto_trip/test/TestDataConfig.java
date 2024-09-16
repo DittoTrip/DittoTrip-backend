@@ -21,6 +21,10 @@ import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
+import site.dittotrip.ditto_trip.reward.domain.*;
+import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
+import site.dittotrip.ditto_trip.reward.repository.*;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
@@ -51,6 +55,12 @@ public class TestDataConfig {
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
     private final DittoRepository dittoRepository;
+    private final RewardRepository rewardRepository;
+    private final ItemRepository itemRepository;
+    private final BadgeRepository badgeRepository;
+    private final UserRewardRepository userRewardRepository;
+    private final UserItemRepository userItemRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -126,6 +136,51 @@ public class TestDataConfig {
         Ditto ditto3 = createDitto("제목3", "여기 좋아요3", user2);
         Ditto ditto4 = createDitto("제목4", "여기 좋아요4", user2);
 
+        Item item11 = createItem("skin1", "empty imagePath", ItemType.SKIN);
+        Item item12 = createItem("skin2", "empty imagePath", ItemType.SKIN);
+        Item item13 = createItem("skin3", "empty imagePath", ItemType.SKIN);
+        Item item21 = createItem("eyes1", "empty imagePath", ItemType.EYES);
+        Item item22 = createItem("eyes2", "empty imagePath", ItemType.EYES);
+        Item item23 = createItem("eyes3", "empty imagePath", ItemType.EYES);
+        Item item31 = createItem("mouse1", "empty imagePath", ItemType.MOUSE);
+        Item item32 = createItem("mouse2", "empty imagePath", ItemType.MOUSE);
+        Item item33 = createItem("mouse3", "empty imagePath", ItemType.MOUSE);
+        Item item41 = createItem("hair1", "empty imagePath", ItemType.HAIR);
+        Item item42 = createItem("hair2", "empty imagePath", ItemType.HAIR);
+        Item item43 = createItem("hair3", "empty imagePath", ItemType.HAIR);
+        Item item51 = createItem("accessory1", "empty imagePath", ItemType.ACCESSORY);
+        Item item52 = createItem("accessory2", "empty imagePath", ItemType.ACCESSORY);
+        Item item53 = createItem("accessory3", "empty imagePath", ItemType.ACCESSORY);
+
+        Badge badge1 = createBadge("badge1", "empty imagePath", "body1", "condition1");
+        Badge badge2 = createBadge("badge2", "empty imagePath", "body2", "condition2");
+        Badge badge3 = createBadge("badge3", "empty imagePath", "body3", "condition3");
+        Badge badge4 = createBadge("badge4", "empty imagePath", "body4", "condition4");
+        Badge badge5 = createBadge("badge5", "empty imagePath", "body4", "condition4");
+        Badge badge6 = createBadge("badge6", "empty imagePath", "body4", "condition4");
+
+        UserItem userItem1 = createUserItem(user1, item11);
+        UserItem userItem2 = createUserItem(user1, item12);
+        UserItem userItem3 = createUserItem(user1, item21);
+        UserItem userItem4 = createUserItem(user1, item22);
+        UserItem userItem5 = createUserItem(user1, item31);
+        UserItem userItem6 = createUserItem(user1, item32);
+        UserItem userItem7 = createUserItem(user1, item41);
+        UserItem userItem8 = createUserItem(user1, item42);
+        UserItem userItem9 = createUserItem(user1, item51);
+        UserItem userItem10 = createUserItem(user1, item52);
+        UserBadge userBadge1 = createUserBadge(user1, badge1);
+        UserBadge userBadge2 = createUserBadge(user1, badge2);
+        UserBadge userBadge3 = createUserBadge(user1, badge3);
+
+        UserProfile userProfile1 = user1.getUserProfile();
+        userProfile1.setUserItemSkin(userItem1);
+        userProfile1.setUserItemEyes(userItem3);
+        userProfile1.setUserItemMouse(userItem5);
+        userProfile1.setUserItemHair(userItem7);
+        userProfile1.setUserItemAccessory(userItem9);
+        userProfile1.setUserBadge(userBadge1);
+
         log.info("===== TEST DATA INIT END =====");
     }
 
@@ -190,6 +245,35 @@ public class TestDataConfig {
         return ditto;
     }
 
+//    private Reward createReward(String name, String imagePath, RewardType rewardType) {
+//        Reward reward = new Reward(name, imagePath, rewardType);
+//        rewardRepository.save(reward);
+//        return reward;
+//    }
+
+    private Item createItem(String name, String imagePath, ItemType itemType) {
+        Item item = new Item(name, imagePath, itemType);
+        itemRepository.save(item);
+        return item;
+    }
+
+    private Badge createBadge(String name, String imagePath, String body, String conditionBody) {
+        Badge badge = new Badge(name, imagePath, body, conditionBody);
+        badgeRepository.save(badge);
+        return badge;
+    }
+
+    private UserItem createUserItem(User user, Item item) {
+        UserItem userItem = new UserItem(user, item);
+        userItemRepository.save(userItem);
+        return userItem;
+    }
+
+    private UserBadge createUserBadge(User user, Badge badge) {
+        UserBadge userBadge = new UserBadge(user, badge);
+        userBadgeRepository.save(userBadge);
+        return userBadge;
+    }
 
     private void modifySpotRating(Spot spot, Float add, Float sub) {
         int reviewCount = spot.getReviewCount();

@@ -8,10 +8,10 @@ import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 @NoArgsConstructor
 public class UserProfileModifyReq {
 
-    private Long itemSkinId;
-    private Long itemEyesId;
-    private Long itemMouseId;
-    private Long itemHairId;
-    private Long itemAccessoryId;
+    private Long userItemSkinId;
+    private Long userItemEyesId;
+    private Long userItemMouseId;
+    private Long userItemHairId;
+    private Long userItemAccessoryId;
 
 }

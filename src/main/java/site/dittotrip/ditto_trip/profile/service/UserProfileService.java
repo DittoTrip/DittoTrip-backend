@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserBadgeModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserNicknameModifyReq;
-import site.dittotrip.ditto_trip.reward.domain.Badge;
-import site.dittotrip.ditto_trip.reward.domain.Item;
+import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
-import site.dittotrip.ditto_trip.reward.repository.BadgeRepository;
-import site.dittotrip.ditto_trip.reward.repository.ItemRepository;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
+import site.dittotrip.ditto_trip.reward.repository.*;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
 import site.dittotrip.ditto_trip.reward.exception.NotMatchedItemTypeException;
@@ -17,7 +17,9 @@ import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,8 +28,8 @@ public class UserProfileService {
 
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
-    private final ItemRepository itemRepository;
-    private final BadgeRepository badgeRepository;
+    private final UserItemRepository userItemRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
 
     public void modifyUserNickname(Long reqUserId, UserNicknameModifyReq modifyReq) {
@@ -39,38 +41,51 @@ public class UserProfileService {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         UserProfile userProfile = userProfileRepository.findByUser(reqUser).orElseThrow(NoSuchElementException::new);
 
-        Item itemSkin = itemRepository.findById(modifyReq.getItemSkinId()).orElseThrow(NoSuchElementException::new);
-        if (!itemSkin.getItemType().equals(ItemType.SKIN)) {
-            throw new NotMatchedItemTypeException();
-        }
-        Item itemEyes = itemRepository.findById(modifyReq.getItemEyesId()).orElseThrow(NoSuchElementException::new);
-        if (!itemEyes.getItemType().equals(ItemType.EYES)) {
-            throw new NotMatchedItemTypeException();
-        }
-        Item itemMouse = itemRepository.findById(modifyReq.getItemMouseId()).orElseThrow(NoSuchElementException::new);
-        if (!itemMouse.getItemType().equals(ItemType.MOUSE)) {
-            throw new NotMatchedItemTypeException();
-        }
-        Item itemHair = itemRepository.findById(modifyReq.getItemHairId()).orElseThrow(NoSuchElementException::new);
-        if (!itemHair.getItemType().equals(ItemType.HAIR)) {
-            throw new NotMatchedItemTypeException();
-        }
-        Item itemAccessory = itemRepository.findById(modifyReq.getItemAccessoryId()).orElseThrow(NoSuchElementException::new);
-        if (!itemAccessory.getItemType().equals(ItemType.ACCESSORY)) {
-            throw new NotMatchedItemTypeException();
-        }
+        UserItem userItemSkin = userItemRepository.findById(modifyReq.getUserItemSkinId()).orElseThrow(NoSuchElementException::new);
+        UserItem userItemEyes = userItemRepository.findById(modifyReq.getUserItemEyesId()).orElseThrow(NoSuchElementException::new);
+        UserItem userItemMouse = userItemRepository.findById(modifyReq.getUserItemMouseId()).orElseThrow(NoSuchElementException::new);
+        UserItem userItemHair = userItemRepository.findById(modifyReq.getUserItemHairId()).orElseThrow(NoSuchElementException::new);
+        UserItem userItemAccessory = userItemRepository.findById(modifyReq.getUserItemAccessoryId()).orElseThrow(NoSuchElementException::new);
 
-        userProfile.setItemSkin(itemSkin);
-        userProfile.setItemEyes(itemEyes);
-        userProfile.setItemMouse(itemMouse);
-        userProfile.setItemHair(itemHair);
-        userProfile.setItemAccessory(itemAccessory);
+        validateItemType(userItemSkin, userItemEyes, userItemMouse, userItemHair, userItemAccessory);
+        validateItemOwner(reqUser, userItemSkin, userItemEyes, userItemMouse, userItemHair, userItemAccessory);
+
+        userProfile.setUserItemSkin(userItemSkin);
+        userProfile.setUserItemEyes(userItemEyes);
+        userProfile.setUserItemMouse(userItemMouse);
+        userProfile.setUserItemHair(userItemHair);
+        userProfile.setUserItemAccessory(userItemAccessory);
     }
 
     public void modifyUserBadge(Long reqUserId, UserBadgeModifyReq modifyReq) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
-        Badge badge = badgeRepository.findById(modifyReq.getBadgeId()).orElseThrow(NoSuchElementException::new);
-        reqUser.getUserProfile().setBadge(badge);
+        UserBadge userBadge = userBadgeRepository.findById(modifyReq.getUserBadgeId()).orElseThrow(NoSuchElementException::new);
+
+        if (!reqUser.equals(userBadge.getUser())) {
+            throw new NoAuthorityException();
+        }
+
+        reqUser.getUserProfile().setUserBadge(userBadge);
+    }
+
+    private void validateItemType(UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouse, UserItem userItemHair, UserItem userItemAccessory) {
+        if (!userItemSkin.getItem().getItemType().equals(ItemType.SKIN) ||
+                !userItemEyes.getItem().getItemType().equals(ItemType.EYES) ||
+                !userItemMouse.getItem().getItemType().equals(ItemType.MOUSE) ||
+                !userItemHair.getItem().getItemType().equals(ItemType.HAIR) ||
+                !userItemAccessory.getItem().getItemType().equals(ItemType.ACCESSORY)) {
+            throw new NotMatchedItemTypeException();
+        }
+    }
+
+    private void validateItemOwner(User reqUser, UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouse, UserItem userItemHair, UserItem userItemAccessory) {
+        if (!reqUser.equals(userItemSkin.getUser()) ||
+                !reqUser.equals(userItemEyes.getUser()) ||
+                !reqUser.equals(userItemMouse.getUser()) ||
+                !reqUser.equals(userItemHair.getUser()) ||
+                !reqUser.equals(userItemAccessory.getUser())) {
+            throw new NoAuthorityException();
+        }
     }
 
 }

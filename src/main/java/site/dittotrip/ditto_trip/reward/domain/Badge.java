@@ -13,8 +13,13 @@ import java.time.LocalDateTime;
 @Getter
 public class Badge extends Reward {
 
-    public Badge(String imagePath) {
-        super(imagePath, RewardType.BADGE);
+    private String body;
+    private String conditionBody;
+
+    public Badge(String name, String imagePath, String body, String conditionBody) {
+        super(name, imagePath, RewardType.BADGE);
+        this.body = body;
+        this.conditionBody = conditionBody;
     }
 
 }

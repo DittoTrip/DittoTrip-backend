@@ -7,6 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserBadgeModifyReq {
 
-    private Long badgeId;
-
+    private Long userBadgeId;
 }

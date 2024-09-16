@@ -11,7 +11,6 @@ import site.dittotrip.ditto_trip.quest.domain.dto.UserQuestListRes;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.quest.exception.AlreadyAchieveQuestException;
 import site.dittotrip.ditto_trip.quest.exception.NotAchieveQuestException;
-import site.dittotrip.ditto_trip.quest.repository.QuestRepository;
 import site.dittotrip.ditto_trip.quest.repository.UserQuestRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.reward.domain.Reward;
@@ -21,7 +20,6 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,6 +36,9 @@ public class QuestService {
         return UserQuestListRes.fromEntities(page);
     }
 
+    /**
+     * UserReward 가 아닌 UserItem 및 UserBadge 로 저장하는 것으로 수정
+     */
     @Transactional(readOnly = false)
     public void achieveQuest(Long reqUserId, Long userQuestId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
