@@ -36,4 +36,12 @@ public class UserQuest {
         this.achieveDateTime = LocalDateTime.now();
     }
 
+    public void addNowCount() {
+        this.nowCount += 1;
+    }
+
+    public void achieveButPendingQuest() {
+        this.userQuestStatus = UserQuestStatus.PENDING;
+    }
+
 }

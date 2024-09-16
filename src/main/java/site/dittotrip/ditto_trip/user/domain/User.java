@@ -3,6 +3,9 @@ package site.dittotrip.ditto_trip.user.domain;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
@@ -16,8 +19,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@NoArgsConstructor
 @Table(name = "users")
+@Getter @Setter
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

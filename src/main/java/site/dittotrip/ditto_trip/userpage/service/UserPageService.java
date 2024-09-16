@@ -3,6 +3,8 @@ package site.dittotrip.ditto_trip.userpage.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
@@ -25,6 +27,7 @@ public class UserPageService {
     private final UserProfileRepository userProfileRepository;
     private final DittoRepository dittoRepository;
     private final FollowRepository followRepository;
+    private final AlarmRepository alarmRepository;
 
     /** 추가될 데이터
      * 1. 팔로우, 팔로잉 데이터
@@ -38,7 +41,11 @@ public class UserPageService {
         Integer followingCount = followRepository.countByFollowingUser(user);
         Integer followedCount = followRepository.countByFollowedUser(user);
 
-        return UserPageRes.fromEntities(reqUser, user, userProfile, dittos, followingCount, followedCount);
+        // 읽지 않은 알림 정보 조회
+        List<Alarm> reqUsersAlarms = alarmRepository.findByUserAndIsChecked(reqUser, Boolean.FALSE);
+        Boolean isNotCheckedAlarm = !reqUsersAlarms.isEmpty();
+
+        return UserPageRes.fromEntities(reqUser, user, userProfile, dittos, followingCount, followedCount, isNotCheckedAlarm);
     }
 
 }

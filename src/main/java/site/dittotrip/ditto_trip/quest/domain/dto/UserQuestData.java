@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
 import site.dittotrip.ditto_trip.quest.domain.enums.QuestRewardType;
-import site.dittotrip.ditto_trip.reward.domain.Reward;
+import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.reward.domain.dto.RewardData;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ public class UserQuestData {
     private Integer conditionCount;
     private Integer nowCount;
     private QuestRewardType questRewardType;
+    private UserQuestStatus userQuestStatus;
 
     private RewardData rewardData;
 
@@ -39,6 +40,7 @@ public class UserQuestData {
                 .conditionCount(userQuest.getQuest().getConditionCount())
                 .nowCount(userQuest.getNowCount())
                 .questRewardType(userQuest.getQuest().getQuestRewardType())
+                .userQuestStatus(userQuest.getUserQuestStatus())
                 .rewardData(RewardData.fromEntity(userQuest.getQuest().getReward()))
                 .build();
     }

@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.ditto.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ import site.dittotrip.ditto_trip.ditto.repository.DittoBookmarkRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
+import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -39,6 +43,8 @@ public class DittoService {
     private final HashtagRepository hashtagRepository;
     private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     public DittoListRes findDittoList(User reqUser, Pageable pageable) {
         Page<Ditto> page = dittoRepository.findAll(pageable);
@@ -56,6 +62,11 @@ public class DittoService {
         return DittoListRes.fromEntities(dittos);
     }
 
+    public DittoListRes findDittoListBySearch(User reqUser, String word, Pageable pageable) {
+        Page<Ditto> page = dittoRepository.findByTitleContaining(word, pageable);
+        return DittoListRes.fromEntities(page);
+    }
+
     public DittoDetailRes findDittoDetail(Long dittoId, User reqUser) {
         Ditto ditto = dittoRepository.findByIdWithUser(dittoId).orElseThrow(NoSuchElementException::new);
 
@@ -65,14 +76,18 @@ public class DittoService {
         Boolean isMine = getIsMine(ditto, reqUser);
         Long myBookmarkId = getMyBookmarkId(ditto, reqUser);
 
-        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser);
+        // 팔로잉 정보 조회
+        Boolean isMyFollowing = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser()).isPresent();
+
+        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, isMyFollowing);
     }
 
     @Transactional(readOnly = false)
     public void saveDitto(User reqUser, DittoSaveReq saveReq,
                            MultipartFile multipartFile) {
+        User user = userRepository.findById(reqUser.getId()).get();
 
-        Ditto ditto = saveReq.toEntity(reqUser);
+        Ditto ditto = saveReq.toEntity(user);
         dittoRepository.save(ditto);
 
         // hashtag 처리
@@ -90,7 +105,7 @@ public class DittoService {
         ditto.setImagePath(imagePath);
 
         // 알림 처리
-//        processAlarmInSaveDitto(ditto);
+        processAlarmInSaveDitto(ditto);
     }
 
     @Transactional(readOnly = false)

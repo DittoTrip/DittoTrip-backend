@@ -55,6 +55,16 @@ public class DittoController {
         return dittoService.findDittoListInBookmark(user);
     }
 
+    @GetMapping("/list/search")
+    @Operation(summary = "디토 리스트 검색 조회",
+            description = "")
+    public DittoListRes dittoSearchList(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                        @RequestParam(name = "query") String query,
+                                        Pageable pageable) {
+        User user = getUserFromUserDetails(userDetails, false);
+        return dittoService.findDittoListBySearch(user, query, pageable);
+    }
+
     @GetMapping("/{dittoId}")
     @Operation(summary = "디토 상세 조회",
             description = "")

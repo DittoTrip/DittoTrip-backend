@@ -1,5 +1,7 @@
 package site.dittotrip.ditto_trip.ditto.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +18,7 @@ public interface DittoRepository extends JpaRepository<Ditto, Long> {
     Optional<Ditto> findByIdWithUser(Long dittoId);
 
     List<Ditto> findTop6ByUserOrderByCreatedDateTimeDesc(User user);
+
+    Page<Ditto> findByTitleContaining(String title, Pageable pageable);
+
 }
