@@ -9,15 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoDetailRes;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoListRes;
-import site.dittotrip.ditto_trip.ditto.domain.dto.DittoModifyReq;
 import site.dittotrip.ditto_trip.ditto.domain.dto.DittoSaveReq;
 import site.dittotrip.ditto_trip.ditto.service.DittoBookmarkService;
 import site.dittotrip.ditto_trip.ditto.service.DittoService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
-import java.util.List;
-
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. Ditto 랜덤 리스트 조회
@@ -43,16 +41,16 @@ public class DittoController {
             description = "")
     public DittoListRes dittoList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return dittoService.findDittoList(user, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return dittoService.findDittoList(reqUserId, pageable);
     }
 
     @GetMapping("/list/bookmark")
     @Operation(summary = "내 북마크 디토 리스트 조회",
             description = "")
     public DittoListRes dittoListInBookmark(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return dittoService.findDittoListInBookmark(user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return dittoService.findDittoListInBookmark(reqUserId);
     }
 
     @GetMapping("/list/search")
@@ -61,8 +59,8 @@ public class DittoController {
     public DittoListRes dittoSearchList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @RequestParam(name = "query") String query,
                                         Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return dittoService.findDittoListBySearch(user, query, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return dittoService.findDittoListBySearch(reqUserId, query, pageable);
     }
 
     @GetMapping("/{dittoId}")
@@ -70,8 +68,8 @@ public class DittoController {
             description = "")
     public DittoDetailRes dittoDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                       @PathVariable(name = "dittoId") Long dittoId) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return dittoService.findDittoDetail(dittoId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return dittoService.findDittoDetail(reqUserId, dittoId);
     }
 
     @PostMapping
@@ -80,8 +78,8 @@ public class DittoController {
     public void dittoSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                           @RequestPart(name = "saveReq") DittoSaveReq saveReq,
                           @RequestPart(name = "image") MultipartFile multipartFile) {
-        User user = getUserFromUserDetails(userDetails, true);
-        dittoService.saveDitto(user, saveReq, multipartFile);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        dittoService.saveDitto(reqUserId, saveReq, multipartFile);
     }
 
     @PutMapping("/{dittoId}")
@@ -91,8 +89,8 @@ public class DittoController {
                             @PathVariable(name = "dittoId") Long dittoId,
                             @RequestPart(name = "saveReq") DittoSaveReq saveReq,
                             @RequestPart(name = "image") MultipartFile multipartFile) {
-        User user = getUserFromUserDetails(userDetails, true);
-        dittoService.modifyDitto(dittoId, user, saveReq, multipartFile);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        dittoService.modifyDitto(reqUserId, dittoId, saveReq, multipartFile);
     }
 
     @DeleteMapping("/{dittoId}")
@@ -100,8 +98,8 @@ public class DittoController {
             description = "")
     public void dittoRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                             @PathVariable(name = "dittoId") Long dittoId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        dittoService.removeDitto(dittoId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        dittoService.removeDitto(reqUserId, dittoId);
     }
 
     /**
@@ -112,8 +110,8 @@ public class DittoController {
             description = "")
     public Boolean dittoBookmarkGet(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable(name = "dittoId") Long dittoId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return dittoBookmarkService.getDittoBookmark(dittoId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return dittoBookmarkService.getDittoBookmark(reqUserId, dittoId);
     }
 
     @PostMapping("/{dittoId}/bookmark")
@@ -121,8 +119,8 @@ public class DittoController {
             description = "")
     public void dittoBookmarkSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @PathVariable(name = "dittoId") Long dittoId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        dittoBookmarkService.saveDittoBookmark(dittoId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        dittoBookmarkService.saveDittoBookmark(reqUserId, dittoId);
     }
 
     @DeleteMapping("/{dittoId}/bookmark")
@@ -130,8 +128,8 @@ public class DittoController {
             description = "")
     public void dittoBookmarkRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "dittoId") Long dittoId) {
-        User user = getUserFromUserDetails(userDetails, true);
-        dittoBookmarkService.removeDittoBookmark(dittoId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        dittoBookmarkService.removeDittoBookmark(reqUserId, dittoId);
     }
 
 }

@@ -13,6 +13,7 @@ import site.dittotrip.ditto_trip.profile.service.UserProfileService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 프로필 수정 - item, badge
@@ -29,8 +30,8 @@ public class UserProfileController {
             description = "")
     public void userProfileModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @RequestBody UserProfileModifyReq modifyReq) {
-        User user = getUserFromUserDetails(userDetails, true);
-        userProfileService.modifyUserProfile(user, modifyReq);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        userProfileService.modifyUserProfile(reqUserId, modifyReq);
     }
 
 }

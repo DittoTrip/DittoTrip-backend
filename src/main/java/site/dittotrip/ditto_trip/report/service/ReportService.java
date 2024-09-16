@@ -17,6 +17,7 @@ import site.dittotrip.ditto_trip.review.repository.ReviewCommentRepository;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.RedisService;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ReportService {
 
+    private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewCommentRepository reviewCommentRepository;
@@ -39,9 +41,10 @@ public class ReportService {
     }
 
     @Transactional(readOnly = false)
-    public void saveReport(User user, ReportSaveReq saveReq) {
+    public void saveReport(Long reqUserId, ReportSaveReq saveReq) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Object targetEntity = getTargetEntity(saveReq);
-        Report report = saveReq.toEntity(targetEntity, user);
+        Report report = saveReq.toEntity(targetEntity, reqUser);
         reportRepository.save(report);
     }
 

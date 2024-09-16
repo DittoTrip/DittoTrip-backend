@@ -21,7 +21,8 @@ public class RewardService {
     private final UserRepository userRepository;
     private final UserRewardRepository userRewardRepository;
 
-    public UserItemListRes findUsersItemList(User reqUser) {
+    public UserItemListRes findUsersItemList(Long reqUserId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         List<UserReward> userRewards = userRewardRepository.findUserItemByUser(reqUser);
         return UserItemListRes.fromEntities(userRewards);
     }

@@ -12,7 +12,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 import site.dittotrip.ditto_trip.userpage.service.UserPageService;
 
-import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 타인의 유저 페이지와 내 유저 페이지 조회의 데이터가 다를 경우 수정 필요
@@ -30,8 +30,8 @@ public class UserPageController {
             description = "")
     public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable(name = "userId") Long userId) {
-        User reqUser = getUserFromUserDetails(userDetails, false);
-        return userPageService.findUserPage(reqUser, userId);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return userPageService.findUserPage(reqUserId, userId);
     }
 
 }

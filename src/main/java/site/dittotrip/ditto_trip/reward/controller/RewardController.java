@@ -13,6 +13,7 @@ import site.dittotrip.ditto_trip.reward.service.RewardService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 유저의 보유 아이템 리스트 조회 (자신의 아이템 리스트만 조회 가능 (수정 시))
@@ -28,8 +29,8 @@ public class RewardController {
     @Operation(summary = "내 아이템 리스트 조회 (프로필 아이템)",
             description = "")
     public UserItemListRes usersItemList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return rewardService.findUsersItemList(user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return rewardService.findUsersItemList(reqUserId);
     }
 
     @GetMapping("/user/{userId}/badge/list")

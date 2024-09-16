@@ -33,7 +33,12 @@ public class UserPageService {
      * 1. 팔로우, 팔로잉 데이터
      * 2. request user 와의 팔로잉 정보
      */
-    public UserPageRes findUserPage(User reqUser, Long userId) {
+    public UserPageRes findUserPage(Long reqUserId, Long userId) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         UserProfile userProfile = userProfileRepository.findByUser(user).orElseThrow(NoSuchElementException::new);
         List<Ditto> dittos = dittoRepository.findTop6ByUserOrderByCreatedDateTimeDesc(user);

@@ -37,6 +37,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SpotService {
 
+    private final UserRepository userRepository;
     private final SpotRepository spotRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryBookmarkRepository categoryBookmarkRepository;
@@ -45,11 +46,15 @@ public class SpotService {
     private final ReviewRepository reviewRepository;
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
-    private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
 
-    public SpotCategoryListRes findSpotListInCategory(User user, Long categoryId,
-                                                      Double userX, Double userY,Pageable pageable) {
+    public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
+                                                      Double userX, Double userY, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
         Page<CategorySpot> page = null;
@@ -73,12 +78,12 @@ public class SpotService {
         SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
         spotCategoryListRes.setTotalPages(page.getTotalPages());
 
-        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(user, category);
+        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(reqUser, category);
         spotCategoryListRes.setCategoryData(CategoryData.fromEntity(category, categoryBookmark));
 
         for (CategorySpot categorySpot : page.getContent()) {
             Spot spot = categorySpot.getSpot();
-            Long spotBookmarkId = getReqUsersSpotBookmarkId(spot, user);
+            Long spotBookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
             Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
 
             spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, spotBookmarkId, distance));
@@ -87,19 +92,24 @@ public class SpotService {
         return spotCategoryListRes;
     }
 
-    public SpotCategoryListRes findSpotListInMap(Long categoryId, User user,
+    public SpotCategoryListRes findSpotListInMap(Long reqUserId, Long categoryId,
                                                  Double userX, Double userY,
                                                  Double startX, Double endX, Double startY, Double endY) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         List<CategorySpot> categorySpots = categorySpotRepository.findByCategoryInScope(category, startX, endX, startY, endY);
 
         SpotCategoryListRes spotCategoryListRes = new SpotCategoryListRes();
-        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(user, category);
+        CategoryBookmark categoryBookmark = getReqUsersCategoryBookmark(reqUser, category);
         spotCategoryListRes.setCategoryData(CategoryData.fromEntity(category, categoryBookmark));
 
         for (CategorySpot categorySpot : categorySpots) {
             Spot spot = categorySpot.getSpot();
-            Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
+            Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
             Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
 
             spotCategoryListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
@@ -108,21 +118,27 @@ public class SpotService {
         return spotCategoryListRes;
     }
 
-    public SpotListRes findSpotListByBookmark(User user,
+    public SpotListRes findSpotListByBookmark(Long reqUserId,
                                               Double userX, Double userY) {
-        List<SpotBookmark> spotBookmarks = spotBookmarkRepository.findByUser(user);
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        List<SpotBookmark> spotBookmarks = spotBookmarkRepository.findByUser(reqUser);
         return SpotListRes.fromEntitiesByBookmark(spotBookmarks, userX, userY);
     }
 
 
-    public SpotListRes findSpotListBySearch(User user, String word,
+    public SpotListRes findSpotListBySearch(Long reqUserId, String word,
                                             Double userX, Double userY, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
 
         SpotListRes spotListRes = new SpotListRes();
         spotListRes.setSpotCount(spots.size());
         for (Spot spot : spots) {
-            Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
+            Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
             Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
 
             spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
@@ -131,7 +147,12 @@ public class SpotService {
         return spotListRes;
     }
 
-    public SpotVisitListRes findSpotVisitList(Long userId, User reqUser, Pageable pageable) {
+    public SpotVisitListRes findSpotVisitList(Long reqUserId, Long userId, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Page<SpotVisit> page = spotVisitRepository.findByUser(user, pageable);
 
@@ -149,18 +170,24 @@ public class SpotService {
         return spotVisitListRes;
     }
 
-    public SpotDetailRes findSpotDetail(Long spotId, User user) {
+    public SpotDetailRes findSpotDetail(Long reqUserId, Long spotId) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
         List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
-        Long bookmarkId = getReqUsersSpotBookmarkId(spot, user);
+        Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
     }
 
     @Transactional(readOnly = false)
-    public void visitSpot(User user, Long spotId, Double userX, Double userY) {
+    public void visitSpot(Long reqUserId, Long spotId, Double userX, Double userY) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
         double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
@@ -168,10 +195,10 @@ public class SpotService {
             throw new SpotVisitDistanceException();
         }
 
-        spotVisitRepository.save(new SpotVisit(spot, user));
+        spotVisitRepository.save(new SpotVisit(spot, reqUser));
 
         // 알림 처리
-        processAlarmInVisitSpot(user, spot);
+        processAlarmInVisitSpot(reqUser, spot);
     }
 
     private void processAlarmInVisitSpot(User user, Spot spot) {

@@ -55,7 +55,12 @@ public class ReviewService {
 
     private final int REVIEW_WRITE_PERIOD = 604800; // 1 week
 
-    public ReviewListRes findReviewList(Long spotId, User user, Pageable pageable) {
+    public ReviewListRes findReviewList(Long reqUserId, Long spotId, Pageable pageable) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
         Page<Review> reviewsPage = reviewRepository.findBySpot(spot, pageable);
         List<Review> reviews = reviewsPage.getContent();
@@ -68,8 +73,8 @@ public class ReviewService {
 
         for (Review review : reviews) {
             Integer commentsCount = reviewCommentRepository.countByReview(review).intValue();
-            Boolean isMine = getIsMine(review, user);
-            Boolean myLike = getMyLike(review, user);
+            Boolean isMine = getIsMine(review, reqUser);
+            Boolean myLike = getMyLike(review, reqUser);
 
             reviewListRes.getReviewDataList().add(ReviewData.fromEntity(review, isMine, myLike, commentsCount));
         }
@@ -77,7 +82,13 @@ public class ReviewService {
         return reviewListRes;
     }
 
-    public ReviewDetailRes findReviewDetail(Long reviewId, User user) {
+    public ReviewDetailRes findReviewDetail(Long reqUserId, Long reviewId) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
+
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         Spot spot = review.getSpotVisit().getSpot();
 
@@ -85,14 +96,14 @@ public class ReviewService {
         reviewDetailRes.setSpotName(spot.getName());
 
         int commentsCount = reviewCommentRepository.countByReview(review).intValue();
-        Boolean isMine = getIsMine(review, user);
-        Boolean myLike = getMyLike(review, user);
+        Boolean isMine = getIsMine(review, reqUser);
+        Boolean myLike = getMyLike(review, reqUser);
         reviewDetailRes.setReviewData(ReviewData.fromEntity(review, isMine, myLike, commentsCount));
 
         List<ReviewComment> parentComments = reviewCommentRepository.findParentCommentsByReview(review);
         List<ReviewCommentData> commentDataList = new ArrayList<>();
         for (ReviewComment parentComment : parentComments) {
-            commentDataList.add(ReviewCommentData.parentFromEntity(parentComment, user));
+            commentDataList.add(ReviewCommentData.parentFromEntity(parentComment, reqUser));
         }
         reviewDetailRes.setCommentDataList(commentDataList);
 
@@ -100,9 +111,8 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = false)
-    public void saveReview(Long spotVisitId, User user, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
-        user = userRepository.findById(user.getId()).get();
-
+    public void saveReview(Long reqUserId, Long spotVisitId, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         SpotVisit spotVisit = spotVisitRepository.findById(spotVisitId).orElseThrow(NoSuchElementException::new);
 
         reviewRepository.findBySpotVisit(spotVisit).ifPresent(m -> {
@@ -114,7 +124,7 @@ public class ReviewService {
             throw new ReviewWritePeriodOverException();
         }
 
-        Review review = reviewSaveReq.toEntity(user, spotVisit);
+        Review review = reviewSaveReq.toEntity(reqUser, spotVisit);
         reviewRepository.save(review);
 
         // image 처리
@@ -131,11 +141,12 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = false)
-    public void modifyReview(Long reviewId, User user, ReviewSaveReq saveReq, List<MultipartFile> multipartFiles) {
+    public void modifyReview(Long reqUserId, Long reviewId, ReviewSaveReq saveReq, List<MultipartFile> multipartFiles) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
         Float oldRating = review.getRating();
 
-        if (review.getUser().getId() != user.getId()) {
+        if (review.getUser().getId() != reqUser.getId()) {
              throw new NoAuthorityException();
         }
 
@@ -154,9 +165,10 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = false)
-    public void removeReview(Long reviewId, User user) {
+    public void removeReview(Long reqUserId, Long reviewId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Review review = reviewRepository.findById(reviewId).orElseThrow(NoSuchElementException::new);
-        if (review.getUser().getId() != user.getId()) {
+        if (review.getUser().getId() != reqUser.getId()) {
              throw new NoAuthorityException();
         }
 

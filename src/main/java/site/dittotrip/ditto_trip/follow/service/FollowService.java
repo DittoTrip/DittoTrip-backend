@@ -28,14 +28,24 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final AlarmRepository alarmRepository;
 
-    public FollowListRes findFollowingList(User reqUser, Long userId) {
+    public FollowListRes findFollowingList(Long reqUserId, Long userId) {
+        User reqUser = null;
+        if (reqUser != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Follow> follows = followRepository.findByFollowingUser(user);
 
         return FollowListRes.fromEntities(follows, reqUser, Boolean.TRUE);
     }
 
-    public FollowListRes findFollowedList(User reqUser, Long userId) {
+    public FollowListRes findFollowedList(Long reqUserId, Long userId) {
+        User reqUser = null;
+        if (reqUser != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
+
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Follow> follows = followRepository.findByFollowedUser(user);
 
@@ -43,7 +53,8 @@ public class FollowService {
     }
 
     @Transactional(readOnly = false)
-    public void saveFollow(User reqUser, Long userId) {
+    public void saveFollow(Long reqUserId, Long userId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         if (user.getId() == reqUser.getId()) {
@@ -61,7 +72,8 @@ public class FollowService {
     }
 
     @Transactional(readOnly = false)
-    public void removeFollow(User reqUser, Long followId) {
+    public void removeFollow(Long reqUserId, Long followId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Follow follow = followRepository.findById(followId).orElseThrow(NoSuchElementException::new);
 
         if (follow.getFollowingUser().getId() != reqUser.getId() &&

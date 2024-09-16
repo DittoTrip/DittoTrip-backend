@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.spot.exception.ExistingSpotDittoException;
 import site.dittotrip.ditto_trip.spot.repository.SpotBookmarkRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
+import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,32 +20,36 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SpotBookmarkService {
 
+    private final UserRepository userRepository;
     private final SpotRepository spotRepository;
     private final SpotBookmarkRepository spotBookmarkRepository;
 
-    public Boolean findSpotBookmark(User user, Long spotId) {
+    public Boolean findSpotBookmark(Long reqUserId, Long spotId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
-        Optional<SpotBookmark> optionalBookmark = spotBookmarkRepository.findBySpotAndUser(spot, user);
+        Optional<SpotBookmark> optionalBookmark = spotBookmarkRepository.findBySpotAndUser(spot, reqUser);
         return optionalBookmark.isPresent();
     }
 
     @Transactional(readOnly = false)
-    public void addSpotBookmark(Long spotId, User user) {
+    public void addSpotBookmark(Long reqUserId, Long spotId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        spotBookmarkRepository.findBySpotAndUser(spot, user).ifPresent(m -> {
+        spotBookmarkRepository.findBySpotAndUser(spot, reqUser).ifPresent(m -> {
             throw new ExistingSpotDittoException();
         });
 
-        SpotBookmark spotBookmark = new SpotBookmark(spot, user);
+        SpotBookmark spotBookmark = new SpotBookmark(spot, reqUser);
         spotBookmarkRepository.save(spotBookmark);
     }
 
     @Transactional(readOnly = false)
-    public void removeSpotBookmark(Long bookmarkId, User user) {
+    public void removeSpotBookmark(Long reqUserId, Long bookmarkId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         SpotBookmark bookmark = spotBookmarkRepository.findById(bookmarkId).orElseThrow(NoSuchElementException::new);
 
-        if (bookmark.getUser().getId() != user.getId()) {
+        if (bookmark.getUser().getId() != reqUser.getId()) {
             throw new NoAuthorityException();
         }
 

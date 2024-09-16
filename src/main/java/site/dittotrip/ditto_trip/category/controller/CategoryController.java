@@ -15,6 +15,7 @@ import site.dittotrip.ditto_trip.category.service.CategoryService;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 카테고리 탐색 첫 페이지 (majorType 별 리스트 -> PERSON / CONTENT)
@@ -39,8 +40,8 @@ public class CategoryController {
     public CategoryPageRes categoryPageList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @RequestParam(name = "subType") CategorySubType subType,
                                             Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return categoryService.findCategoryList(user, subType, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return categoryService.findCategoryList(reqUserId, subType, pageable);
     }
 
     @GetMapping("/list/bookmark")
@@ -49,8 +50,8 @@ public class CategoryController {
     public CategoryMajorTypeListRes categoryBookmarkList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                          @RequestParam(name = "majorType") CategoryMajorType majorType,
                                                          Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return categoryService.findCategoryListByBookmark(user, majorType, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return categoryService.findCategoryListByBookmark(reqUserId, majorType, pageable);
     }
 
     @GetMapping("/list/search")
@@ -60,8 +61,8 @@ public class CategoryController {
                                                        @RequestParam(name = "query") String query,
                                                        @RequestParam(name = "majorType") CategoryMajorType majorType,
                                                        Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return categoryService.findCategoryListBySearch(user, query, majorType, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return categoryService.findCategoryListBySearch(reqUserId, query, majorType, pageable);
     }
 
     @GetMapping("/list/search/typeless")
@@ -69,8 +70,8 @@ public class CategoryController {
             description = "타입에 상관없이 하나의 리스트를 반환합니다.")
     public CategoryListNoTypeRes categorySearchNoTypeList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                           @RequestParam(name = "query") String query) {
-        User user = getUserFromUserDetails(userDetails, false);
-        return categoryService.findCategoryNoTypeListBySearch(user, query);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return categoryService.findCategoryNoTypeListBySearch(reqUserId, query);
     }
 
     @PostMapping
@@ -103,8 +104,8 @@ public class CategoryController {
             description = "Boolean 데이터를 반환")
     public Boolean CategoryBookmarkGet(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return categoryBookmarkService.findCategoryBookmark(user, categoryId);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return categoryBookmarkService.findCategoryBookmark(reqUserId, categoryId);
     }
 
     @PostMapping("/{categoryId}/bookmark")
@@ -112,8 +113,8 @@ public class CategoryController {
             description = "")
     public void CategoryBookmarkAdd(@PathVariable(name = "categoryId") Long categoryId,
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails, true);
-        categoryBookmarkService.addCategoryBookmark(categoryId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        categoryBookmarkService.addCategoryBookmark(reqUserId, categoryId);
     }
 
     @DeleteMapping("/{categoryId}/bookmark")
@@ -121,8 +122,8 @@ public class CategoryController {
             description = "")
     public void CategoryBookmarkRemove(@PathVariable(name = "categoryId") Long categoryId,
                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = getUserFromUserDetails(userDetails, true);
-        categoryBookmarkService.removeCategoryBookmark(categoryId, user);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        categoryBookmarkService.removeCategoryBookmark(reqUserId, categoryId);
     }
 
 }

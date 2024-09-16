@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.alarm.domain.dto.AlarmListRes;
 import site.dittotrip.ditto_trip.alarm.service.AlarmService;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
-import site.dittotrip.ditto_trip.user.domain.User;
 
-import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 알림 리스트 조회
@@ -27,8 +26,8 @@ public class AlarmController {
             description = "")
     public AlarmListRes alarmList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Pageable pageable) {
-        User user = getUserFromUserDetails(userDetails, true);
-        return alarmService.findAlarmList(user, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return alarmService.findAlarmList(reqUserId, pageable);
     }
 
 }

@@ -36,7 +36,7 @@ public class UserPageRes {
                 .isNotCheckedAlarm(isNotCheckedAlarm)
                 .build();
 
-        if (reqUser.getId() == user.getId()) {
+        if (reqUser != null && reqUser.getId() == user.getId()) {
             userPageRes.setIsMine(Boolean.TRUE);
         } else {
             userPageRes.setIsMine(Boolean.FALSE);

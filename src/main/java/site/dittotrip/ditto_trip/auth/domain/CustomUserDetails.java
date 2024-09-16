@@ -72,6 +72,18 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     return true;
   }
 
+  public static Long getUserIdFromUserDetails(CustomUserDetails userDetails, boolean isRequired) {
+    if (userDetails == null) {
+      if (isRequired) {
+        throw new NotFoundUserInfoException();
+      } else {
+        return null;
+      }
+    } else {
+      return userDetails.getUser().getId();
+    }
+  }
+
   public static User getUserFromUserDetails(CustomUserDetails userDetails, boolean isRequired) {
     if (userDetails == null) {
       if (isRequired) {
@@ -88,4 +100,9 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
   public String getName() {
     return user.getId().toString();
   }
+
+  public Long getId() {
+    return user.getId();
+  }
+
 }
