@@ -112,8 +112,10 @@ public class DittoService {
         }
 
         // image 처리
-        String imagePath = s3Service.uploadFile(multipartFile);
-        ditto.setImagePath(imagePath);
+        if(!multipartFile.isEmpty()) {
+            String imagePath = s3Service.uploadFile(multipartFile);
+            ditto.setImagePath(imagePath);
+        }
 
         // 알림 처리
         processAlarmInSaveDitto(ditto);
@@ -157,7 +159,9 @@ public class DittoService {
             throw new NoAuthorityException();
         }
 
-        s3Service.deleteFile(ditto.getImagePath());
+        if(ditto.getImagePath() != null){
+            s3Service.deleteFile(ditto.getImagePath());
+        }
         dittoRepository.delete(ditto);
     }
 
