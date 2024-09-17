@@ -49,6 +49,12 @@ public class Review {
     @Setter
     private List<ReviewImage> reviewImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewComment> reviewComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewLike> reviewLikes = new ArrayList<>();
+
     public Review(String body, Float rating, User user, SpotVisit spotVisit) {
         this.body = body;
         this.rating = rating;
