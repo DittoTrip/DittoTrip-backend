@@ -34,8 +34,10 @@ public class RewardController {
     @GetMapping("/user/{userId}/badge/list")
     @Operation(summary = "유저의 뱃지 리스트 조회",
             description = "")
-    public UserBadgeListRes usersBadgeListRes(@PathVariable(name = "userId") Long userId) {
-        return rewardService.findBadgeList(userId);
+    public UserBadgeListRes usersBadgeListRes(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                              @PathVariable(name = "userId") Long userId) {
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return rewardService.findBadgeList(reqUserId, userId);
     }
 
 }

@@ -32,18 +32,25 @@ public class RewardService {
         return UserItemListRes.fromEntities(userItems);
     }
 
-    public UserBadgeListRes findBadgeList(Long userId) {
+    public UserBadgeListRes findBadgeList(Long reqUserId, Long userId) {
+        User reqUser = null;
+        if (reqUserId != null) {
+            reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        }
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         List<Badge> badges = badgeRepository.findAll();
         List<UserBadge> userBadges = userBadgeRepository.findByUser(user);
 
-        Map<Reward, UserBadge> ownBadgeMap = new HashMap<>();
-        for (UserBadge userBadge : userBadges) {
-            ownBadgeMap.put(userBadge.getBadge(), userBadge);
+        if (reqUser.equals(user)) {
+            Map<Reward, UserBadge> ownBadgeMap = new HashMap<>();
+            for (UserBadge userBadge : userBadges) {
+                ownBadgeMap.put(userBadge.getBadge(), userBadge);
+            }
+            return UserBadgeListRes.fromEntitiesAtMine(badges, ownBadgeMap);
+        } else {
+            return UserBadgeListRes.fromEntities(badges);
         }
-
-        return UserBadgeListRes.fromEntities(badges, ownBadgeMap);
     }
 
 }
