@@ -4,18 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.user.domain.dto.UserDataForAdmin;
 import site.dittotrip.ditto_trip.user.domain.dto.UserListForAdminRes;
 import site.dittotrip.ditto_trip.user.domain.dto.UserListRes;
+import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
   private final UserRepository userRepository;
@@ -49,6 +54,12 @@ public class UserService {
     }
 
     return res;
+  }
+
+  @Transactional(readOnly = false)
+  public void pauseUser(Long userId) {
+    User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+    user.setUserStatus(UserStatus.PERMANENTLY_BANNED);
   }
 
 }
