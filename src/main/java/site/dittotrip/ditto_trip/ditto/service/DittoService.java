@@ -73,6 +73,12 @@ public class DittoService {
         return DittoListRes.fromEntities(page);
     }
 
+    public DittoListRes findUsersDittoList(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Page<Ditto> page = dittoRepository.findByUser(user, pageable);
+        return DittoListRes.fromEntities(page);
+    }
+
     public DittoDetailRes findDittoDetail(Long reqUserId, Long dittoId) {
         User reqUser = null;
         if (reqUserId != null) {

@@ -17,6 +17,8 @@ public interface DittoRepository extends JpaRepository<Ditto, Long> {
     @Query("select d from Ditto d where d.id= :dittoId")
     Optional<Ditto> findByIdWithUser(Long dittoId);
 
+    Page<Ditto> findByUser(User user, Pageable pageable);
+
     List<Ditto> findTop6ByUserOrderByCreatedDateTimeDesc(User user);
 
     Page<Ditto> findByTitleContaining(String title, Pageable pageable);
