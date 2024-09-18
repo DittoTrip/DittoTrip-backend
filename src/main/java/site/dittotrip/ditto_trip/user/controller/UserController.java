@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/list")
+    @GetMapping("/list/search")
     @Operation(summary = "유저 리스트 검색 조회",
             description = "")
     public UserListRes userList(@RequestParam(name = "query") String query,
