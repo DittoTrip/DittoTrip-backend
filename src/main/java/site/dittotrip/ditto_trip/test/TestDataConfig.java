@@ -177,6 +177,20 @@ public class TestDataConfig {
         UserBadge userBadge2 = createUserBadge(user1, badge2);
         UserBadge userBadge3 = createUserBadge(user1, badge3);
 
+        UserItem userItem21 = createUserItem(user2, item11);
+        UserItem userItem22 = createUserItem(user2, item21);
+        UserItem userItem23 = createUserItem(user2, item31);
+        UserItem userItem24 = createUserItem(user2, item41);
+        UserItem userItem25 = createUserItem(user2, item51);
+        UserBadge userBadge21 = createUserBadge(user2, badge1);
+        UserItem userItem31 = createUserItem(user3, item11);
+        UserItem userItem32 = createUserItem(user3, item21);
+        UserItem userItem33 = createUserItem(user3, item31);
+        UserItem userItem34 = createUserItem(user3, item41);
+        UserItem userItem35 = createUserItem(user3, item51);
+        UserBadge userBadge31 = createUserBadge(user3, badge1);
+        log.info("!!!!!!!!!! {}", user1.getUserProfile().getProgressionBar());
+
         UserProfile userProfile1 = user1.getUserProfile();
         userProfile1.setUserItemSkin(userItem1);
         userProfile1.setUserItemEyes(userItem3);
@@ -184,6 +198,20 @@ public class TestDataConfig {
         userProfile1.setUserItemHair(userItem7);
         userProfile1.setUserItemAccessory(userItem9);
         userProfile1.setUserBadge(userBadge1);
+        UserProfile userProfile2 = user2.getUserProfile();
+        userProfile2.setUserItemSkin(userItem21);
+        userProfile2.setUserItemEyes(userItem22);
+        userProfile2.setUserItemMouse(userItem23);
+        userProfile2.setUserItemHair(userItem24);
+        userProfile2.setUserItemAccessory(userItem25);
+        userProfile2.setUserBadge(userBadge21);
+        UserProfile userProfile3 = user3.getUserProfile();
+        userProfile3.setUserItemSkin(userItem31);
+        userProfile3.setUserItemEyes(userItem32);
+        userProfile3.setUserItemMouse(userItem33);
+        userProfile3.setUserItemHair(userItem34);
+        userProfile3.setUserItemAccessory(userItem35);
+        userProfile3.setUserBadge(userBadge31);
 
         Quest quest1 = createQuest("quest1", "emptyBody", 10, QuestActionType.DITTO, 100, badge4);
         Quest quest2 = createQuest("quest2", "emptyBody", 20, QuestActionType.FOLLOWING, 200, badge5);
@@ -218,10 +246,6 @@ public class TestDataConfig {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         user.getAuthorities().add(authority);
         userRepository.save(user);
-
-        UserProfile userProfile = new UserProfile(user);
-        user.setUserProfile(userProfile);
-        userProfileRepository.save(userProfile);
 
         return user;
     }

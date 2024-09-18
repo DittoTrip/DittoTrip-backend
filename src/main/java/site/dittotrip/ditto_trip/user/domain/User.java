@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name = "users")
 @Getter @Setter
 public class User {
@@ -51,7 +51,7 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<SpotVisit> spotVisits = new ArrayList<>();
 
-  @OneToOne(mappedBy = "user")
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private UserProfile userProfile;
 
   @OneToMany(mappedBy = "followingUser")
@@ -59,5 +59,9 @@ public class User {
 
   @OneToMany(mappedBy = "followedUser")
   private List<Follow> followeds = new ArrayList<>();
+
+  public User() {
+    userProfile = new UserProfile(this);
+  }
 
 }
