@@ -123,6 +123,7 @@ public class TestDataConfig {
         SpotVisit spotVisit6 = createSpotVisit(spot1, user2);
         SpotVisit spotVisit7 = createSpotVisit(spot1, user3);
         SpotVisit spotVisit8 = createSpotVisit(spot1, user1);
+        SpotVisit spotVisit9 = createSpotVisit(spot1, user1);
 
         Review review1 = createReview("좋았슴", 4f, user2, spotVisit1);
         Review review2 = createReview("좋았습니다.", 3f, user2, spotVisit2);

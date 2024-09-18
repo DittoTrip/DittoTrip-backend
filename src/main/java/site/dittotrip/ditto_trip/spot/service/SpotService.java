@@ -182,7 +182,17 @@ public class SpotService {
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
         Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
 
-        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
+        // 요청자의 스팟 방문 정보 처리
+        Long mySpotVisitId = null;
+        List<SpotVisit> spotVisits = spotVisitRepository.findByUserAndSpot(reqUser, spot);
+        for (SpotVisit spotVisit : spotVisits) {
+            if (spotVisit.getReview() == null) {
+                mySpotVisitId = spotVisit.getId();
+                break;
+            }
+        }
+
+        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId, mySpotVisitId);
     }
 
     @Transactional(readOnly = false)

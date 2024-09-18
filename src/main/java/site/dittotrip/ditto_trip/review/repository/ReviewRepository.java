@@ -31,4 +31,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByUser(User user);
 
     Optional<Review> findBySpotVisit(SpotVisit spotVisit);
+
 }
