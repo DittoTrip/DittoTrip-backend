@@ -24,9 +24,10 @@ public class UserPageRes {
     private Integer followedCount;
     private Boolean isMine;
     private Boolean isNotCheckedAlarm;
+    private Long myFollowingId;
 
     public static UserPageRes fromEntities(User reqUser, User user, UserProfile userProfile, List<Ditto> dittos,
-                                           Integer followingCount, Integer followedCount, Boolean isNotCheckedAlarm) {
+                                           Integer followingCount, Integer followedCount, Boolean isNotCheckedAlarm, Long myFollowingId) {
         UserPageRes userPageRes = UserPageRes.builder()
                 .userData(UserData.fromEntity(user))
                 .userProfileData(UserProfileData.fromEntity(userProfile))
@@ -34,6 +35,7 @@ public class UserPageRes {
                 .followingCount(followingCount)
                 .followedCount(followedCount)
                 .isNotCheckedAlarm(isNotCheckedAlarm)
+                .myFollowingId(myFollowingId)
                 .build();
 
         if (reqUser != null && reqUser.getId() == user.getId()) {

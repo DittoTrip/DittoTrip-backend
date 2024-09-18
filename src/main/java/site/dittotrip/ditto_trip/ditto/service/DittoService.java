@@ -88,9 +88,13 @@ public class DittoService {
         Long myBookmarkId = getMyBookmarkId(ditto, reqUser);
 
         // 팔로잉 정보 조회
-        Boolean isMyFollowing = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser()).isPresent();
+        Optional<Follow> followOptional = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser());
+        Long myFollowingId = null;
+        if (followOptional.isPresent()) {
+            myFollowingId = followOptional.get().getId();
+        }
 
-        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, isMyFollowing);
+        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, myFollowingId);
     }
 
     @Transactional(readOnly = false)
