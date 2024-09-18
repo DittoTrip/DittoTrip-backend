@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import site.dittotrip.ditto_trip.user.domain.dto.ContentListRes;
+import site.dittotrip.ditto_trip.user.domain.dto.UserDetailRes;
 import site.dittotrip.ditto_trip.user.domain.dto.UserListForAdminRes;
 import site.dittotrip.ditto_trip.user.domain.dto.UserListRes;
 import site.dittotrip.ditto_trip.user.service.UserService;
@@ -30,6 +32,30 @@ public class UserController {
                                                 Pageable pageable) {
         return userService.findUserListForAdmin(query, pageable);
     }
+
+    @GetMapping("/{userId}")
+    @Operation(summary = "유저 상세 조회 (관리자용)",
+            description = "")
+    public UserDetailRes userDetailForAdmin(@PathVariable(name = "userId") Long userId) {
+        return userService.findUserDetail(userId);
+    }
+
+    @GetMapping("/{userId}/review/list")
+    @Operation(summary = "유저 상세 페이지에서 리뷰 리스트 조회 (관리자용)",
+            description = "")
+    public ContentListRes usersReviewList(@PathVariable(name = "userId") Long userId,
+                                          Pageable pageable) {
+        return userService.findUsersReviewList(userId, pageable);
+    }
+
+    @GetMapping("/{userId}/ditto/list")
+    @Operation(summary = "유저 상세 페이지에서 디토 리스트 조회 (관리자용)",
+            description = "")
+    public ContentListRes usersDittoList(@PathVariable(name = "userId") Long userId,
+                                          Pageable pageable) {
+        return userService.findUsersDittoList(userId, pageable);
+    }
+
 
     @PutMapping("/{userId}")
     @Operation(summary = "유저 활동 일지 정지 (관리자용)",

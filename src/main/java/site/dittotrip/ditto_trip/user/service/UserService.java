@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
+import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
-import site.dittotrip.ditto_trip.user.domain.dto.UserDataForAdmin;
-import site.dittotrip.ditto_trip.user.domain.dto.UserListForAdminRes;
-import site.dittotrip.ditto_trip.user.domain.dto.UserListRes;
+import site.dittotrip.ditto_trip.user.domain.dto.*;
 import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -54,6 +54,26 @@ public class UserService {
     }
 
     return res;
+  }
+
+  public UserDetailRes findUserDetail(Long userId) {
+    User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+    Long reviewCount = reviewRepository.countByUser(user);
+    Long dittoCount = dittoRepository.countByUser(user);
+
+    return UserDetailRes.fromEntity(UserDataForAdmin.fromEntity(user, reviewCount.intValue(), dittoCount.intValue()));
+  }
+
+  public ContentListRes findUsersReviewList(Long userId, Pageable pageable) {
+    User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+    Page<Review> page = reviewRepository.findByUser(user, pageable);
+    return ContentListRes.fromReviews(page);
+  }
+
+  public ContentListRes findUsersDittoList(Long userId, Pageable pageable) {
+    User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+    Page<Ditto> page = dittoRepository.findByUser(user, pageable);
+    return ContentListRes.fromDittos(page);
   }
 
   @Transactional(readOnly = false)
