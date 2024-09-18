@@ -21,6 +21,8 @@ public class UserDataForAdmin {
     private Integer reviewCount;
     private Integer dittoCount;
 
+    private UserProfileData userProfileData;
+
     public static UserDataForAdmin fromEntity(User user, Integer reviewCount, Integer dittoCount) {
         return UserDataForAdmin.builder()
                 .userId(user.getId())
@@ -31,6 +33,7 @@ public class UserDataForAdmin {
                 .progressionBar(user.getUserProfile().getProgressionBar())
                 .reviewCount(reviewCount)
                 .dittoCount(dittoCount)
+                .userProfileData(UserProfileData.fromEntity(user.getUserProfile()))
                 .build();
     }
 
