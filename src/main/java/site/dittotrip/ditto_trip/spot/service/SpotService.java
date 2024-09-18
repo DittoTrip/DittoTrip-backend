@@ -133,18 +133,26 @@ public class SpotService {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
 
-        List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
-
-        SpotListRes spotListRes = new SpotListRes();
-        spotListRes.setSpotCount(spots.size());
-        for (Spot spot : spots) {
-            Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
-            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
-
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
+        Page<Spot> page = null;
+        if (word != null) {
+            page = spotRepository.findByNameContaining(word, pageable);
+        } else {
+            page = spotRepository.findAll(pageable);
         }
 
-        return spotListRes;
+        SpotListRes res = new SpotListRes();
+        if (reqUser != null) {
+            for (Spot spot : page.getContent()) {
+                Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
+                Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+                res.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
+            }
+        } else {
+            res = SpotListRes.fromEntitiesForNoAuth(page, userX, userY);
+        }
+
+        return res;
     }
 
     public SpotVisitListRes findSpotVisitList(Long reqUserId, Long userId, Pageable pageable) {

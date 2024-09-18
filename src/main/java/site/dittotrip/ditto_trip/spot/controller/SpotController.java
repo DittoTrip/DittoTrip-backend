@@ -66,10 +66,10 @@ public class SpotController {
     }
 
     @GetMapping("/spot/list/search")
-    @Operation(summary = "스팟 리스트 검색 조회",
+    @Operation(summary = "스팟 리스트 검색 조회 (관리자도 사용)",
             description = "")
     public SpotListRes spotListBySearch(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                        @RequestParam(name = "query") String query,
+                                        @RequestParam(name = "query", required = false) String query,
                                         @RequestParam(name = "userX", required = false) Double userX,
                                         @RequestParam(name = "userY", required = false) Double userY,
                                         Pageable pageable) {

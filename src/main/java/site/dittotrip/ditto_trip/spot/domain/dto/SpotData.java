@@ -61,6 +61,19 @@ public class SpotData {
         return spotData;
     }
 
+    public static SpotData fromEntityForNoAuth(Spot spot, Double distance) {
+        return SpotData.builder()
+                .spotId(spot.getId())
+                .name(spot.getName())
+                .address(spot.getAddress())
+                .pointX(spot.getPointX())
+                .pointY(spot.getPointY())
+                .imagePath(spot.getImagePath())
+                .rating(spot.getRating())
+                .distance(distance)
+                .build();
+    }
+
     private void putHashtags(Spot spot) {
         for (HashtagSpot hashtagSpot : spot.getHashtagSpots()) {
             this.hashtags.add(hashtagSpot.getHashtag().getName());
