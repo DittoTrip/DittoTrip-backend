@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
 import site.dittotrip.ditto_trip.spot.domain.SpotApply;
 import site.dittotrip.ditto_trip.spot.domain.SpotApplyImage;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
@@ -36,13 +38,21 @@ public class SpotApplyService {
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
 
-    public void findSpotApplyList(Pageable pageable) {
+    public SpotApplyListRes findSpotApplyList(String word, Pageable pageable) {
+        Page<SpotApply> page;
+        if (word != null) {
+            page = spotApplyRepository.findByNameContaining(word, pageable);
+        } else {
+            page = spotApplyRepository.findAll(pageable);
+        }
+
+        return SpotApplyListRes.fromEntities(page);
     }
 
-    public SpotApplyListRes findMySpotApplyList(Long reqUserId) {
+    public SpotApplyMiniListRes findMySpotApplyList(Long reqUserId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         List<SpotApply> spotApplies = spotApplyRepository.findByUser(reqUser);
-        return SpotApplyListRes.fromEntities(spotApplies);
+        return SpotApplyMiniListRes.fromEntities(spotApplies);
     }
 
     @Transactional(readOnly = false)

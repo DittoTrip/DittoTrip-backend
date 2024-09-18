@@ -9,13 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.service.SpotApplyService;
-import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.List;
 
-import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserFromUserDetails;
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 @RestController
@@ -26,15 +25,17 @@ public class SpotApplyController {
     private final SpotApplyService spotApplyService;
 
     @GetMapping("/list")
-    @Operation(summary = "스팟 신청 리스트 조회 (관리자 기능) (디자인 나오고 작업 예정)",
-            description = "")
-    public void spotApplyList(Pageable pageable) {
+    @Operation(summary = "스팟 신청 검색 리스트 조회 (관리자 기능)",
+            description = "query가 없는 경우 전체 조회")
+    public SpotApplyListRes spotApplyList(@RequestParam(name = "query", required = false) String query,
+                                          Pageable pageable) {
+        return spotApplyService.findSpotApplyList(query, pageable);
     }
 
     @GetMapping("/list/my")
     @Operation(summary = "내 스팟 신청 리스트 조회",
             description = "")
-    public SpotApplyListRes mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public SpotApplyMiniListRes mySpotApplyList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, true);
         return spotApplyService.findMySpotApplyList(reqUserId);
     }
