@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
+import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagCategory;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class CategoryData {
 
     private Long categoryId;
     private String name;
+    private CategoryMajorType majorType;
+    private CategorySubType subType;
     private String imageFilePath;
 
     private Long myBookmarkId;
@@ -27,6 +31,8 @@ public class CategoryData {
         CategoryData categoryData = CategoryData.builder()
                 .categoryId(category.getId())
                 .name(category.getName())
+                .majorType(category.getCategoryMajorType())
+                .subType(category.getCategorySubType())
                 .imageFilePath(category.getImagePath())
                 .build();
 

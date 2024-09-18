@@ -74,6 +74,13 @@ public class CategoryController {
         return categoryService.findCategoryNoTypeListBySearch(reqUserId, query);
     }
 
+    @GetMapping("/list/typeless")
+    @Operation(summary = "카테고리 리스트 조회 (관리자 기능)",
+            description = "타입에 상관없이 하나의 리스트를 반환합니다.")
+    public CategoryListNoTypeRes categoryNoTypeList(Pageable pageable) {
+        return categoryService.findCategoryNoTypeList(pageable);
+    }
+
     @PostMapping
     @Operation(summary = "카테고리 저장 (관리자 기능)",
             description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")

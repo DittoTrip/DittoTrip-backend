@@ -120,6 +120,17 @@ public class CategoryService {
         return res;
     }
 
+    public CategoryListNoTypeRes findCategoryNoTypeList(Pageable pageable) {
+        Page<Category> page = categoryRepository.findAll(pageable);
+
+        CategoryListNoTypeRes res = new CategoryListNoTypeRes();
+        for (Category category : page.getContent()) {
+            res.getCategoryDataList().add(CategoryData.fromEntity(category, null));
+        }
+
+        return res;
+    }
+
     @Transactional(readOnly = false)
     public void saveCategory(CategorySaveReq saveReq, MultipartFile multipartFile) {
         Category category = saveReq.toEntity();

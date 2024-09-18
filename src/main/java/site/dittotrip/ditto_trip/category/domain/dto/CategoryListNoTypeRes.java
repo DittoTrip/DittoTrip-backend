@@ -11,4 +11,6 @@ public class CategoryListNoTypeRes {
 
     private List<CategoryData> categoryDataList = new ArrayList<>();
 
+    private Integer totalPages;
+
 }
