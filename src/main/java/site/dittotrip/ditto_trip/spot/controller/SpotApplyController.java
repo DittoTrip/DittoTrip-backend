@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
@@ -43,8 +44,10 @@ public class SpotApplyController {
     @GetMapping("/{spotApplyId}")
     @Operation(summary = "스팟 신청 상세 조회 (디자인 나오고 작업 예정)",
             description = "등록한 유저와 관리자만 조회 가능합니다.")
-    public void spotApplyDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                @PathVariable(name = "spotApplyId") Long spotApplyId) {
+    public SpotApplyDetailRes spotApplyDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                              @PathVariable(name = "spotApplyId") Long spotApplyId) {
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        return spotApplyService.findSpotApplyDetail(reqUserId, spotApplyId);
     }
 
     @PostMapping()
@@ -72,8 +75,9 @@ public class SpotApplyController {
     @PostMapping("/{spotApplyId}/handle")
     @Operation(summary = "스팟 신청 처리 (관리자 기능)",
             description = "")
-    public void spotApplyHandle(@PathVariable(name = "spotApplyId") Long spotApplyId) {
-
+    public void spotApplyHandle(@PathVariable(name = "spotApplyId") Long spotApplyId,
+                                @RequestParam(name = "isApproval") Boolean isApproval) {
+        spotApplyService.handleSpotApply(spotApplyId, isApproval);
     }
 
 }

@@ -11,12 +11,16 @@ import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
+import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
+import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotApply;
 import site.dittotrip.ditto_trip.spot.domain.SpotApplyImage;
+import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
+import site.dittotrip.ditto_trip.spot.domain.enums.SpotApplyStatus;
 import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -53,6 +57,18 @@ public class SpotApplyService {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         List<SpotApply> spotApplies = spotApplyRepository.findByUser(reqUser);
         return SpotApplyMiniListRes.fromEntities(spotApplies);
+    }
+
+    public SpotApplyDetailRes findSpotApplyDetail(Long reqUserId, Long spotApplyId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        SpotApply spotApply = spotApplyRepository.findById(spotApplyId).orElseThrow(NoSuchElementException::new);
+
+        // 관리자 관한 조건 추가 필요
+        if (!reqUser.equals(spotApply.getUser())) {
+            throw new NoAuthorityException();
+        }
+
+        return SpotApplyDetailRes.fromEntity(spotApply);
     }
 
     @Transactional(readOnly = false)
@@ -97,6 +113,18 @@ public class SpotApplyService {
         }
 
         spotApplyRepository.delete(spotApply);
+    }
+
+    @Transactional(readOnly = false)
+    public void handleSpotApply(Long spotApplyId, Boolean isApproval) {
+        SpotApply spotApply = spotApplyRepository.findById(spotApplyId).orElseThrow(NoSuchElementException::new);
+
+        if (isApproval) {
+            spotRepository.save(new Spot(spotApply));
+            spotApply.setSpotApplyStatus(SpotApplyStatus.APPROVED);
+        } else {
+            spotApply.setSpotApplyStatus(SpotApplyStatus.REJECTED);
+        }
     }
 
 }

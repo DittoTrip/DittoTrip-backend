@@ -16,6 +16,7 @@ import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
@@ -29,10 +30,9 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
 import site.dittotrip.ditto_trip.reward.repository.*;
-import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
+import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
+import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -63,6 +63,7 @@ public class TestDataConfig {
     private final UserBadgeRepository userBadgeRepository;
     private final QuestRepository questRepository;
     private final UserQuestRepository userQuestRepository;
+    private final SpotApplyRepository spotApplyRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -197,6 +198,13 @@ public class TestDataConfig {
         createUserQuest(user1, quest5);
         createUserQuest(user1, quest6);
 
+        SpotApply spotApply = createSpotApply("spotApply1", "address", 200D, 200D, user1);
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category101, spotApply));
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category102, spotApply));
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category103, spotApply));
+        spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag1, spotApply));
+        spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag2, spotApply));
+
 
         log.info("===== TEST DATA INIT END =====");
     }
@@ -296,6 +304,12 @@ public class TestDataConfig {
         UserQuest userQuest = new UserQuest(user, quest);
         userQuestRepository.save(userQuest);
         return userQuest;
+    }
+
+    private SpotApply createSpotApply(String name, String address, Double pointX, Double pointY, User user) {
+        SpotApply spotApply = new SpotApply(name, address, pointX, pointY, user);
+        spotApplyRepository.save(spotApply);
+        return spotApply;
     }
 
     private void modifySpotRating(Spot spot, Float add, Float sub) {
