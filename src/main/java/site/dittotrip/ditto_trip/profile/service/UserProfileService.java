@@ -1,8 +1,10 @@
 package site.dittotrip.ditto_trip.profile.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.profile.domain.dto.PasswordModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserBadgeModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserNicknameModifyReq;
 import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
@@ -30,11 +32,21 @@ public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
     private final UserItemRepository userItemRepository;
     private final UserBadgeRepository userBadgeRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public void modifyUserNickname(Long reqUserId, UserNicknameModifyReq modifyReq) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         reqUser.setNickname(modifyReq.getNickname());
+    }
+
+    public void modifyPassword(Long reqUserId, PasswordModifyReq modifyReq) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        if (!passwordEncoder.matches(modifyReq.getOriginPassword(), reqUser.getPassword())) {
+            throw new IllegalArgumentException("Password doesn't match");
+        }
+        // todo 비번 유효성 검사
+        reqUser.setPassword(passwordEncoder.encode(modifyReq.getNewPassword()));
     }
 
     public void modifyUserItem(Long reqUserId, UserProfileModifyReq modifyReq) {
