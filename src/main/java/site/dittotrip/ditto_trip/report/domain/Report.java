@@ -47,22 +47,22 @@ public class Report {
      *  Review / ReviewComment / Ditto / DittoComment
      */
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "review_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Setter
     private Review review;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "review_comment_id")
+    @JoinColumn(name = "review_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Setter
     private ReviewComment reviewComment;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ditto_id")
+    @JoinColumn(name = "ditto_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Setter
     private Ditto ditto;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ditto_comment_id")
+    @JoinColumn(name = "ditto_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Setter
     private DittoComment dittoComment;
 
