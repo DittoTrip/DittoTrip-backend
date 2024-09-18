@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
@@ -36,6 +37,9 @@ public class User {
   private String nickname;
   private String provider;
   private String providerId;
+
+  @CreationTimestamp
+  private LocalDateTime createdDateTime;
 
   @Enumerated(EnumType.STRING)
   private UserStatus userStatus = UserStatus.NORMAL;

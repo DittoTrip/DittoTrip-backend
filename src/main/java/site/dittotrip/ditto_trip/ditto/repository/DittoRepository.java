@@ -21,4 +21,6 @@ public interface DittoRepository extends JpaRepository<Ditto, Long> {
 
     Page<Ditto> findByTitleContaining(String title, Pageable pageable);
 
+    Long countByUser(User user);
+
 }
