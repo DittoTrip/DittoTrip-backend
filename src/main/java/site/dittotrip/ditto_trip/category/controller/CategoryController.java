@@ -66,19 +66,13 @@ public class CategoryController {
     }
 
     @GetMapping("/list/search/typeless")
-    @Operation(summary = "카테고리 리스트 검색 조회",
+    @Operation(summary = "카테고리 리스트 검색 조회 (관리자도 사용)",
             description = "타입에 상관없이 하나의 리스트를 반환합니다.")
     public CategoryListNoTypeRes categorySearchNoTypeList(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                          @RequestParam(name = "query") String query) {
+                                                          @RequestParam(name = "query", required = false) String query,
+                                                          Pageable pageable) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
-        return categoryService.findCategoryNoTypeListBySearch(reqUserId, query);
-    }
-
-    @GetMapping("/list/typeless")
-    @Operation(summary = "카테고리 리스트 조회 (관리자 기능)",
-            description = "타입에 상관없이 하나의 리스트를 반환합니다.")
-    public CategoryListNoTypeRes categoryNoTypeList(Pageable pageable) {
-        return categoryService.findCategoryNoTypeList(pageable);
+        return categoryService.findCategoryNoTypeListBySearch(reqUserId, query, pageable);
     }
 
     @PostMapping

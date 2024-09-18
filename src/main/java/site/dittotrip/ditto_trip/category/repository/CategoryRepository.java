@@ -14,7 +14,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 
-    List<Category> findByNameContaining(String word);
+    Page<Category> findByNameContaining(String word, Pageable pageable);
 
     @Query("select c from Category c where c.name like %:word% and c.categoryMajorType= :majorType")
     Page<Category> findBySearchAndMajorType(@Param("word") String word,
