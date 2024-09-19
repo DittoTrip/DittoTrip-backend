@@ -1,7 +1,9 @@
 package site.dittotrip.ditto_trip.reward.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.dittotrip.ditto_trip.reward.domain.Item;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserItemData {
 
@@ -21,6 +25,10 @@ public class UserItemData {
     private LocalDateTime createdDateTime;
 
     public static UserItemData fromEntity(UserItem userItem) {
+        if (userItem == null) {
+            return null;
+        }
+
         Item item = userItem.getItem();
         return UserItemData.builder()
                 .userRewardId(userItem.getId())

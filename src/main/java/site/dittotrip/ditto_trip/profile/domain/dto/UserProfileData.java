@@ -26,7 +26,7 @@ public class UserProfileData {
                 .itemMouse(UserItemData.fromEntity(userProfile.getUserItemMouse()))
                 .itemHair(UserItemData.fromEntity(userProfile.getUserItemHair()))
                 .itemAccessory(UserItemData.fromEntity(userProfile.getUserItemAccessory()))
-                .badgeData(BadgeData.fromEntity(userProfile.getUserBadge().getBadge(), userProfile.getUserBadge()))
+                .badgeData(BadgeData.fromEntity(userProfile))
                 .build();
     }
 
