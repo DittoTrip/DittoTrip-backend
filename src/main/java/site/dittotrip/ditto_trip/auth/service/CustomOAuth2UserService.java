@@ -61,17 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     String newNickname;
 
     do {
-      String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      StringBuilder nickname = new StringBuilder();
-
-      for (int i = 0; i < 3; i++) {
-        nickname.append(alphabet.charAt(random.nextInt(alphabet.length())));
-      }
-
-      int number = random.nextInt(9000) + 1000;
-      nickname.append(number);
-
-      newNickname = nickname.toString();
+        newNickname = "익명" + (random.nextInt(900000) + 100000);
     }while(userRepository.findByNickname(newNickname).isPresent());
 
     return newNickname;

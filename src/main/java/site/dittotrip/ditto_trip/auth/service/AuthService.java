@@ -21,6 +21,7 @@ import site.dittotrip.ditto_trip.utils.EmailService;
 import site.dittotrip.ditto_trip.utils.JwtProvider;
 import site.dittotrip.ditto_trip.utils.RedisService;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -115,6 +116,51 @@ public class AuthService {
       User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(refreshToken))).orElseThrow(NoSuchElementException::new);
       jwtProvider.deleteRefreshToken(user.getId().toString());
     }
+  }
+
+  public void resetPassword(String email){
+    User user = userRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
+    String newPassword = generatePassword();
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+
+    String subject = "비밀번호 초기화";
+    emailService.sendSimpleMessage(email, subject, newPassword);
+  }
+
+  private static String generatePassword() {
+    // 사용할 문자들 정의 (숫자, 대문자, 소문자, 특수문자)
+    String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    String digits = "0123456789";
+    String specialCharacters = "!@#$%^&*()-_+=<>?";
+    String allCharacters = upperCase + lowerCase + digits + specialCharacters;
+
+    // SecureRandom 객체 생성
+    SecureRandom random = new SecureRandom();
+    StringBuilder password = new StringBuilder(12);
+
+    // 각 종류의 문자 하나씩 추가
+    password.append(upperCase.charAt(random.nextInt(upperCase.length())));
+    password.append(lowerCase.charAt(random.nextInt(lowerCase.length())));
+    password.append(digits.charAt(random.nextInt(digits.length())));
+    password.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+
+    // 남은 길이만큼 랜덤 문자 추가
+    for (int i = 4; i < 12; i++) {
+      password.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+    }
+
+    // 비밀번호 섞기
+    for (int i = password.length() - 1; i > 0; i--) {
+      int j = random.nextInt(i + 1);
+      char temp = password.charAt(i);
+      password.setCharAt(i, password.charAt(j));
+      password.setCharAt(j, temp);
+    }
+
+    return password.toString();
   }
 
   private static String generateRandomNumber() {

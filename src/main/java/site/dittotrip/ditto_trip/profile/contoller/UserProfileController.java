@@ -3,11 +3,9 @@ package site.dittotrip.ditto_trip.profile.contoller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.profile.domain.dto.PasswordModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserBadgeModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserNicknameModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
@@ -34,6 +32,15 @@ public class UserProfileController {
                                    @RequestBody UserNicknameModifyReq modifyReq) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, true);
         userProfileService.modifyUserNickname(reqUserId, modifyReq);
+    }
+
+    @PatchMapping("/password")
+    @Operation(summary = "비밀번호 수정하기",
+        description = "")
+    public void passwordModify(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                   @RequestBody PasswordModifyReq modifyReq) {
+        Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+        userProfileService.modifyPassword(reqUserId, modifyReq);
     }
 
     @PutMapping("/items")

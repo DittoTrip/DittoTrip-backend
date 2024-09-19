@@ -8,11 +8,8 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.auth.domain.dto.LoginReq;
-import site.dittotrip.ditto_trip.auth.domain.dto.TokenRes;
-import site.dittotrip.ditto_trip.auth.domain.dto.SignupReq;
+import site.dittotrip.ditto_trip.auth.domain.dto.*;
 import site.dittotrip.ditto_trip.auth.service.AuthService;
-import site.dittotrip.ditto_trip.auth.domain.dto.VerifyCodeReq;
 
 import java.io.IOException;
 
@@ -76,5 +73,12 @@ public class AuthController {
       description = "")
   public void logout(@RequestHeader("Authorization") String refreshToken) {
     authService.logout(refreshToken);
+  }
+
+  @PostMapping("/reset-password")
+  @Operation(summary = "비밀번호 재발급",
+      description = "")
+  public void resetPassword(@RequestBody ResetPasswordReq dto) {
+    authService.resetPassword(dto.getEmail());
   }
 }
