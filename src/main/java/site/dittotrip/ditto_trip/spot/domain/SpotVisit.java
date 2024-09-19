@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.user.domain.User;
 
@@ -30,6 +31,9 @@ public class SpotVisit {
 
     @CreationTimestamp
     private LocalDateTime createdDateTime;
+
+    @OneToOne(mappedBy = "spotVisit")
+    private Review review;
 
     public SpotVisit(Spot spot, User user) {
         this.spot = spot;

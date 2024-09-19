@@ -22,6 +22,7 @@ public class ReportData {
 
     private UserData userData;
     private Long targetId;
+    private String contentPath;
 
     public static ReportData fromEntity(Report report) {
         ReportData reportData = ReportData.builder()
@@ -34,6 +35,7 @@ public class ReportData {
                 .build();
 
         reportData.putTargetId(report);
+        reportData.putContentPath(report);
         return reportData;
     }
 
@@ -50,6 +52,25 @@ public class ReportData {
                 break;
             case DITTO_COMMENT:
                 this.setTargetId(report.getDittoComment().getId());
+                break;
+            default:
+                throw new ReportTargetTypeException();
+        }
+    }
+
+    private void putContentPath(Report report) {
+        switch (report.getReportTargetType()) {
+            case REVIEW:
+                this.setContentPath("/review/" + targetId);
+                break;
+            case REVIEW_COMMENT:
+                this.setContentPath("/review/" + targetId);
+                break;
+            case DITTO:
+                this.setContentPath("/ditto/" + targetId);
+                break;
+            case DITTO_COMMENT:
+                this.setContentPath("/ditto/" + targetId);
                 break;
             default:
                 throw new ReportTargetTypeException();

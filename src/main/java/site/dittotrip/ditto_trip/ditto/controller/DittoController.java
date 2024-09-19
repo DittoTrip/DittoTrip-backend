@@ -62,6 +62,14 @@ public class DittoController {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
         return dittoService.findDittoListBySearch(reqUserId, query, pageable);
     }
+    @GetMapping("/list/user/{userId}")
+    @Operation(summary = "유저의 디토 리스트 조회",
+            description = "")
+    public DittoListRes dittoListOfUser(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                        @PathVariable(name = "userId") Long userId,
+                                        Pageable pageable) {
+        return dittoService.findUsersDittoList(userId, pageable);
+    }
 
     @GetMapping("/{dittoId}")
     @Operation(summary = "디토 상세 조회",

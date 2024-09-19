@@ -28,7 +28,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select r from Review r where r.spotVisit.spot= :spot")
     Page<Review> findBySpot(Spot spot, Pageable pageable);
 
-    Optional<Review> findByUser(User user);
+    Page<Review> findByUser(User user, Pageable pageable);
 
     Optional<Review> findBySpotVisit(SpotVisit spotVisit);
+
+    Long countByUser(User user);
+
 }

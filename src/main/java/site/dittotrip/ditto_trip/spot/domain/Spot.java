@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,13 +37,33 @@ public class Spot {
     private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    @Setter
     private List<CategorySpot> categorySpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    @Setter
     private List<SpotImage> spotImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    @Setter
     private List<HashtagSpot> hashtagSpots = new ArrayList<>();
+
+    public Spot(SpotApply spotApply) {
+        Spot spot = new Spot(spotApply.getName(), spotApply.getAddress(), spotApply.getPointX(), spotApply.getPointY(), spotApply.getImagePath());
+
+        for (CategorySpotApply categorySpotApply : spotApply.getCategorySpotApplies()) {
+            spot.getCategorySpots().add(new CategorySpot(categorySpotApply.getCategory(), spot));
+        }
+
+        for (SpotApplyImage spotApplyImage : spotApply.getSpotApplyImages()) {
+            spot.getSpotImages().add(new SpotImage(spotApplyImage.getImagePath(), spot));
+        }
+
+        for (HashtagSpotApply hashtagSpotApply : spotApply.getHashtagSpotApplies()) {
+            spot.getHashtagSpots().add(new HashtagSpot(hashtagSpotApply.getHashtag(), spot));
+        }
+
+    }
 
     /**
      * for test

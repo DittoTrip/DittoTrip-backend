@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.spot.domain.dto;
 
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
@@ -12,12 +13,12 @@ import java.util.List;
 public class SpotListRes {
 
     private List<SpotData> spotDataList = new ArrayList<>();
-    private Integer spotCount;
+
+    private Integer totalPages;
 
     public static SpotListRes fromEntitiesByBookmark(List<SpotBookmark> spotBookmarks,
                                                      Double userX, Double userY) {
         SpotListRes spotListRes = new SpotListRes();
-        spotListRes.setSpotCount(spotBookmarks.size());
 
         for (SpotBookmark spotBookmark : spotBookmarks) {
             Spot spot = spotBookmark.getSpot();
@@ -26,6 +27,19 @@ public class SpotListRes {
         }
 
         return spotListRes;
+    }
+
+    public static SpotListRes fromEntitiesForNoAuth(Page<Spot> page,
+                                                   Double userX, Double userY) {
+        SpotListRes res = new SpotListRes();
+        res.setTotalPages(page.getTotalPages());
+
+        for (Spot spot : page.getContent()) {
+            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+            res.getSpotDataList().add(SpotData.fromEntityForNoAuth(spot, distance));
+        }
+
+        return res;
     }
 
 }

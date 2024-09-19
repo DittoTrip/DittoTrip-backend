@@ -12,18 +12,34 @@ import java.util.Map;
 @Data
 public class UserBadgeListRes {
 
-    List<BadgeData> badgeDataList = new ArrayList<>();
+    private List<BadgeData> badgeDataList = new ArrayList<>();
 
-    public static UserBadgeListRes fromEntities(List<Badge> badges, Map<Reward, UserBadge> ownBadgeMap) {
+    private Boolean isMine;
+
+    public static UserBadgeListRes fromEntitiesAtMine(List<Badge> badges, Map<Reward, UserBadge> ownBadgeMap) {
         UserBadgeListRes userBadgeListRes = new UserBadgeListRes();
-        List<BadgeData> badgeDataList = userBadgeListRes.getBadgeDataList();
+        userBadgeListRes.setIsMine(Boolean.TRUE);
 
+        List<BadgeData> badgeDataList = userBadgeListRes.getBadgeDataList();
         for (Badge badge : badges) {
             UserBadge userBadge = null;
             if (ownBadgeMap.containsKey(badge)) {
                 userBadge = ownBadgeMap.get(badge);
             }
             badgeDataList.add(BadgeData.fromEntity(badge, userBadge));
+        }
+
+        return userBadgeListRes;
+    }
+
+    public static UserBadgeListRes fromEntities(List<Badge> badges) {
+        UserBadgeListRes userBadgeListRes = new UserBadgeListRes();
+        userBadgeListRes.setIsMine(Boolean.FALSE);
+
+        List<BadgeData> badgeDataList = userBadgeListRes.getBadgeDataList();
+
+        for (Badge badge : badges) {
+            badgeDataList.add(BadgeData.fromEntity(badge, null));
         }
 
         return userBadgeListRes;

@@ -133,18 +133,26 @@ public class SpotService {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
 
-        List<Spot> spots = spotRepository.findByNameContaining(word, pageable);
-
-        SpotListRes spotListRes = new SpotListRes();
-        spotListRes.setSpotCount(spots.size());
-        for (Spot spot : spots) {
-            Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
-            Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
-
-            spotListRes.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
+        Page<Spot> page = null;
+        if (word != null) {
+            page = spotRepository.findByNameContaining(word, pageable);
+        } else {
+            page = spotRepository.findAll(pageable);
         }
 
-        return spotListRes;
+        SpotListRes res = new SpotListRes();
+        if (reqUser != null) {
+            for (Spot spot : page.getContent()) {
+                Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
+                Double distance = DistanceCalculator.getDistanceTwoPoints(userX, userY, spot.getPointX(), spot.getPointY());
+
+                res.getSpotDataList().add(SpotData.fromEntity(spot, bookmarkId, distance));
+            }
+        } else {
+            res = SpotListRes.fromEntitiesForNoAuth(page, userX, userY);
+        }
+
+        return res;
     }
 
     public SpotVisitListRes findSpotVisitList(Long reqUserId, Long userId, Pageable pageable) {
@@ -182,7 +190,17 @@ public class SpotService {
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
         Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
 
-        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId);
+        // 요청자의 스팟 방문 정보 처리
+        Long mySpotVisitId = null;
+        List<SpotVisit> spotVisits = spotVisitRepository.findByUserAndSpot(reqUser, spot);
+        for (SpotVisit spotVisit : spotVisits) {
+            if (spotVisit.getReview() == null) {
+                mySpotVisitId = spotVisit.getId();
+                break;
+            }
+        }
+
+        return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId, mySpotVisitId);
     }
 
     @Transactional(readOnly = false)

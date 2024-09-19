@@ -16,6 +16,7 @@ import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
@@ -29,10 +30,9 @@ import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
 import site.dittotrip.ditto_trip.reward.repository.*;
-import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
+import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.repository.CategorySpotRepository;
+import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -63,6 +63,7 @@ public class TestDataConfig {
     private final UserBadgeRepository userBadgeRepository;
     private final QuestRepository questRepository;
     private final UserQuestRepository userQuestRepository;
+    private final SpotApplyRepository spotApplyRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -123,6 +124,7 @@ public class TestDataConfig {
         SpotVisit spotVisit6 = createSpotVisit(spot1, user2);
         SpotVisit spotVisit7 = createSpotVisit(spot1, user3);
         SpotVisit spotVisit8 = createSpotVisit(spot1, user1);
+        SpotVisit spotVisit9 = createSpotVisit(spot1, user1);
 
         Review review1 = createReview("좋았슴", 4f, user2, spotVisit1);
         Review review2 = createReview("좋았습니다.", 3f, user2, spotVisit2);
@@ -175,6 +177,20 @@ public class TestDataConfig {
         UserBadge userBadge2 = createUserBadge(user1, badge2);
         UserBadge userBadge3 = createUserBadge(user1, badge3);
 
+        UserItem userItem21 = createUserItem(user2, item11);
+        UserItem userItem22 = createUserItem(user2, item21);
+        UserItem userItem23 = createUserItem(user2, item31);
+        UserItem userItem24 = createUserItem(user2, item41);
+        UserItem userItem25 = createUserItem(user2, item51);
+        UserBadge userBadge21 = createUserBadge(user2, badge1);
+        UserItem userItem31 = createUserItem(user3, item11);
+        UserItem userItem32 = createUserItem(user3, item21);
+        UserItem userItem33 = createUserItem(user3, item31);
+        UserItem userItem34 = createUserItem(user3, item41);
+        UserItem userItem35 = createUserItem(user3, item51);
+        UserBadge userBadge31 = createUserBadge(user3, badge1);
+        log.info("!!!!!!!!!! {}", user1.getUserProfile().getProgressionBar());
+
         UserProfile userProfile1 = user1.getUserProfile();
         userProfile1.setUserItemSkin(userItem1);
         userProfile1.setUserItemEyes(userItem3);
@@ -182,6 +198,20 @@ public class TestDataConfig {
         userProfile1.setUserItemHair(userItem7);
         userProfile1.setUserItemAccessory(userItem9);
         userProfile1.setUserBadge(userBadge1);
+        UserProfile userProfile2 = user2.getUserProfile();
+        userProfile2.setUserItemSkin(userItem21);
+        userProfile2.setUserItemEyes(userItem22);
+        userProfile2.setUserItemMouse(userItem23);
+        userProfile2.setUserItemHair(userItem24);
+        userProfile2.setUserItemAccessory(userItem25);
+        userProfile2.setUserBadge(userBadge21);
+        UserProfile userProfile3 = user3.getUserProfile();
+        userProfile3.setUserItemSkin(userItem31);
+        userProfile3.setUserItemEyes(userItem32);
+        userProfile3.setUserItemMouse(userItem33);
+        userProfile3.setUserItemHair(userItem34);
+        userProfile3.setUserItemAccessory(userItem35);
+        userProfile3.setUserBadge(userBadge31);
 
         Quest quest1 = createQuest("quest1", "emptyBody", 10, QuestActionType.DITTO, 100, badge4);
         Quest quest2 = createQuest("quest2", "emptyBody", 20, QuestActionType.FOLLOWING, 200, badge5);
@@ -196,6 +226,13 @@ public class TestDataConfig {
         createUserQuest(user1, quest5);
         createUserQuest(user1, quest6);
 
+        SpotApply spotApply = createSpotApply("spotApply1", "address", 200D, 200D, user1);
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category101, spotApply));
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category102, spotApply));
+        spotApply.getCategorySpotApplies().add(new CategorySpotApply(category103, spotApply));
+        spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag1, spotApply));
+        spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag2, spotApply));
+
 
         log.info("===== TEST DATA INIT END =====");
     }
@@ -209,10 +246,6 @@ public class TestDataConfig {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         user.getAuthorities().add(authority);
         userRepository.save(user);
-
-        UserProfile userProfile = new UserProfile(user);
-        user.setUserProfile(userProfile);
-        userProfileRepository.save(userProfile);
 
         return user;
     }
@@ -295,6 +328,12 @@ public class TestDataConfig {
         UserQuest userQuest = new UserQuest(user, quest);
         userQuestRepository.save(userQuest);
         return userQuest;
+    }
+
+    private SpotApply createSpotApply(String name, String address, Double pointX, Double pointY, User user) {
+        SpotApply spotApply = new SpotApply(name, address, pointX, pointY, user);
+        spotApplyRepository.save(spotApply);
+        return spotApply;
     }
 
     private void modifySpotRating(Spot spot, Float add, Float sub) {

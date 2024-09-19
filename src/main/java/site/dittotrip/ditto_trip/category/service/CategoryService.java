@@ -103,18 +103,35 @@ public class CategoryService {
     /**
      * 카테고리 타입마다 나누지 않고 하나의 리스트로 반환합니다.
      */
-    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(Long reqUserId, String word) {
+    public CategoryListNoTypeRes findCategoryNoTypeListBySearch(Long reqUserId, String word, Pageable pageable) {
         User reqUser = null;
         if (reqUserId != null) {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
 
-        List<Category> categories = categoryRepository.findByNameContaining(word);
+        Page<Category> page = null;
+        if (word != null) {
+            page = categoryRepository.findByNameContaining(word, pageable);
+        } else {
+            page = categoryRepository.findAll(pageable);
+        }
 
         CategoryListNoTypeRes res = new CategoryListNoTypeRes();
-        for (Category category : categories) {
+        res.setTotalPages(page.getTotalPages());
+        for (Category category : page.getContent()) {
             CategoryBookmark reqUsersBookmark = getReqUsersBookmark(reqUser, category);
             res.getCategoryDataList().add(CategoryData.fromEntity(category, reqUsersBookmark));
+        }
+
+        return res;
+    }
+
+    public CategoryListNoTypeRes findCategoryNoTypeList(Pageable pageable) {
+        Page<Category> page = categoryRepository.findAll(pageable);
+
+        CategoryListNoTypeRes res = new CategoryListNoTypeRes();
+        for (Category category : page.getContent()) {
+            res.getCategoryDataList().add(CategoryData.fromEntity(category, null));
         }
 
         return res;

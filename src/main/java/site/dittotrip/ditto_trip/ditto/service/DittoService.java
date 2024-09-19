@@ -73,6 +73,12 @@ public class DittoService {
         return DittoListRes.fromEntities(page);
     }
 
+    public DittoListRes findUsersDittoList(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Page<Ditto> page = dittoRepository.findByUser(user, pageable);
+        return DittoListRes.fromEntities(page);
+    }
+
     public DittoDetailRes findDittoDetail(Long reqUserId, Long dittoId) {
         User reqUser = null;
         if (reqUserId != null) {
@@ -88,9 +94,13 @@ public class DittoService {
         Long myBookmarkId = getMyBookmarkId(ditto, reqUser);
 
         // 팔로잉 정보 조회
-        Boolean isMyFollowing = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser()).isPresent();
+        Optional<Follow> followOptional = followRepository.findByFollowingUserAndFollowedUser(reqUser, ditto.getUser());
+        Long myFollowingId = null;
+        if (followOptional.isPresent()) {
+            myFollowingId = followOptional.get().getId();
+        }
 
-        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, isMyFollowing);
+        return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, myFollowingId);
     }
 
     @Transactional(readOnly = false)

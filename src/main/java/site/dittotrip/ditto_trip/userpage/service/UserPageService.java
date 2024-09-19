@@ -17,6 +17,7 @@ import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +51,14 @@ public class UserPageService {
         List<Alarm> reqUsersAlarms = alarmRepository.findByUserAndIsChecked(reqUser, Boolean.FALSE);
         Boolean isNotCheckedAlarm = !reqUsersAlarms.isEmpty();
 
-        return UserPageRes.fromEntities(reqUser, user, userProfile, dittos, followingCount, followedCount, isNotCheckedAlarm);
+        // 팔로잉 정보 조회
+        Optional<Follow> followOptional = followRepository.findByFollowingUserAndFollowedUser(reqUser, user);
+        Long myFollowingId = null;
+        if (followOptional.isPresent()) {
+            myFollowingId = followOptional.get().getId();
+        }
+
+        return UserPageRes.fromEntities(reqUser, user, userProfile, dittos, followingCount, followedCount, isNotCheckedAlarm, myFollowingId);
     }
 
 }

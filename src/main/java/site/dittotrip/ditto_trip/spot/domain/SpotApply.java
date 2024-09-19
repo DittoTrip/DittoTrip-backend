@@ -32,6 +32,7 @@ public class SpotApply {
     @Setter
     private String imagePath;
 
+    @Setter
     private SpotApplyStatus spotApplyStatus = SpotApplyStatus.PENDING;
 
     @CreationTimestamp
@@ -42,12 +43,15 @@ public class SpotApply {
     private User user;
 
     @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<CategorySpotApply> categorySpotApplies = new ArrayList<>();
 
     @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<SpotApplyImage> spotApplyImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "spotApply", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
     private List<HashtagSpotApply> hashtagSpotApplies = new ArrayList<>();
 
     public SpotApply(String name, String address, Double pointX, Double pointY, User user) {

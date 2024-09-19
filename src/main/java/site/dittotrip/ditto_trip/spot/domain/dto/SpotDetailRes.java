@@ -20,10 +20,13 @@ public class SpotDetailRes {
     private List<SpotImageData> spotImageDataList = new ArrayList<>();
     private List<ReviewMiniData> reviewDataList = new ArrayList<>();
 
-    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Long bookmarkId) {
+    private Long mySpotVisitId;
+
+    public static SpotDetailRes fromEntity(Spot spot, List<SpotImage> SpotImages, List<Review> reviews, Long bookmarkId, Long mySpotVisitId) {
         SpotDetailRes spotDetailRes = new SpotDetailRes();
 
         spotDetailRes.setSpotData(SpotData.fromEntityForDetail(spot, bookmarkId));
+        spotDetailRes.setMySpotVisitId(mySpotVisitId);
         spotDetailRes.putImageDataList(SpotImages);
         spotDetailRes.putReviewDataList(reviews);
 
