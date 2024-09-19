@@ -66,7 +66,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list/search/typeless")
-    @Operation(summary = "카테고리 리스트 검색 조회 (관리자도 사용)",
+    @Operation(summary = "카테고리 리스트 검색 조회",
             description = "타입에 상관없이 하나의 리스트를 반환합니다.")
     public CategoryListNoTypeRes categorySearchNoTypeList(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                           @RequestParam(name = "query", required = false) String query,
@@ -74,6 +74,8 @@ public class CategoryController {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
         return categoryService.findCategoryNoTypeListBySearch(reqUserId, query, pageable);
     }
+
+
 
     @PostMapping
     @Operation(summary = "카테고리 저장 (관리자 기능)",
