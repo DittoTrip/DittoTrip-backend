@@ -26,8 +26,10 @@ public class Category {
     @Setter
     private String name;
     @Setter
+    @Enumerated(EnumType.STRING)
     private CategoryMajorType categoryMajorType;
     @Setter
+    @Enumerated(EnumType.STRING)
     private CategorySubType categorySubType;
     @Setter
     private String imagePath;

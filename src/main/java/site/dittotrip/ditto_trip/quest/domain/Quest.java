@@ -23,6 +23,7 @@ public class Quest {
     private String title;
     private String body;
     private Integer conditionCount;
+    @Enumerated(EnumType.STRING)
     private QuestActionType questActionType;
     @CreationTimestamp
     private LocalDateTime createdDateTime;
