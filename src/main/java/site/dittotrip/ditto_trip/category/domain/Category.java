@@ -9,6 +9,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagCategory;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
+import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,10 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @Setter
     private List<CategorySpot> categorySpots = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private List<CategorySpotApply> categorySpotApplies = new ArrayList<>();
 
     /**
      * for CategoryListRes test
