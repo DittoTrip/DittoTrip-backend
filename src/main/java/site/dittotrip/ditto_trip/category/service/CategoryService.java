@@ -200,7 +200,9 @@ public class CategoryService {
     @Transactional(readOnly = false)
     public void removeCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
-        s3Service.deleteFile(category.getImagePath());
+        if (category.getImagePath() != null) {
+            s3Service.deleteFile(category.getImagePath());
+        }
         categoryRepository.delete(category);
     }
 
