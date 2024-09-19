@@ -70,9 +70,10 @@ public class TestDataConfig {
     public void testDataInit() {
         log.info("===== TEST DATA INIT START =====");
 
-        User user1 = createUser("순재", "won9619v@naver.com", "1234", "haus");
-        User user2 = createUser("인주", "huhhuh@naver.com", "12345", "YH486");
-        User user3 = createUser("윤하", "yunha@naver.com", "123456", "realYH");
+        User user1 = createUser("순재", "won9619v@naver.com", "1234", "haus", new SimpleGrantedAuthority("ROLE_USER"));
+        User user2 = createUser("인주", "huhhuh@naver.com", "12345", "YH486", new SimpleGrantedAuthority("ROLE_USER"));
+        User user3 = createUser("윤하", "yunha@naver.com", "123456", "realYH", new SimpleGrantedAuthority("ROLE_USER"));
+        User user4 = createUser("관리자", "admin@naver.com", "123456", "admin", new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         Category category101 = createCategory("이상한 변호사 우영우", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
         Category category102 = createCategory("동백꽃 필 무렵", CategoryMajorType.CONTENT, CategorySubType.CONTENT_DRAMA);
@@ -237,13 +238,12 @@ public class TestDataConfig {
         log.info("===== TEST DATA INIT END =====");
     }
 
-    private User createUser(String name, String email, String password, String nickname) {
+    private User createUser(String name, String email, String password, String nickname, SimpleGrantedAuthority authority) {
         User user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setNickname(nickname);
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         user.getAuthorities().add(authority);
         userRepository.save(user);
 
