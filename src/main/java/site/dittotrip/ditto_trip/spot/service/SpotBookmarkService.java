@@ -3,10 +3,10 @@ package site.dittotrip.ditto_trip.spot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotBookmark;
-import site.dittotrip.ditto_trip.spot.exception.ExistingSpotDittoException;
+import site.dittotrip.ditto_trip.spot.exception.ExistingSpotBookmarkException;
 import site.dittotrip.ditto_trip.spot.repository.SpotBookmarkRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -37,7 +37,7 @@ public class SpotBookmarkService {
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
         spotBookmarkRepository.findBySpotAndUser(spot, reqUser).ifPresent(m -> {
-            throw new ExistingSpotDittoException();
+            throw new ExistingSpotBookmarkException();
         });
 
         SpotBookmark spotBookmark = new SpotBookmark(spot, reqUser);

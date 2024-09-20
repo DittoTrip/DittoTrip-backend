@@ -11,7 +11,6 @@ import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.*;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
-import site.dittotrip.ditto_trip.category.exception.AlreadyExistingCategorySpotException;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -126,15 +125,20 @@ public class CategoryService {
         return res;
     }
 
-    public CategoryListNoTypeRes findCategoryNoTypeList(Pageable pageable) {
-        Page<Category> page = categoryRepository.findAll(pageable);
-
-        CategoryListNoTypeRes res = new CategoryListNoTypeRes();
-        for (Category category : page.getContent()) {
-            res.getCategoryDataList().add(CategoryData.fromEntity(category, null));
+    public CategoryListForAdminRes findCategoryListForAdmin(String word, Pageable pageable) {
+        Page<Category> page;
+        if (word != null) {
+            page = categoryRepository.findByNameContaining(word, pageable);
+        } else {
+            page = categoryRepository.findAll(pageable);
         }
 
-        return res;
+        return CategoryListForAdminRes.fromEntities(page);
+    }
+
+    public CategoryDetailForAdminRes findCategoryDetailForAdmin(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+        return CategoryDetailForAdminRes.fromEntity(category);
     }
 
     @Transactional(readOnly = false)

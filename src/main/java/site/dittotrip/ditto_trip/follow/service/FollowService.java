@@ -10,14 +10,13 @@ import site.dittotrip.ditto_trip.follow.domain.dto.FollowListRes;
 import site.dittotrip.ditto_trip.follow.exception.ExistingFollowException;
 import site.dittotrip.ditto_trip.follow.exception.FollowSelfException;
 import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)

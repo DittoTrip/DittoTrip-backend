@@ -7,10 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.profile.domain.dto.PasswordModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserBadgeModifyReq;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserNicknameModifyReq;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
 import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
-import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 import site.dittotrip.ditto_trip.reward.repository.*;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileModifyReq;
@@ -19,9 +18,7 @@ import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional

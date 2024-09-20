@@ -19,6 +19,7 @@ public class UserQuest {
     @Column(name = "user_quest_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private UserQuestStatus userQuestStatus = UserQuestStatus.NOT_ACHIEVE;
     private Integer nowCount = 0;
     private LocalDateTime achieveDateTime;

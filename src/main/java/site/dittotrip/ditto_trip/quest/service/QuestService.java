@@ -12,7 +12,7 @@ import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.quest.exception.AlreadyAchieveQuestException;
 import site.dittotrip.ditto_trip.quest.exception.NotAchieveQuestException;
 import site.dittotrip.ditto_trip.quest.repository.UserQuestRepository;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
 import site.dittotrip.ditto_trip.reward.domain.*;
 import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 import site.dittotrip.ditto_trip.reward.repository.*;

@@ -33,6 +33,7 @@ public class SpotApply {
     private String imagePath;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private SpotApplyStatus spotApplyStatus = SpotApplyStatus.PENDING;
 
     @CreationTimestamp

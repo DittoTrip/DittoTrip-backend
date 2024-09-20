@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -11,6 +12,7 @@ import site.dittotrip.ditto_trip.hashtag.domain.HashtagCategory;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +28,16 @@ public class Category {
     @Setter
     private String name;
     @Setter
+    @Enumerated(EnumType.STRING)
     private CategoryMajorType categoryMajorType;
     @Setter
+    @Enumerated(EnumType.STRING)
     private CategorySubType categorySubType;
     @Setter
     private String imagePath;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @Setter
