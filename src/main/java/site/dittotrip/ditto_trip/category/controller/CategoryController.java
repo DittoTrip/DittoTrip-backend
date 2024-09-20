@@ -90,9 +90,9 @@ public class CategoryController {
     @PostMapping
     @Operation(summary = "카테고리 저장 (관리자 기능)",
             description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.")
-    public void categorySave(@RequestBody CategorySaveReq categorySaveReq,
-                             @RequestParam(name = "image") MultipartFile multipartFile) {
-        categoryService.saveCategory(categorySaveReq, multipartFile);
+    public void categorySave(@RequestPart(name = "saveReq") CategorySaveReq saveReq,
+                             @RequestPart(name = "image") MultipartFile multipartFile) {
+        categoryService.saveCategory(saveReq, multipartFile);
     }
 
     @PutMapping("/{categoryId}")
@@ -100,8 +100,8 @@ public class CategoryController {
             description = "관리자 권한이 없는 유저의 요청은 인증 필터에 의해 거부됩니다.\n" +
                     "이미지는 필수가 아닙니다.")
     public void categoryModify(@PathVariable(name = "categoryId") Long categoryId,
-                               @RequestBody CategoryModifyReq categoryModifyReq,
-                               @RequestParam(name = "image", required = false) MultipartFile multipartFile) {
+                               @RequestPart(name = "modifyReq") CategoryModifyReq categoryModifyReq,
+                               @RequestPart(name = "image") MultipartFile multipartFile) {
         categoryService.modifyCategory(categoryId, categoryModifyReq, multipartFile);
     }
 
