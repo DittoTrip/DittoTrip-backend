@@ -21,6 +21,7 @@ import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplySaveReq;
 import site.dittotrip.ditto_trip.spot.domain.enums.SpotApplyStatus;
+import site.dittotrip.ditto_trip.spot.exception.AlreadyHandledSpotApplyException;
 import site.dittotrip.ditto_trip.spot.repository.SpotApplyRepository;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
@@ -118,6 +119,10 @@ public class SpotApplyService {
     @Transactional(readOnly = false)
     public void handleSpotApply(Long spotApplyId, Boolean isApproval) {
         SpotApply spotApply = spotApplyRepository.findById(spotApplyId).orElseThrow(NoSuchElementException::new);
+
+        if (!spotApply.getSpotApplyStatus().equals(SpotApplyStatus.PENDING)) {
+            throw new AlreadyHandledSpotApplyException();
+        }
 
         if (isApproval) {
             spotRepository.save(Spot.fromSpotApply(spotApply));
