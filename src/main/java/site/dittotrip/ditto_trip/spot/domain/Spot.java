@@ -48,7 +48,7 @@ public class Spot {
     @Setter
     private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
-    public Spot(SpotApply spotApply) {
+    public static Spot fromSpotApply(SpotApply spotApply) {
         Spot spot = new Spot(spotApply.getName(), spotApply.getAddress(), spotApply.getPointX(), spotApply.getPointY(), spotApply.getImagePath());
 
         for (CategorySpotApply categorySpotApply : spotApply.getCategorySpotApplies()) {
@@ -63,6 +63,7 @@ public class Spot {
             spot.getHashtagSpots().add(new HashtagSpot(hashtagSpotApply.getHashtag(), spot));
         }
 
+        return spot;
     }
 
     /**

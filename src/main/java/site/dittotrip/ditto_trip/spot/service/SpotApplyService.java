@@ -120,7 +120,7 @@ public class SpotApplyService {
         SpotApply spotApply = spotApplyRepository.findById(spotApplyId).orElseThrow(NoSuchElementException::new);
 
         if (isApproval) {
-            spotRepository.save(new Spot(spotApply));
+            spotRepository.save(Spot.fromSpotApply(spotApply));
             spotApply.setSpotApplyStatus(SpotApplyStatus.APPROVED);
         } else {
             spotApply.setSpotApplyStatus(SpotApplyStatus.REJECTED);
