@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.review.exception;
+package site.dittotrip.ditto_trip.exception.common;
 
 public class NotMatchedRelationException extends RuntimeException {
 }

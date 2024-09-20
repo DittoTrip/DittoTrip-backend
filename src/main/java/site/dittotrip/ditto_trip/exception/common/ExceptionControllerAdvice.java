@@ -25,11 +25,16 @@ public class ExceptionControllerAdvice {
         return handleException(e, request, HttpStatus.UNAUTHORIZED);
     }
 
-
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResult serverErrorHandler(Exception e, HttpServletRequest request) {
         return handleException(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResult customErrorHandler(CustomException e, HttpServletRequest request) {
+        return handleCustomException(e, request);
     }
 
     private ErrorResult handleException(Exception e, HttpServletRequest request, HttpStatus status) {
@@ -48,4 +53,20 @@ public class ExceptionControllerAdvice {
 
         return new ErrorResult(status.value(), errorMessage, requestMethod, requestUri);
     }
+
+    private ErrorResult handleCustomException(CustomException e, HttpServletRequest request) {
+
+        String clientIp = request.getRemoteAddr();
+        String userId = request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "Anonymous";
+
+        String requestMethod = request.getMethod();
+        String requestUri = request.getRequestURI();
+        String queryString = request.getQueryString();
+
+        log.error("사용자: {}, IP: {}, 요청: {} {}?{}, 상태 코드: {}, 에러 메시지: {}",
+                userId, clientIp, requestMethod, requestUri, queryString, e.getHttpStatus(), e.getMessage(), e);
+
+        return new ErrorResult(e.getHttpStatus().value(), e.getMessage(), requestMethod, requestUri);
+    }
+
 }

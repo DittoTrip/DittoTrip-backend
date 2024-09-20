@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
-import site.dittotrip.ditto_trip.category.exception.ExistingCategoryDibsException;
+import site.dittotrip.ditto_trip.category.exception.ExistingCategoryBookmarkException;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
@@ -39,7 +39,7 @@ public class CategoryBookmarkService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
         categoryBookmarkRepository.findByCategoryAndUser(category, reqUser).ifPresent(m -> {
-            throw new ExistingCategoryDibsException();
+            throw new ExistingCategoryBookmarkException();
         });
 
         CategoryBookmark categoryBookmark = new CategoryBookmark(category, reqUser);

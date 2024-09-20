@@ -11,7 +11,6 @@ import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.*;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
-import site.dittotrip.ditto_trip.category.exception.AlreadyExistingCategorySpotException;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;

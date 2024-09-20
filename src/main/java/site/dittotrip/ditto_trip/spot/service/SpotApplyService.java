@@ -11,7 +11,7 @@ import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotApply;

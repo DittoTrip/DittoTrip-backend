@@ -11,8 +11,8 @@ import site.dittotrip.ditto_trip.ditto.domain.dto.DittoCommentSaveReq;
 import site.dittotrip.ditto_trip.ditto.exception.DoubleChildDittoCommentException;
 import site.dittotrip.ditto_trip.ditto.repository.DittoCommentRepository;
 import site.dittotrip.ditto_trip.ditto.repository.DittoRepository;
-import site.dittotrip.ditto_trip.review.exception.NoAuthorityException;
-import site.dittotrip.ditto_trip.review.exception.NotMatchedRelationException;
+import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
+import site.dittotrip.ditto_trip.exception.common.NotMatchedRelationException;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.ArrayList;
