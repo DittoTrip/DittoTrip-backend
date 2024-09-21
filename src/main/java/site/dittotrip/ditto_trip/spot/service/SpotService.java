@@ -26,6 +26,7 @@ import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,6 +48,7 @@ public class SpotService {
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final AlarmRepository alarmRepository;
+    private final S3Service s3Service;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
                                                       Double userX, Double userY, Pageable pageable) {
@@ -201,6 +203,22 @@ public class SpotService {
         }
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId, mySpotVisitId);
+    }
+
+    @Transactional(readOnly = false)
+    public void removeSpot(Long spotId) {
+        Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+
+        // 이미지 처리
+        if (spot.getImagePath() != null) {
+            s3Service.deleteFile(spot.getName());
+        }
+
+        for (SpotImage spotImage : spot.getSpotImages()) {
+            s3Service.deleteFile(spotImage.getImagePath());
+        }
+
+        spotRepository.delete(spot);
     }
 
     @Transactional(readOnly = false)

@@ -99,6 +99,13 @@ public class SpotController {
         return spotService.findSpotDetail(reqUserId, spotId);
     }
 
+    @DeleteMapping("/spot/{spotId}")
+    @Operation(summary = "스팟 삭제 (관리자 기능)",
+            description = "")
+    public void spotDetail(@PathVariable(name = "spotId") Long spotId) {
+        spotService.removeSpot(spotId);
+    }
+
     @PostMapping("/spot/{spotId}")
     @Operation(summary = "스팟 방문",
             description = "params \n" +
