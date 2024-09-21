@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
+import site.dittotrip.ditto_trip.quest.aop.ExpHandlingTargetMethod;
+import site.dittotrip.ditto_trip.quest.aop.QuestHandlingTargetMethod;
 import site.dittotrip.ditto_trip.review.domain.ReviewComment;
 import site.dittotrip.ditto_trip.review.domain.ReviewImage;
 import site.dittotrip.ditto_trip.review.domain.dto.*;
@@ -109,6 +111,8 @@ public class ReviewService {
         return reviewDetailRes;
     }
 
+    @QuestHandlingTargetMethod
+    @ExpHandlingTargetMethod
     @Transactional(readOnly = false)
     public void saveReview(Long reqUserId, Long spotVisitId, ReviewSaveReq reviewSaveReq, List<MultipartFile> multipartFiles) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);

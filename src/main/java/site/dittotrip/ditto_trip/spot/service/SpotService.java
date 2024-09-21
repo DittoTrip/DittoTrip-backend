@@ -19,6 +19,8 @@ import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
+import site.dittotrip.ditto_trip.quest.aop.ExpHandlingTargetMethod;
+import site.dittotrip.ditto_trip.quest.aop.QuestHandlingTargetMethod;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
@@ -258,6 +260,8 @@ public class SpotService {
         spotRepository.delete(spot);
     }
 
+    @ExpHandlingTargetMethod
+    @QuestHandlingTargetMethod
     @Transactional(readOnly = false)
     public void visitSpot(Long reqUserId, Long spotId, Double userX, Double userY) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
