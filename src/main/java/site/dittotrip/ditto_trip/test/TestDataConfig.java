@@ -141,16 +141,16 @@ public class TestDataConfig {
         Ditto ditto3 = createDitto("제목3", "여기 좋아요3", user2);
         Ditto ditto4 = createDitto("제목4", "여기 좋아요4", user2);
 
-        Item item11 = createItem("skin1", "empty imagePath", ItemType.SKIN);
+        Item item11 = createItem("skin1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(19).png", ItemType.SKIN);
         Item item12 = createItem("skin2", "empty imagePath", ItemType.SKIN);
         Item item13 = createItem("skin3", "empty imagePath", ItemType.SKIN);
-        Item item21 = createItem("eyes1", "empty imagePath", ItemType.EYES);
+        Item item21 = createItem("eyes1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(1).png", ItemType.EYES);
         Item item22 = createItem("eyes2", "empty imagePath", ItemType.EYES);
         Item item23 = createItem("eyes3", "empty imagePath", ItemType.EYES);
-        Item item31 = createItem("mouse1", "empty imagePath", ItemType.MOUSE);
+        Item item31 = createItem("mouse1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(2).png", ItemType.MOUSE);
         Item item32 = createItem("mouse2", "empty imagePath", ItemType.MOUSE);
         Item item33 = createItem("mouse3", "empty imagePath", ItemType.MOUSE);
-        Item item41 = createItem("hair1", "empty imagePath", ItemType.HAIR);
+        Item item41 = createItem("hair1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(4).png", ItemType.HAIR);
         Item item42 = createItem("hair2", "empty imagePath", ItemType.HAIR);
         Item item43 = createItem("hair3", "empty imagePath", ItemType.HAIR);
         Item item51 = createItem("accessory1", "empty imagePath", ItemType.ACCESSORY);
@@ -199,6 +199,7 @@ public class TestDataConfig {
         userProfile1.setUserItemHair(userItem7);
         userProfile1.setUserItemAccessory(userItem9);
         userProfile1.setUserBadge(userBadge1);
+
         UserProfile userProfile2 = user2.getUserProfile();
         userProfile2.setUserItemSkin(userItem21);
         userProfile2.setUserItemEyes(userItem22);
