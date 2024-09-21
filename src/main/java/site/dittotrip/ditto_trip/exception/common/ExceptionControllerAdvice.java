@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
@@ -35,6 +37,13 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler
     public ErrorResult customErrorHandler(CustomException e, HttpServletRequest request) {
         return handleCustomException(e, request);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public ErrorResult notFoundErrorHandler(HttpServletRequest request) {
+        CustomException customException = new NotFoundEntityException();
+        return handleException(customException, request, customException.getHttpStatus());
     }
 
     private ErrorResult handleException(Exception e, HttpServletRequest request, HttpStatus status) {
