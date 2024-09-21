@@ -24,4 +24,6 @@ public interface CategoryBookmarkRepository extends JpaRepository<CategoryBookma
                                                   @Param("majorType") CategoryMajorType majorType,
                                                   Pageable pageable);
 
+    List<CategoryBookmark> findByCategory(Category category);
+
 }

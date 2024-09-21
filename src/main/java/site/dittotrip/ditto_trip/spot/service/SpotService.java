@@ -32,9 +32,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -240,6 +238,8 @@ public class SpotService {
             spot.getHashtagSpots().add(new HashtagSpot(hashtag, spot));
         }
 
+        // 알림 처리
+        processAlarmInSavingSpot(spot);
     }
 
     @Transactional(readOnly = false)
@@ -272,6 +272,23 @@ public class SpotService {
 
         // 알림 처리
         processAlarmInVisitSpot(reqUser, spot);
+    }
+
+    private void processAlarmInSavingSpot(Spot spot) {
+        String title = "관심있는 카테고리에 새로운 스팟이 등록되었습니다 !!";
+        String body = "[" + spot.getName() + "]" + " 스팟을 확인해보세요 !!";
+        String path = "/spot/" + spot.getId();
+
+        Set<User> targets = new HashSet<>();
+        List<CategorySpot> categorySpots = spot.getCategorySpots();
+        for (CategorySpot categorySpot : categorySpots) {
+            List<CategoryBookmark> categoryBookmarks = categoryBookmarkRepository.findByCategory(categorySpot.getCategory());
+            for (CategoryBookmark categoryBookmark : categoryBookmarks) {
+                targets.add(categoryBookmark.getUser());
+            }
+        }
+
+        alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets.stream().toList()));
     }
 
     private void processAlarmInVisitSpot(User user, Spot spot) {
