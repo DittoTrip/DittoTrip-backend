@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
@@ -15,6 +16,9 @@ import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
+import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
+import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
+import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.repository.ReviewRepository;
 import site.dittotrip.ditto_trip.review.utils.DistanceCalculator;
@@ -48,6 +52,7 @@ public class SpotService {
     private final SpotBookmarkRepository spotBookmarkRepository;
     private final SpotVisitRepository spotVisitRepository;
     private final AlarmRepository alarmRepository;
+    private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
@@ -203,6 +208,38 @@ public class SpotService {
         }
 
         return SpotDetailRes.fromEntity(spot, SpotImages, reviews, bookmarkId, mySpotVisitId);
+    }
+
+    @Transactional(readOnly = false)
+    public void saveSpot(SpotSaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
+        Spot spot = saveReq.toEntity();
+        spotRepository.save(spot);
+
+        // 이미지 처리
+        String mainImagePath = s3Service.uploadFile(multipartFile);
+        spot.setImagePath(mainImagePath);
+
+        for (MultipartFile file : multipartFiles) {
+            String imagePath = s3Service.uploadFile(file);
+            spot.getSpotImages().add(new SpotImage(imagePath, spot));
+        }
+
+        // CategorySpot 처리
+        for (Long categoryId : saveReq.getCategoryIds()) {
+            Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+            spot.getCategorySpots().add(new CategorySpot(category, spot));
+        }
+
+        // hashtag 처리
+        for (String hashtagName : saveReq.getHashtagNames()) {
+            Hashtag hashtag = hashtagRepository.findByName(hashtagName).orElse(null);
+            if (hashtag == null) {
+                hashtag = new Hashtag(hashtagName);
+                hashtagRepository.save(hashtag);
+            }
+            spot.getHashtagSpots().add(new HashtagSpot(hashtag, spot));
+        }
+
     }
 
     @Transactional(readOnly = false)

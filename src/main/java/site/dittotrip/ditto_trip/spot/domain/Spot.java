@@ -27,6 +27,7 @@ public class Spot {
     private String address;
     private Double pointX;
     private Double pointY;
+    @Setter
     private String imagePath;
     @Setter
     private Integer reviewCount = 0;
@@ -66,9 +67,6 @@ public class Spot {
         return spot;
     }
 
-    /**
-     * for test
-     */
     public Spot(String name, String address, Double pointX, Double pointY, String imagePath) {
         this.name = name;
         this.address = address;
