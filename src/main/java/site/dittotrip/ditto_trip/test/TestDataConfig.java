@@ -47,7 +47,6 @@ public class TestDataConfig {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserProfileRepository userProfileRepository;
     private final CategoryRepository categoryRepository;
     private final SpotRepository spotRepository;
     private final HashtagRepository hashtagRepository;
@@ -55,10 +54,8 @@ public class TestDataConfig {
     private final SpotVisitRepository spotVisitRepository;
     private final ReviewRepository reviewRepository;
     private final DittoRepository dittoRepository;
-    private final RewardRepository rewardRepository;
     private final ItemRepository itemRepository;
     private final BadgeRepository badgeRepository;
-    private final UserRewardRepository userRewardRepository;
     private final UserItemRepository userItemRepository;
     private final UserBadgeRepository userBadgeRepository;
     private final QuestRepository questRepository;
