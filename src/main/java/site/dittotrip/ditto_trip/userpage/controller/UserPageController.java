@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
-import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.userpage.domain.dto.UserPageRes;
 import site.dittotrip.ditto_trip.userpage.service.UserPageService;
 
@@ -19,19 +18,28 @@ import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdF
  * 1. 유저 페이지 조회
  */
 @RestController
-@RequestMapping("/user/{userId}/user-page")
+@RequestMapping("/user-page")
 @RequiredArgsConstructor
 public class UserPageController {
 
     private final UserPageService userPageService;
 
-    @GetMapping
+    @GetMapping("/{userId}")
     @Operation(summary = "유저 페이지 조회",
             description = "")
-    public UserPageRes userPageFind(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                    @PathVariable(name = "userId") Long userId) {
+    public UserPageRes userPage(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                @PathVariable(name = "userId") Long userId) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
         return userPageService.findUserPage(reqUserId, userId);
     }
+
+    @GetMapping("/my")
+    @Operation(summary = "내 유저 페이지 조회",
+            description = "")
+    public UserPageRes myUserPage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return userPageService.findUserPage(reqUserId, reqUserId);
+    }
+
 
 }
