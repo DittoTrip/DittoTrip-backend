@@ -22,6 +22,7 @@ import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
+import site.dittotrip.ditto_trip.quest.aop.QuestHandlingTargetMethod;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
@@ -103,6 +104,7 @@ public class DittoService {
         return DittoDetailRes.fromEntity(ditto, dittoComments, dittoCount.intValue(), isMine, myBookmarkId, reqUser, myFollowingId);
     }
 
+    @QuestHandlingTargetMethod
     @Transactional(readOnly = false)
     public void saveDitto(Long reqUserId, DittoSaveReq saveReq,
                            MultipartFile multipartFile) {

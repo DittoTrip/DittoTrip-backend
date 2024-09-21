@@ -6,16 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
+import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
-import site.dittotrip.ditto_trip.spot.domain.CategorySpotApply;
-import site.dittotrip.ditto_trip.spot.domain.Spot;
-import site.dittotrip.ditto_trip.spot.domain.SpotApply;
-import site.dittotrip.ditto_trip.spot.domain.SpotApplyImage;
+import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyMiniListRes;
@@ -28,8 +29,7 @@ import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,7 +40,9 @@ public class SpotApplyService {
     private final SpotRepository spotRepository;
     private final SpotApplyRepository spotApplyRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryBookmarkRepository categoryBookmarkRepository;
     private final HashtagRepository hashtagRepository;
+    private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
 
     public SpotApplyListRes findSpotApplyList(String word, Pageable pageable) {
@@ -125,11 +127,40 @@ public class SpotApplyService {
         }
 
         if (isApproval) {
-            spotRepository.save(Spot.fromSpotApply(spotApply));
+            Spot spot = Spot.fromSpotApply(spotApply);
+            spotRepository.save(spot);
             spotApply.setSpotApplyStatus(SpotApplyStatus.APPROVED);
+            processAlarmInHandlingSpotApply(spotApply, spot);
         } else {
             spotApply.setSpotApplyStatus(SpotApplyStatus.REJECTED);
         }
     }
+
+    private void processAlarmInHandlingSpotApply(SpotApply spotApply, Spot spot) {
+        String title1 = "스팟 신청이 처리되었습니다 !!";
+        String body1 = "[" + spot.getName() + "]" + " 스팟을 확인해보세요 !!";
+        String path1 = "/spot/" + spot.getId();
+
+        User spotApplier = spotApply.getUser();
+        List<User> target1 = new ArrayList<>(List.of(spotApplier));
+        alarmRepository.saveAll(Alarm.createAlarms(title1, body1, path1, target1));
+
+        String title2 = "관심있는 카테고리에 새로운 스팟이 등록되었습니다 !!";
+        String body2 = "[" + spot.getName() + "]" + " 스팟을 확인해보세요 !!";
+        String path2 = "/spot/" + spot.getId();
+        Set<User> target2 = new HashSet<>();
+        target2.add(spotApplier);
+        List<CategorySpot> categorySpots = spot.getCategorySpots();
+        for (CategorySpot categorySpot : categorySpots) {
+            List<CategoryBookmark> categoryBookmarks = categoryBookmarkRepository.findByCategory(categorySpot.getCategory());
+            for (CategoryBookmark categoryBookmark : categoryBookmarks) {
+                target2.add(categoryBookmark.getUser());
+            }
+        }
+        target2.remove(spotApplier);
+
+        alarmRepository.saveAll(Alarm.createAlarms(title2, body2, path2, target2.stream().toList()));
+    }
+
 
 }

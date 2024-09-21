@@ -27,6 +27,7 @@ public class Spot {
     private String address;
     private Double pointX;
     private Double pointY;
+    @Setter
     private String imagePath;
     @Setter
     private Integer reviewCount = 0;
@@ -48,6 +49,9 @@ public class Spot {
     @Setter
     private List<HashtagSpot> hashtagSpots = new ArrayList<>();
 
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    private List<SpotBookmark> spotBookmarks = new ArrayList<>();
+
     public static Spot fromSpotApply(SpotApply spotApply) {
         Spot spot = new Spot(spotApply.getName(), spotApply.getAddress(), spotApply.getPointX(), spotApply.getPointY(), spotApply.getImagePath());
 
@@ -66,9 +70,6 @@ public class Spot {
         return spot;
     }
 
-    /**
-     * for test
-     */
     public Spot(String name, String address, Double pointX, Double pointY, String imagePath) {
         this.name = name;
         this.address = address;

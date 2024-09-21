@@ -11,6 +11,7 @@ import site.dittotrip.ditto_trip.follow.exception.ExistingFollowException;
 import site.dittotrip.ditto_trip.follow.exception.FollowSelfException;
 import site.dittotrip.ditto_trip.follow.repository.FollowRepository;
 import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
+import site.dittotrip.ditto_trip.quest.aop.QuestHandlingTargetMethod;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -51,6 +52,7 @@ public class FollowService {
         return FollowListRes.fromEntities(follows, reqUser, Boolean.FALSE);
     }
 
+    @QuestHandlingTargetMethod
     @Transactional(readOnly = false)
     public void saveFollow(Long reqUserId, Long userId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);

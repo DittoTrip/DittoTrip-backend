@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.exception.common.TooManyImagesException;
 import site.dittotrip.ditto_trip.spot.domain.dto.*;
 import site.dittotrip.ditto_trip.spot.service.SpotBookmarkService;
 import site.dittotrip.ditto_trip.spot.service.SpotService;
-import site.dittotrip.ditto_trip.user.domain.User;
+
+import java.util.List;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.*;
 
@@ -97,6 +100,19 @@ public class SpotController {
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
         return spotService.findSpotDetail(reqUserId, spotId);
+    }
+
+    @PostMapping("/spot")
+    @Operation(summary = "스팟 등록 (관리자 기능)",
+            description = "")
+    public void spotSave(@RequestPart(name = "saveReq") SpotSaveReq saveReq,
+                         @RequestPart(name = "image") MultipartFile multipartFile,
+                         @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
+        if (multipartFiles.size() > 10) {
+            throw new TooManyImagesException();
+        }
+
+        spotService.saveSpot(saveReq, multipartFile, multipartFiles);
     }
 
     @DeleteMapping("/spot/{spotId}")
