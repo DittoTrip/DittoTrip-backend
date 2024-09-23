@@ -64,6 +64,11 @@ public class UserService {
     return UserDetailRes.fromEntity(UserDataForAdmin.fromEntity(user, reviewCount.intValue(), dittoCount.intValue()));
   }
 
+  public MyUserInfoRes findMyUserInfo(Long reqUserId) {
+    User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+    return MyUserInfoRes.fromEntity(reqUser);
+  }
+
   public ContentListRes findUsersReviewList(Long userId, Pageable pageable) {
     User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
     Page<Review> page = reviewRepository.findByUser(user, pageable);

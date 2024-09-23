@@ -21,8 +21,8 @@ public class ReviewSaveReq {
     }
 
     public void modifyEntity(Review review) {
-        review.setBody(review.getBody());
-        review.setRating(rating);
+        review.setBody(this.getBody());
+        review.setRating(this.rating);
     }
 
 }

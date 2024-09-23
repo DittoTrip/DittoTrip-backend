@@ -104,11 +104,11 @@ public class SpotController {
 
     @PostMapping("/spot")
     @Operation(summary = "스팟 등록 (관리자 기능)",
-            description = "")
+            description = "images 제한 3개")
     public void spotSave(@RequestPart(name = "saveReq") SpotSaveReq saveReq,
                          @RequestPart(name = "image") MultipartFile multipartFile,
                          @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
-        if (multipartFiles.size() > 10) {
+        if (multipartFiles.size() > 3) {
             throw new TooManyImagesException();
         }
 

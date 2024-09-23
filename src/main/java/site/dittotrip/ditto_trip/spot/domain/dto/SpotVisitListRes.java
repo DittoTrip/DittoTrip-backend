@@ -12,5 +12,4 @@ public class SpotVisitListRes {
     private Integer count;
     private Integer totalPages;
 
-
 }

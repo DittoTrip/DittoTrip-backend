@@ -8,6 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
+import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
@@ -61,6 +63,7 @@ public class TestDataConfig {
     private final QuestRepository questRepository;
     private final UserQuestRepository userQuestRepository;
     private final SpotApplyRepository spotApplyRepository;
+    private final AlarmRepository alarmRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -232,6 +235,14 @@ public class TestDataConfig {
         spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag1, spotApply));
         spotApply.getHashtagSpotApplies().add(new HashtagSpotApply(hashtag2, spotApply));
 
+        Alarm alarm1 = createAlarm("title1", "body1", "/review/5", user1);
+        Alarm alarm2 = createAlarm("title2", "body2", "path2", user1);
+        Alarm alarm3 = createAlarm("title3", "body3", "path3", user1);
+        Alarm alarm4 = createAlarm("title4", "body4", "path4", user1);
+        Alarm alarm5 = createAlarm("title5", "body5", "path5", user1);
+        Alarm alarm6 = createAlarm("title6", "body6", "path6", user1);
+        Alarm alarm7 = createAlarm("title7", "body7", "path7", user1);
+
 
         log.info("===== TEST DATA INIT END =====");
     }
@@ -332,6 +343,12 @@ public class TestDataConfig {
         SpotApply spotApply = new SpotApply(name, address, pointX, pointY, user);
         spotApplyRepository.save(spotApply);
         return spotApply;
+    }
+
+    private Alarm createAlarm(String title, String body, String path, User user) {
+        Alarm alarm = new Alarm(title, body, path, user);
+        alarmRepository.save(alarm);
+        return alarm;
     }
 
     private void modifySpotRating(Spot spot, Float add, Float sub) {
