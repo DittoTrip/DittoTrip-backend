@@ -156,12 +156,16 @@ public class ReviewService {
         saveReq.modifyEntity(review);
 
         // image 처리
-        List<ReviewImage> reviewImages = new ArrayList<>();
+        List<ReviewImage> reviewImages = review.getReviewImages();
+        for (ReviewImage image : reviewImages) {
+            s3Service.deleteFile(image.getImagePath());
+        }
+        reviewImages.clear();
+
         for (MultipartFile multipartFile : multipartFiles) {
             String imagePath = s3Service.uploadFile(multipartFile);
             reviewImages.add(new ReviewImage(imagePath, review));
         }
-        review.setReviewImages(reviewImages);
 
         // spot field 업데이트
         Review.modifySpotByReview(review.getSpotVisit().getSpot(), review.getRating(), oldRating);
