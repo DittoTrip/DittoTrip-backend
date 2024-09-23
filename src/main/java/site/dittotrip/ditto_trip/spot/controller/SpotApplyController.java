@@ -42,7 +42,7 @@ public class SpotApplyController {
     }
 
     @GetMapping("/{spotApplyId}")
-    @Operation(summary = "스팟 신청 상세 조회 (디자인 나오고 작업 예정)",
+    @Operation(summary = "스팟 신청 상세 조회",
             description = "등록한 유저와 관리자만 조회 가능합니다.")
     public SpotApplyDetailRes spotApplyDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
                                               @PathVariable(name = "spotApplyId") Long spotApplyId) {
@@ -52,12 +52,13 @@ public class SpotApplyController {
 
     @PostMapping()
     @Operation(summary = "스팟 신청 등록",
-            description = "image는 대표이미지입니다.")
+            description = "image는 대표이미지입니다.\n" +
+                    "images 제한 3개")
     public void spotApplySave(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @RequestPart(name = "saveReq") SpotApplySaveReq saveReq,
                               @RequestPart(name = "image") MultipartFile multipartFile,
                               @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
-        if (multipartFiles.size() > 10) {
+        if (multipartFiles.size() > 3) {
             throw new TooManyImagesException();
         }
 

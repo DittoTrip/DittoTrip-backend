@@ -45,9 +45,6 @@ public class ReviewController {
         return reviewService.findReviewList(reqUserId, spotId, pageable);
     }
 
-    /**
-     * 작업 중
-     */
     @GetMapping("/review/{reviewId}")
     @Operation(summary = "리뷰 상세 조회",
             description = "")
@@ -59,7 +56,7 @@ public class ReviewController {
 
     @PostMapping("/review")
     @Operation(summary = "리뷰 등록",
-            description = "")
+            description = "images 10개 제한")
     public void reviewSave(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @RequestParam(name = "spotVisitId") Long spotVisitId,
                            @RequestPart(name = "saveReq") ReviewSaveReq saveReq,
@@ -74,7 +71,7 @@ public class ReviewController {
 
     @PutMapping("/review/{reviewId}")
     @Operation(summary = "리뷰 수정",
-            description = "")
+            description = "images 10개 제한")
     public void reviewModify(@AuthenticationPrincipal CustomUserDetails userDetails,
                              @PathVariable(name = "reviewId") Long reviewId,
                              @RequestPart(name = "saveReq") ReviewSaveReq saveReq,
@@ -104,7 +101,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 좋아요 조회",
             description = "")
     public Boolean reviewLikeGet(@AuthenticationPrincipal CustomUserDetails userDetails,
-                               @PathVariable(name = "reviewId") Long reviewId) {
+                                 @PathVariable(name = "reviewId") Long reviewId) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, true);
         return reviewLikeService.getReviewLike(reqUserId, reviewId);
     }
@@ -122,7 +119,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 좋아요 삭제",
             description = "")
     public void reviewLikeRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
-                             @PathVariable(name = "reviewId") Long reviewId) {
+                                 @PathVariable(name = "reviewId") Long reviewId) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, true);
         reviewLikeService.removeReviewLike(reqUserId, reviewId);
     }
