@@ -14,6 +14,7 @@ public class SpotApplyMiniData {
     private Long id;
     private String name;
     private SpotApplyStatus spotApplyStatus;
+    private String imagePath;
     private LocalDateTime createdDateTime;
 
     public static SpotApplyMiniData fromEntity(SpotApply spotApply) {
@@ -21,6 +22,7 @@ public class SpotApplyMiniData {
                 .id(spotApply.getId())
                 .name(spotApply.getName())
                 .spotApplyStatus(spotApply.getSpotApplyStatus())
+                .imagePath(spotApply.getImagePath())
                 .createdDateTime(spotApply.getCreatedDateTime())
                 .build();
     }

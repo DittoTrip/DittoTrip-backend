@@ -3,11 +3,10 @@ package site.dittotrip.ditto_trip.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import site.dittotrip.ditto_trip.user.domain.dto.ContentListRes;
-import site.dittotrip.ditto_trip.user.domain.dto.UserDetailRes;
-import site.dittotrip.ditto_trip.user.domain.dto.UserListForAdminRes;
-import site.dittotrip.ditto_trip.user.domain.dto.UserListRes;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.user.domain.dto.*;
 import site.dittotrip.ditto_trip.user.service.UserService;
 
 @RestController
@@ -38,6 +37,14 @@ public class UserController {
             description = "")
     public UserDetailRes userDetailForAdmin(@PathVariable(name = "userId") Long userId) {
         return userService.findUserDetail(userId);
+    }
+
+    @GetMapping("/my-info")
+    @Operation(summary = "내 유저 정보 조회",
+            description = "")
+    public MyUserInfoRes myUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long reqUserId = CustomUserDetails.getUserIdFromUserDetails(userDetails, true);
+        return userService.findMyUserInfo(reqUserId);
     }
 
     @GetMapping("/{userId}/review/list")

@@ -7,6 +7,8 @@ import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -35,6 +37,14 @@ public class UserQuest {
     public UserQuest(User user, Quest quest) {
         this.user = user;
         this.quest = quest;
+    }
+
+    public static List<UserQuest> createUserQuests(List<User> users, Quest quest) {
+        List<UserQuest> userQuests = new ArrayList<>();
+        for (User user : users) {
+            userQuests.add(new UserQuest(user, quest));
+        }
+        return userQuests;
     }
 
     public void achieveQuest() {
