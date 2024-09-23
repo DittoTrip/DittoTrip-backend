@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.alarm.domain.dto.AlarmListRes;
+import site.dittotrip.ditto_trip.alarm.domain.dto.AlarmSaveReq;
 import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
@@ -25,7 +26,6 @@ public class AlarmService {
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
 
-    @Transactional(readOnly = false)
     public AlarmListRes findAlarmList(Long reqUserId, Pageable pageable) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
 
@@ -39,6 +39,13 @@ public class AlarmService {
         }
 
         return alarmListRes;
+    }
+
+    @Transactional(readOnly = false)
+    public void saveAlarms(AlarmSaveReq saveReq) {
+        List<User> users = userRepository.findAll();
+        List<Alarm> alarms = saveReq.toEntities(users);
+        alarmRepository.saveAll(alarms);
     }
 
 }
