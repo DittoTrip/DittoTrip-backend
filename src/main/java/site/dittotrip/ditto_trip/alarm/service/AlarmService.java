@@ -26,6 +26,7 @@ public class AlarmService {
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
 
+    @Transactional(readOnly = false)
     public AlarmListRes findAlarmList(Long reqUserId, Pageable pageable) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
 
