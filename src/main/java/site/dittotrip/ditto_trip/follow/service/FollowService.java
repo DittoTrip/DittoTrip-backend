@@ -73,15 +73,11 @@ public class FollowService {
     }
 
     @Transactional(readOnly = false)
-    public void removeFollow(Long reqUserId, Long followId) {
+    public void removeFollow(Long reqUserId, Long userId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
-        Follow follow = followRepository.findById(followId).orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
-        if (follow.getFollowingUser().getId() != reqUser.getId() &&
-                follow.getFollowedUser().getId() != reqUser.getId()) {
-            throw new NoAuthorityException();
-        }
-
+        Follow follow = followRepository.findByFollowingUserAndFollowedUser(reqUser, user).orElseThrow(NoSuchElementException::new);
         followRepository.delete(follow);
     }
 
