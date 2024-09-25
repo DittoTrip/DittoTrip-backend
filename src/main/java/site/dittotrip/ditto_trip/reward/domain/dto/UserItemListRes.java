@@ -1,9 +1,11 @@
 package site.dittotrip.ditto_trip.reward.domain.dto;
 
 import lombok.Data;
+import site.dittotrip.ditto_trip.profile.domain.dto.UserProfileData;
 import site.dittotrip.ditto_trip.reward.domain.Item;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
 import site.dittotrip.ditto_trip.reward.domain.enums.ItemType;
+import site.dittotrip.ditto_trip.user.domain.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +15,12 @@ import java.util.Map;
 @Data
 public class UserItemListRes {
 
-    Map<ItemType, List<UserItemData>> userItemDataMap = new HashMap<>();
+    private UserProfileData userProfileData;
+    private Map<ItemType, List<UserItemData>> userItemDataMap = new HashMap<>();
 
-    public static UserItemListRes fromEntities(List<UserItem> userItems) {
+    public static UserItemListRes fromEntities(User user, List<UserItem> userItems) {
         UserItemListRes userItemListRes = new UserItemListRes();
+        userItemListRes.setUserProfileData(UserProfileData.fromEntity(user.getUserProfile()));
         Map<ItemType, List<UserItemData>> map = userItemListRes.getUserItemDataMap();
 
         ItemType[] types = ItemType.values();

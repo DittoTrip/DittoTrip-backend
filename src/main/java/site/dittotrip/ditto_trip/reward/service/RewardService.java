@@ -29,7 +29,7 @@ public class RewardService {
     public UserItemListRes findUsersItemList(Long reqUserId) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         List<UserItem> userItems = userItemRepository.findByUser(reqUser);
-        return UserItemListRes.fromEntities(userItems);
+        return UserItemListRes.fromEntities(reqUser, userItems);
     }
 
     public UserBadgeListRes findBadgeList(Long reqUserId, Long userId) {
@@ -47,7 +47,7 @@ public class RewardService {
             for (UserBadge userBadge : userBadges) {
                 ownBadgeMap.put(userBadge.getBadge(), userBadge);
             }
-            return UserBadgeListRes.fromEntitiesAtMine(badges, ownBadgeMap);
+            return UserBadgeListRes.fromEntitiesAtMine(user, badges, ownBadgeMap);
         } else {
             return UserBadgeListRes.fromEntities(badges);
         }
