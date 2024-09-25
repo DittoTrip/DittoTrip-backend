@@ -1,5 +1,6 @@
 package site.dittotrip.ditto_trip.utils;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,16 +30,28 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    String token = jwtProvider.resolveToken(request);
+    try {
+      String token = jwtProvider.resolveToken(request);
 
-    if (jwtProvider.validateToken(token)) {
-      User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(token)))
-          .orElseThrow(() -> new UsernameNotFoundException("유효하지 않은 토큰입니다."));
-      UserDetails userDetails = new CustomUserDetails(user);
-      Authentication authentication =  new UsernamePasswordAuthenticationToken(userDetails, "", createAuthorityList(jwtProvider.getRole(token)));
-      SecurityContextHolder.getContext().setAuthentication(authentication);
+      if (jwtProvider.validateToken(token)) {
+        User user = userRepository.findById(Long.valueOf(jwtProvider.getUserId(token)))
+            .orElseThrow(() -> new UsernameNotFoundException("유효하지 않은 토큰입니다."));
+        UserDetails userDetails = new CustomUserDetails(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", createAuthorityList(jwtProvider.getRole(token)));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
+
+      filterChain.doFilter(request, response);
+    } catch (ExpiredJwtException e) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write("만료된 토큰");
+    } catch (Exception e) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write("유효하지 않은 토큰");
     }
-
-    filterChain.doFilter(request, response);
   }
 }
