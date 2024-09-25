@@ -52,14 +52,13 @@ public class FollowController {
         followService.saveFollow(reqUserId, userId);
     }
 
-    @DeleteMapping("/follow/{followId}")
+    @DeleteMapping("/follow/{userId}")
     @Operation(summary = "팔로우 삭제",
             description = "")
     public void followRemove(@AuthenticationPrincipal CustomUserDetails userDetails,
-                             @PathVariable(name = "followId") Long followId) {
-
+                             @PathVariable(name = "userId") Long userId) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, true);
-        followService.removeFollow(reqUserId, followId);
+        followService.removeFollow(reqUserId, userId);
     }
 
 }
