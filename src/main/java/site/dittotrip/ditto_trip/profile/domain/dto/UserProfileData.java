@@ -10,7 +10,7 @@ import site.dittotrip.ditto_trip.reward.domain.dto.UserItemData;
 @Builder
 public class UserProfileData {
 
-    private Integer progressionBar;
+    private ProgressionData progressionData;
     private UserItemData itemSkin;
     private UserItemData itemEyes;
     private UserItemData itemMouse;
@@ -20,7 +20,7 @@ public class UserProfileData {
 
     public static UserProfileData fromEntity(UserProfile userProfile) {
         return UserProfileData.builder()
-                .progressionBar(userProfile.getProgressionBar())
+                .progressionData(ProgressionData.fromEntity(userProfile.getProgressionBar()))
                 .itemSkin(UserItemData.fromEntity(userProfile.getUserItemSkin()))
                 .itemEyes(UserItemData.fromEntity(userProfile.getUserItemEyes()))
                 .itemMouse(UserItemData.fromEntity(userProfile.getUserItemMouse()))
