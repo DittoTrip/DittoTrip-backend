@@ -31,7 +31,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     queryParams.add("refreshToken", refreshToken);
 
     URI uri = UriComponentsBuilder
-        .fromUriString("http://localhost:3000/oauth2/redirect")
+        .fromUriString("https://ditto-bsu0404s-projects.vercel.app")
         .queryParams(queryParams)
         .build()
         .toUri();

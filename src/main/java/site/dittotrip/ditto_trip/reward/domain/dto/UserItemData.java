@@ -21,6 +21,7 @@ public class UserItemData {
     private Long userRewardId;
     private String name;
     private String imagePath;
+    private String wearingImagePath;
     private ItemType itemType;
     private LocalDateTime createdDateTime;
 
@@ -34,6 +35,7 @@ public class UserItemData {
                 .userRewardId(userItem.getId())
                 .name(item.getName())
                 .imagePath(item.getImagePath())
+                .wearingImagePath(item.getWearingImagePath())
                 .itemType(item.getItemType())
                 .createdDateTime(userItem.getCreatedDateTime())
                 .build();
