@@ -2,6 +2,7 @@ package site.dittotrip.ditto_trip.quest.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import site.dittotrip.ditto_trip.quest.domain.Quest;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.reward.domain.dto.RewardData;
@@ -21,6 +22,7 @@ public class UserQuestData {
     private UserQuestStatus userQuestStatus;
 
     private RewardData rewardData;
+    private Integer rewardExp;
 
     public static List<UserQuestData> fromEntities(List<UserQuest> userQuests) {
         List<UserQuestData> userQuestDataList = new ArrayList<>();
@@ -31,14 +33,16 @@ public class UserQuestData {
     }
 
     private static UserQuestData fromEntity(UserQuest userQuest) {
+        Quest quest = userQuest.getQuest();
         return UserQuestData.builder()
                 .userQuestId(userQuest.getId())
-                .title(userQuest.getQuest().getTitle())
-                .body(userQuest.getQuest().getBody())
-                .conditionCount(userQuest.getQuest().getConditionCount())
+                .title(quest.getTitle())
+                .body(quest.getBody())
+                .conditionCount(quest.getConditionCount())
                 .nowCount(userQuest.getNowCount())
                 .userQuestStatus(userQuest.getUserQuestStatus())
-                .rewardData(RewardData.fromEntity(userQuest.getQuest().getReward()))
+                .rewardData(RewardData.fromEntity(quest.getReward()))
+                .rewardExp(quest.getRewardExp())
                 .build();
     }
 
