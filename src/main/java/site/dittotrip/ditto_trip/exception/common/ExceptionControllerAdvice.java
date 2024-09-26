@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import site.dittotrip.ditto_trip.auth.exception.NotFoundUserInfoException;
 
 import java.util.NoSuchElementException;
 
@@ -25,7 +26,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class, BadCredentialsException.class, ExpiredJwtException.class})
+    @ExceptionHandler({NotFoundUserInfoException.class, AccessDeniedException.class, BadCredentialsException.class, ExpiredJwtException.class})
     public ErrorResult unauthorizedHandler(Exception e, HttpServletRequest request) {
         return handleException(e, request, HttpStatus.UNAUTHORIZED);
     }
