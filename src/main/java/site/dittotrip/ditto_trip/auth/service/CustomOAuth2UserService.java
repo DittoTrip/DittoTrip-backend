@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
+import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.repository.ItemRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserItemRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -22,6 +25,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   private final UserRepository userRepository;
   private final UserProfileRepository userProfileRepository;
+  private final UserItemRepository userItemRepository;
+  private final ItemRepository itemRepository;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) {
@@ -46,8 +51,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       newUser.getAuthorities().add(new SimpleGrantedAuthority("ROLE_USER"));
       userRepository.save(newUser);
 
-      UserProfile userProfile = new UserProfile(newUser);
-      newUser.setUserProfile(userProfile);
+        UserItem userItem1 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("skin1")));
+        UserItem userItem2 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("eyes1")));
+        UserItem userItem3 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("mouth1")));
+        UserItem userItem4 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("hair1")));
+        UserItem userItem5 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("accessory1")));
+
+      UserProfile userProfile = newUser.getUserProfile();
+        userProfile.setUserItemSkin(userItem1);
+        userProfile.setUserItemEyes(userItem2);
+        userProfile.setUserItemMouth(userItem3);
+        userProfile.setUserItemHair(userItem4);
+        userProfile.setUserItemAccessory(userItem5);
+//        userProfile.setUserBadge(userBadge1);
       userProfileRepository.save(userProfile);
 
       return newUser;
