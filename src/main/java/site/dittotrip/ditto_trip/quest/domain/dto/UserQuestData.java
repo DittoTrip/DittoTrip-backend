@@ -6,6 +6,7 @@ import site.dittotrip.ditto_trip.quest.domain.Quest;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
 import site.dittotrip.ditto_trip.reward.domain.dto.RewardData;
+import site.dittotrip.ditto_trip.reward.domain.enums.RewardType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class UserQuestData {
     private Integer nowCount;
     private UserQuestStatus userQuestStatus;
 
+    private RewardType rewardType;
     private RewardData rewardData;
     private Integer rewardExp;
 
@@ -41,6 +43,7 @@ public class UserQuestData {
                 .conditionCount(quest.getConditionCount())
                 .nowCount(userQuest.getNowCount())
                 .userQuestStatus(userQuest.getUserQuestStatus())
+                .rewardType(quest.getReward().getRewardType())
                 .rewardData(RewardData.fromEntity(quest.getReward()))
                 .rewardExp(quest.getRewardExp())
                 .build();
