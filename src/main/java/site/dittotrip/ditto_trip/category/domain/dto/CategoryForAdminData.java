@@ -10,6 +10,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotMiniData;
 import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,17 +36,9 @@ public class CategoryForAdminData {
     }
 
     public static CategoryForAdminData fromEntity(Category category) {
-        Language language = Language.KO;
-
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
-            HttpServletRequest request = attributes.getRequest();
-            language = request.getHeader("Accept-Language") != null && request.getHeader("Accept-Language").equals("en") ? Language.EN : Language.KO;
-        }
-
         return CategoryForAdminData.builder()
                 .categoryId(category.getId())
-            .name(language == Language.EN ? category.getNameEN() : category.getName())
+            .name(TranslationService.getLanguage() == Language.EN ? category.getNameEN() : category.getName())
                 .subType(category.getCategorySubType())
                 .createdDateTime(category.getCreatedDateTime())
                 .categorySpotCount(category.getCategorySpots().size())

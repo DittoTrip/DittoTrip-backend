@@ -12,6 +12,7 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagCategory;
 import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +32,9 @@ public class CategoryData {
     private List<String> hashtags = new ArrayList<>();
 
     public static CategoryData fromEntity(Category category, CategoryBookmark bookmark) {
-        Language language = Language.KO;
-
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
-            HttpServletRequest request = attributes.getRequest();
-            language = request.getHeader("Accept-Language") != null && request.getHeader("Accept-Language").equals("en") ? Language.EN : Language.KO;
-        }
-
         CategoryData categoryData = CategoryData.builder()
                 .categoryId(category.getId())
-                .name(language == Language.EN ? category.getNameEN() : category.getName())
+                .name(TranslationService.getLanguage() == Language.EN ? category.getNameEN() : category.getName())
                 .majorType(category.getCategoryMajorType())
                 .subType(category.getCategorySubType())
                 .imageFilePath(category.getImagePath())
