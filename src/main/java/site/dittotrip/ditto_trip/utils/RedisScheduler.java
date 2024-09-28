@@ -15,6 +15,7 @@ public class RedisScheduler {
         redisService.reduceScores(RedisConstants.ZSET_SEARCH_RANKING_KEY, 0.95);
         redisService.reduceScores(RedisConstants.ZSET_CONTENT_RANKING_KEY, 0.6);
         redisService.reduceScores(RedisConstants.ZSET_PERSON_RANKING_KEY, 0.6);
+        redisService.reduceScores(RedisConstants.ZSET_SPOT_RANKING_KEY, 0.6);
     }
 
 }
