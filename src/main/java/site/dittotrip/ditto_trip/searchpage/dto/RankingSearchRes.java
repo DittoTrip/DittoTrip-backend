@@ -8,10 +8,8 @@ import java.util.List;
 
 @Data
 @Builder
-public class SearchPageRes {
+public class RankingSearchRes {
 
     private List<String> words;
-
-    private List<CategorySearchPageData> categorySearchPageDataList = new ArrayList<>();
 
 }

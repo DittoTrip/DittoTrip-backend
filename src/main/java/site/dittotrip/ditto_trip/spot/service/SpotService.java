@@ -12,6 +12,7 @@ import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -62,11 +63,16 @@ public class SpotService {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
 
-        // redis ZSet 처리
-        redisService.addIfAbsent(RedisConstants.ZSET_CATEGORY_RANKING_KEY, categoryId.toString());
-        redisService.incrementScore(RedisConstants.ZSET_CATEGORY_RANKING_KEY, categoryId.toString());
-
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+
+        // redis ZSet 처리
+        if (category.getCategoryMajorType().equals(CategoryMajorType.CONTENT)) {
+            redisService.addIfAbsent(RedisConstants.ZSET_CONTENT_RANKING_KEY, categoryId.toString());
+            redisService.incrementScore(RedisConstants.ZSET_CONTENT_RANKING_KEY, categoryId.toString());
+        } else {
+            redisService.addIfAbsent(RedisConstants.ZSET_PERSON_RANKING_KEY, categoryId.toString());
+            redisService.incrementScore(RedisConstants.ZSET_PERSON_RANKING_KEY, categoryId.toString());
+        }
 
         Page<CategorySpot> page = null;
         PageRequest newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
