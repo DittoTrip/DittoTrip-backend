@@ -17,6 +17,8 @@ import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.RedisConstants;
+import site.dittotrip.ditto_trip.utils.RedisService;
 
 import java.util.*;
 
@@ -31,6 +33,7 @@ public class MainPageService {
     private final CategoryRepository categoryRepository;
     private final SpotRepository spotRepository;
     private final AlarmRepository alarmRepository;
+    private final RedisService redisService;
 
     public MainPageRes findMainPage(Long reqUserId) {
         User reqUser = null;
@@ -45,8 +48,14 @@ public class MainPageService {
         CategorySubType randomSubType = getRandomSubType();
         List<Category> categories = categoryRepository.findByRandom(randomSubType);
 
-        // Spot Data (아직 처리 x)
-        List<Spot> spots = new ArrayList<>();
+        // Spot Date
+        List<String> spotIdsString = redisService.getRankingList(RedisConstants.ZSET_SPOT_RANKING_KEY, 6);
+
+        List<Long> spotIds = new ArrayList<>();
+        for (String spotId : spotIdsString) {
+            spotIds.add(Long.parseLong(spotId));
+        }
+        List<Spot> spots = spotRepository.findAllById(spotIds);
 
         // 읽지 않은 알림 정보 조회
         Boolean isNotCheckedAlarm = Boolean.FALSE;

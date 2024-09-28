@@ -53,4 +53,15 @@ public class RedisService {
     }
   }
 
+  public void reduceScores(String key, double ratio) {
+    Long size = redisTemplate.opsForZSet().size(key);
+    Set<Object> keywords = redisTemplate.opsForZSet().range(key, 0, size - 1);
+
+    for (Object keyword : keywords) {
+      Double score = redisTemplate.opsForZSet().score(key, keyword);
+      double newScore = score * ratio;
+      redisTemplate.opsForZSet().add(key, keyword, newScore);
+    }
+  }
+
 }
