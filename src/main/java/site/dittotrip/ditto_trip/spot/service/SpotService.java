@@ -288,6 +288,10 @@ public class SpotService {
 
         spotVisitRepository.save(new SpotVisit(spot, reqUser));
 
+        // redis ZSet 처리
+        redisService.addIfAbsent(RedisConstants.ZSET_SPOT_RANKING_KEY, spot.getId().toString());
+        redisService.incrementScore(RedisConstants.ZSET_SPOT_RANKING_KEY, spot.getId().toString());
+
         // 알림 처리
         processAlarmInVisitSpot(reqUser, spot);
     }
