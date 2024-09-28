@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +31,7 @@ import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.RedisService;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.*;
@@ -54,6 +54,7 @@ public class SpotService {
     private final AlarmRepository alarmRepository;
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
+    private final RedisService redisService;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
                                                       Double userX, Double userY, Pageable pageable) {
@@ -139,6 +140,10 @@ public class SpotService {
         if (reqUserId != null) {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
+
+        // Redis ZSet 처리
+        redisService.addIfAbsent(word);
+        redisService.incrementScore(word);
 
         Page<Spot> page = null;
         if (word != null) {
