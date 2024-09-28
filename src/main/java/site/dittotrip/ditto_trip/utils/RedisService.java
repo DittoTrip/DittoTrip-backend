@@ -15,8 +15,6 @@ public class RedisService {
 
   private final RedisTemplate<String, Object> redisTemplate;
 
-  private static final String RANKING_KEY_IN_ZSET = "ranking";
-
   public void set(String key, Object value) {
     redisTemplate.opsForValue().set(key, value);
   }
@@ -34,21 +32,25 @@ public class RedisService {
     redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
   }
 
-  public void addIfAbsent(String value) {
-    redisTemplate.opsForZSet().addIfAbsent(RANKING_KEY_IN_ZSET, value, 0);
+  /**
+   * ZSet
+   *  - key : CATEGORY_RANKING, SPOT_RANKING
+   */
+  public void addIfAbsent(String key, String value) {
+    redisTemplate.opsForZSet().addIfAbsent(key, value, 0);
   }
 
-  public void incrementScore(String value) {
-    redisTemplate.opsForZSet().incrementScore(RANKING_KEY_IN_ZSET, value, 1);
+  public void incrementScore(String key, String value) {
+    redisTemplate.opsForZSet().incrementScore(key, value, 1);
   }
 
-  public List<String> getRankingList() {
-    Set<Object> keywords = redisTemplate.opsForZSet().reverseRange(RANKING_KEY_IN_ZSET, 0, 9);
-      if (keywords != null) {
-        return keywords.stream().map(s -> (String) s).collect(Collectors.toList());
-      } else {
-        return null;
-      }
+  public List<String> getRankingList(String key, int size) {
+    Set<Object> keywords = redisTemplate.opsForZSet().reverseRange(key, 0, size - 1);
+    if (keywords != null) {
+      return keywords.stream().map(s -> (String) s).collect(Collectors.toList());
+    } else {
+      return null;
+    }
   }
 
 }

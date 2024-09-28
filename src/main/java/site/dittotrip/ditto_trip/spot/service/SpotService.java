@@ -1,7 +1,6 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +30,12 @@ import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.RedisConstants;
 import site.dittotrip.ditto_trip.utils.RedisService;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.*;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -62,6 +61,10 @@ public class SpotService {
         if (reqUserId != null) {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
+
+        // redis ZSet 처리
+        redisService.addIfAbsent(RedisConstants.ZSET_CATEGORY_RANKING_KEY, categoryId.toString());
+        redisService.incrementScore(RedisConstants.ZSET_CATEGORY_RANKING_KEY, categoryId.toString());
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
 
@@ -142,8 +145,8 @@ public class SpotService {
         }
 
         // Redis ZSet 처리
-        redisService.addIfAbsent(word);
-        redisService.incrementScore(word);
+        redisService.addIfAbsent(RedisConstants.ZSET_SEARCH_RANKING_KEY, word);
+        redisService.incrementScore(RedisConstants.ZSET_SEARCH_RANKING_KEY, word);
 
         Page<Spot> page = null;
         if (word != null) {

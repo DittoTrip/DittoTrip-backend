@@ -6,9 +6,9 @@ import site.dittotrip.ditto_trip.exception.common.CustomException;
 public class NotMatchedSortException extends CustomException {
 
     private static final String MESSAGE = "Sort 파라미터가 적절하지 않습니다. 가능한 sort 파라미터는 아래와 같습니다.\n" +
-            "1. createdDateTime: DESC\n" +
-            "2. rating: DESC\n" +
-            "3. distance: ASC";
+            "1. createdDateTime,desc\n" +
+            "2. rating,desc\n" +
+            "3. distance";
     private static final HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
 
     @Override
