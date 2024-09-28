@@ -33,6 +33,7 @@ import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.*;
 
@@ -54,6 +55,7 @@ public class SpotService {
     private final AlarmRepository alarmRepository;
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
+    private final TranslationService translationService;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
                                                       Double userX, Double userY, Pageable pageable) {
@@ -213,6 +215,12 @@ public class SpotService {
     @Transactional(readOnly = false)
     public void saveSpot(SpotSaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
         Spot spot = saveReq.toEntity();
+
+        String[] textList = new String[1];
+        textList[0] = saveReq.getName();
+        String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        spot.setNameEN(nameEN);
+
         spotRepository.save(spot);
 
         // 이미지 처리

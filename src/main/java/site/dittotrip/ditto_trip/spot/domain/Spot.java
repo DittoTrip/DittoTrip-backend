@@ -24,6 +24,9 @@ public class Spot {
     private Long id;
 
     private String name;
+    @Column(name = "name_en")
+    @Setter
+    private String nameEN;
     private String address;
     private Double pointX;
     private Double pointY;
