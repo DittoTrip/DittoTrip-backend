@@ -52,16 +52,16 @@ public class UserProfileService {
 
         UserItem userItemSkin = userItemRepository.findById(modifyReq.getUserItemSkinId()).orElseThrow(NoSuchElementException::new);
         UserItem userItemEyes = userItemRepository.findById(modifyReq.getUserItemEyesId()).orElseThrow(NoSuchElementException::new);
-        UserItem userItemMouse = userItemRepository.findById(modifyReq.getUserItemMouseId()).orElseThrow(NoSuchElementException::new);
+        UserItem userItemMouth = userItemRepository.findById(modifyReq.getUserItemMouthId()).orElseThrow(NoSuchElementException::new);
         UserItem userItemHair = userItemRepository.findById(modifyReq.getUserItemHairId()).orElseThrow(NoSuchElementException::new);
         UserItem userItemAccessory = userItemRepository.findById(modifyReq.getUserItemAccessoryId()).orElseThrow(NoSuchElementException::new);
 
-        validateItemType(userItemSkin, userItemEyes, userItemMouse, userItemHair, userItemAccessory);
-        validateItemOwner(reqUser, userItemSkin, userItemEyes, userItemMouse, userItemHair, userItemAccessory);
+        validateItemType(userItemSkin, userItemEyes, userItemMouth, userItemHair, userItemAccessory);
+        validateItemOwner(reqUser, userItemSkin, userItemEyes, userItemMouth, userItemHair, userItemAccessory);
 
         userProfile.setUserItemSkin(userItemSkin);
         userProfile.setUserItemEyes(userItemEyes);
-        userProfile.setUserItemMouse(userItemMouse);
+        userProfile.setUserItemMouth(userItemMouth);
         userProfile.setUserItemHair(userItemHair);
         userProfile.setUserItemAccessory(userItemAccessory);
     }
@@ -77,20 +77,20 @@ public class UserProfileService {
         reqUser.getUserProfile().setUserBadge(userBadge);
     }
 
-    private void validateItemType(UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouse, UserItem userItemHair, UserItem userItemAccessory) {
+    private void validateItemType(UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouth, UserItem userItemHair, UserItem userItemAccessory) {
         if (!userItemSkin.getItem().getItemType().equals(ItemType.SKIN) ||
                 !userItemEyes.getItem().getItemType().equals(ItemType.EYES) ||
-                !userItemMouse.getItem().getItemType().equals(ItemType.MOUSE) ||
+                !userItemMouth.getItem().getItemType().equals(ItemType.MOUTH) ||
                 !userItemHair.getItem().getItemType().equals(ItemType.HAIR) ||
                 !userItemAccessory.getItem().getItemType().equals(ItemType.ACCESSORY)) {
             throw new NotMatchedItemTypeException();
         }
     }
 
-    private void validateItemOwner(User reqUser, UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouse, UserItem userItemHair, UserItem userItemAccessory) {
+    private void validateItemOwner(User reqUser, UserItem userItemSkin, UserItem userItemEyes, UserItem userItemMouth, UserItem userItemHair, UserItem userItemAccessory) {
         if (!reqUser.equals(userItemSkin.getUser()) ||
                 !reqUser.equals(userItemEyes.getUser()) ||
-                !reqUser.equals(userItemMouse.getUser()) ||
+                !reqUser.equals(userItemMouth.getUser()) ||
                 !reqUser.equals(userItemHair.getUser()) ||
                 !reqUser.equals(userItemAccessory.getUser())) {
             throw new NoAuthorityException();

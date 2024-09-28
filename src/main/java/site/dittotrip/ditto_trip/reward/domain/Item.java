@@ -14,12 +14,14 @@ import java.time.LocalDateTime;
 @Getter
 public class Item extends Reward {
 
-    @Enumerated(EnumType.STRING)
-    private ItemType itemType;
+  @Enumerated(EnumType.STRING)
+  private ItemType itemType;
+  private String wearingImagePath;
 
-    public Item(String name, String imagePath, ItemType itemType) {
-        super(name, imagePath, RewardType.ITEM);
-        this.itemType = itemType;
-    }
+  public Item(String name, String imagePath, String wearingImagePath, ItemType itemType) {
+    super(name, imagePath, RewardType.ITEM);
+    this.itemType = itemType;
+    this.wearingImagePath = wearingImagePath;
+  }
 
 }

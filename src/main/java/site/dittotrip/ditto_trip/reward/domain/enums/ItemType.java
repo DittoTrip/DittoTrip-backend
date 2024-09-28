@@ -4,7 +4,7 @@ public enum ItemType {
 
     SKIN,
     EYES,
-    MOUSE,
+    MOUTH,
     HAIR,
     ACCESSORY
 

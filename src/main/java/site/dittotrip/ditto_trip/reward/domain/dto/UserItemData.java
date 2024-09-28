@@ -18,9 +18,11 @@ import java.time.LocalDateTime;
 @Builder
 public class UserItemData {
 
+    private Long itemId;
     private Long userRewardId;
     private String name;
     private String imagePath;
+    private String wearingImagePath;
     private ItemType itemType;
     private LocalDateTime createdDateTime;
 
@@ -31,9 +33,11 @@ public class UserItemData {
 
         Item item = userItem.getItem();
         return UserItemData.builder()
+            .itemId(item.getId())
                 .userRewardId(userItem.getId())
                 .name(item.getName())
                 .imagePath(item.getImagePath())
+                .wearingImagePath(item.getWearingImagePath())
                 .itemType(item.getItemType())
                 .createdDateTime(userItem.getCreatedDateTime())
                 .build();

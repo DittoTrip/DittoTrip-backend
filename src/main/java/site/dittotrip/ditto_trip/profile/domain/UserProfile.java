@@ -38,9 +38,9 @@ public class UserProfile {
     private UserItem userItemEyes;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "user_item_mouse_id")
+    @JoinColumn(name = "user_item_mouth_id")
     @Setter
-    private UserItem userItemMouse;
+    private UserItem userItemMouth;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_item_hair_id")

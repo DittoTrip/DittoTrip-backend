@@ -75,7 +75,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
   public static Long getUserIdFromUserDetails(CustomUserDetails userDetails, boolean isRequired) {
     if (userDetails == null) {
       if (isRequired) {
-        throw new NotFoundUserInfoException();
+        throw new NotFoundUserInfoException("로그인 후 이용 가능합니다.");
       } else {
         return null;
       }
@@ -87,7 +87,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
   public static User getUserFromUserDetails(CustomUserDetails userDetails, boolean isRequired) {
     if (userDetails == null) {
       if (isRequired) {
-        throw new NotFoundUserInfoException();
+        throw new NotFoundUserInfoException("로그인 후 이용 가능합니다.");
       } else {
         return null;
       }
