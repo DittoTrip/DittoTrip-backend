@@ -13,7 +13,7 @@ public class UserProfileData {
     private ProgressionData progressionData;
     private UserItemData itemSkin;
     private UserItemData itemEyes;
-    private UserItemData itemMouse;
+    private UserItemData itemMouth;
     private UserItemData itemHair;
     private UserItemData itemAccessory;
     private BadgeData badgeData;
@@ -23,7 +23,7 @@ public class UserProfileData {
                 .progressionData(ProgressionData.fromEntity(userProfile.getProgressionBar()))
                 .itemSkin(UserItemData.fromEntity(userProfile.getUserItemSkin()))
                 .itemEyes(UserItemData.fromEntity(userProfile.getUserItemEyes()))
-                .itemMouse(UserItemData.fromEntity(userProfile.getUserItemMouse()))
+                .itemMouth(UserItemData.fromEntity(userProfile.getUserItemMouth()))
                 .itemHair(UserItemData.fromEntity(userProfile.getUserItemHair()))
                 .itemAccessory(UserItemData.fromEntity(userProfile.getUserItemAccessory()))
                 .badgeData(BadgeData.fromEntity(userProfile))

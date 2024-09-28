@@ -10,7 +10,7 @@ public class UserProfileModifyReq {
 
     private Long userItemSkinId;
     private Long userItemEyesId;
-    private Long userItemMouseId;
+    private Long userItemMouthId;
     private Long userItemHairId;
     private Long userItemAccessoryId;
 

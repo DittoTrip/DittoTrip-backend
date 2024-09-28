@@ -141,21 +141,51 @@ public class TestDataConfig {
         Ditto ditto3 = createDitto("제목3", "여기 좋아요3", user2);
         Ditto ditto4 = createDitto("제목4", "여기 좋아요4", user2);
 
-        Item item11 = createItem("skin1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(19).png", ItemType.SKIN);
-        Item item12 = createItem("skin2", "empty imagePath", ItemType.SKIN);
-        Item item13 = createItem("skin3", "empty imagePath", ItemType.SKIN);
-        Item item21 = createItem("eyes1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(1).png", ItemType.EYES);
-        Item item22 = createItem("eyes2", "empty imagePath", ItemType.EYES);
-        Item item23 = createItem("eyes3", "empty imagePath", ItemType.EYES);
-        Item item31 = createItem("mouse1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(2).png", ItemType.MOUSE);
-        Item item32 = createItem("mouse2", "empty imagePath", ItemType.MOUSE);
-        Item item33 = createItem("mouse3", "empty imagePath", ItemType.MOUSE);
-        Item item41 = createItem("hair1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5/Ditto+%E1%84%8F%E1%85%A2%E1%84%85%E1%85%B5%E1%86%A8%E1%84%90%E1%85%A5+(4).png", ItemType.HAIR);
-        Item item42 = createItem("hair2", "empty imagePath", ItemType.HAIR);
-        Item item43 = createItem("hair3", "empty imagePath", ItemType.HAIR);
-        Item item51 = createItem("accessory1", "empty imagePath", ItemType.ACCESSORY);
-        Item item52 = createItem("accessory2", "empty imagePath", ItemType.ACCESSORY);
-        Item item53 = createItem("accessory3", "empty imagePath", ItemType.ACCESSORY);
+        Item item11 = createItem("skin1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_1.png", ItemType.SKIN);
+        Item item12 = createItem("skin2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_2.png", ItemType.SKIN);
+        Item item13 = createItem("skin3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_3.png", ItemType.SKIN);
+        Item item14 = createItem("skin4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_4.png", ItemType.SKIN);
+        Item item15 = createItem("skin5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_5.png", ItemType.SKIN);
+        Item item21 = createItem("eyes1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_1.png", ItemType.EYES);
+        Item item22 = createItem("eyes2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_2.png", ItemType.EYES);
+        Item item23 = createItem("eyes3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_3.png", ItemType.EYES);
+        Item item24 = createItem("eyes4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_4.png", ItemType.EYES);
+        Item item25 = createItem("eyes5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_5.png", ItemType.EYES);
+        Item item26 = createItem("eyes6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_6.png", ItemType.EYES);
+        Item item27 = createItem("eyes7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_7.png", ItemType.EYES);
+        Item item28 = createItem("eyes8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_8.png", ItemType.EYES);
+        Item item29 = createItem("eyes9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_9.png", ItemType.EYES);
+        Item item20 = createItem("eyes10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_10.png", ItemType.EYES);
+        Item item31 = createItem("mouth1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_1.png", ItemType.MOUTH);
+        Item item32 = createItem("mouth2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_2.png", ItemType.MOUTH);
+        Item item33 = createItem("mouth3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_3.png", ItemType.MOUTH);
+        Item item34 = createItem("mouth4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_4.png", ItemType.MOUTH);
+        Item item35 = createItem("mouth5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_5.png", ItemType.MOUTH);
+        Item item36 = createItem("mouth6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_6.png", ItemType.MOUTH);
+        Item item37 = createItem("mouth7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_7.png", ItemType.MOUTH);
+        Item item38 = createItem("mouth8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_8.png", ItemType.MOUTH);
+        Item item39 = createItem("mouth9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_9.png", ItemType.MOUTH);
+        Item item30 = createItem("mouth10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_10.png", ItemType.MOUTH);
+        Item item41 = createItem("hair1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_1.png", ItemType.HAIR);
+        Item item42 = createItem("hair2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_2.png", ItemType.HAIR);
+        Item item43 = createItem("hair3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_3.png", ItemType.HAIR);
+        Item item44 = createItem("hair4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_4.png", ItemType.HAIR);
+        Item item45 = createItem("hair5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_5.png", ItemType.HAIR);
+        Item item46 = createItem("hair6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_6.png", ItemType.HAIR);
+        Item item47 = createItem("hair7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_7.png", ItemType.HAIR);
+        Item item48 = createItem("hair8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_8.png", ItemType.HAIR);
+        Item item49 = createItem("hair9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_9.png", ItemType.HAIR);
+        Item item40 = createItem("hair10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_10.png", ItemType.HAIR);
+        Item item51 = createItem("accessory1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_1.png", ItemType.ACCESSORY);
+        Item item52 = createItem("accessory2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_2.png", ItemType.ACCESSORY);
+        Item item53 = createItem("accessory3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_3.png", ItemType.ACCESSORY);
+        Item item54 = createItem("accessory4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_4.png", ItemType.ACCESSORY);
+        Item item55 = createItem("accessory5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_5.png", ItemType.ACCESSORY);
+        Item item56 = createItem("accessory6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_6.png", ItemType.ACCESSORY);
+        Item item57 = createItem("accessory7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_7.png", ItemType.ACCESSORY);
+        Item item58 = createItem("accessory8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_8.png", ItemType.ACCESSORY);
+        Item item59 = createItem("accessory9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_9.png", ItemType.ACCESSORY);
+        Item item50 = createItem("accessory10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_10.png", ItemType.ACCESSORY);
 
         Badge badge1 = createBadge("badge1", "empty imagePath", "body1", "condition1");
         Badge badge2 = createBadge("badge2", "empty imagePath", "body2", "condition2");
@@ -195,7 +225,7 @@ public class TestDataConfig {
         UserProfile userProfile1 = user1.getUserProfile();
         userProfile1.setUserItemSkin(userItem1);
         userProfile1.setUserItemEyes(userItem3);
-        userProfile1.setUserItemMouse(userItem5);
+        userProfile1.setUserItemMouth(userItem5);
         userProfile1.setUserItemHair(userItem7);
         userProfile1.setUserItemAccessory(userItem9);
         userProfile1.setUserBadge(userBadge1);
@@ -203,14 +233,14 @@ public class TestDataConfig {
         UserProfile userProfile2 = user2.getUserProfile();
         userProfile2.setUserItemSkin(userItem21);
         userProfile2.setUserItemEyes(userItem22);
-        userProfile2.setUserItemMouse(userItem23);
+        userProfile2.setUserItemMouth(userItem23);
         userProfile2.setUserItemHair(userItem24);
         userProfile2.setUserItemAccessory(userItem25);
         userProfile2.setUserBadge(userBadge21);
         UserProfile userProfile3 = user3.getUserProfile();
         userProfile3.setUserItemSkin(userItem31);
         userProfile3.setUserItemEyes(userItem32);
-        userProfile3.setUserItemMouse(userItem33);
+        userProfile3.setUserItemMouth(userItem33);
         userProfile3.setUserItemHair(userItem34);
         userProfile3.setUserItemAccessory(userItem35);
         userProfile3.setUserBadge(userBadge31);
@@ -303,8 +333,8 @@ public class TestDataConfig {
         return ditto;
     }
 
-    private Item createItem(String name, String imagePath, ItemType itemType) {
-        Item item = new Item(name, imagePath, itemType);
+    private Item createItem(String name, String imagePath, String wearingImagePath, ItemType itemType) {
+        Item item = new Item(name, imagePath, wearingImagePath, itemType);
         itemRepository.save(item);
         return item;
     }

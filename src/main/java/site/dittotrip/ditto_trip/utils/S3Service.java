@@ -4,6 +4,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,10 @@ public class S3Service {
 
     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
     try {
-      s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), null)
+      ObjectMetadata metadata = new ObjectMetadata();
+      metadata.setContentLength(file.getSize());
+
+      s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), metadata)
               .withCannedAcl(CannedAccessControlList.PublicRead));
     } catch (IOException e) {
       throw new ImageUploadException();

@@ -69,7 +69,6 @@ public class JwtProvider {
       return false;
     }
 
-    try {
       return Jwts.parserBuilder()
           .setSigningKey(getSigningKey())
           .build()
@@ -77,10 +76,6 @@ public class JwtProvider {
           .getBody()
           .getExpiration()
           .after(new Date());
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
   }
 
   public String getUserId(String accessToken) {

@@ -1,13 +1,17 @@
 package site.dittotrip.ditto_trip.exception.common;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+import site.dittotrip.ditto_trip.auth.exception.NotFoundUserInfoException;
 
 import java.util.NoSuchElementException;
 
@@ -22,9 +26,15 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class})
+    @ExceptionHandler({NotFoundUserInfoException.class, AccessDeniedException.class, BadCredentialsException.class, ExpiredJwtException.class})
     public ErrorResult unauthorizedHandler(Exception e, HttpServletRequest request) {
         return handleException(e, request, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({NoResourceFoundException.class})
+    public ErrorResult notFoundHandler(Exception e, HttpServletRequest request) {
+        return handleException(e, request, HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
