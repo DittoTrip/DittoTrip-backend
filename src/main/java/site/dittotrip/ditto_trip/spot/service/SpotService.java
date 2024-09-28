@@ -1,11 +1,9 @@
 package site.dittotrip.ditto_trip.spot.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +12,7 @@ import site.dittotrip.ditto_trip.alarm.repository.AlarmRepository;
 import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.category.domain.CategoryBookmark;
 import site.dittotrip.ditto_trip.category.domain.dto.CategoryData;
+import site.dittotrip.ditto_trip.category.domain.enums.CategoryMajorType;
 import site.dittotrip.ditto_trip.category.repository.CategoryBookmarkRepository;
 import site.dittotrip.ditto_trip.category.repository.CategoryRepository;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
@@ -32,11 +31,12 @@ import site.dittotrip.ditto_trip.spot.exception.SpotVisitDistanceException;
 import site.dittotrip.ditto_trip.spot.repository.*;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.RedisConstants;
+import site.dittotrip.ditto_trip.utils.RedisService;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.*;
 
-@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -54,6 +54,7 @@ public class SpotService {
     private final AlarmRepository alarmRepository;
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
+    private final RedisService redisService;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
                                                       Double userX, Double userY, Pageable pageable) {
@@ -63,6 +64,15 @@ public class SpotService {
         }
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
+
+        // redis ZSet 처리
+        if (category.getCategoryMajorType().equals(CategoryMajorType.CONTENT)) {
+            redisService.addIfAbsent(RedisConstants.ZSET_CONTENT_RANKING_KEY, categoryId.toString());
+            redisService.incrementScore(RedisConstants.ZSET_CONTENT_RANKING_KEY, categoryId.toString());
+        } else {
+            redisService.addIfAbsent(RedisConstants.ZSET_PERSON_RANKING_KEY, categoryId.toString());
+            redisService.incrementScore(RedisConstants.ZSET_PERSON_RANKING_KEY, categoryId.toString());
+        }
 
         Page<CategorySpot> page = null;
         PageRequest newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
@@ -139,6 +149,10 @@ public class SpotService {
         if (reqUserId != null) {
             reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         }
+
+        // Redis ZSet 처리
+        redisService.addIfAbsent(RedisConstants.ZSET_SEARCH_RANKING_KEY, word);
+        redisService.incrementScore(RedisConstants.ZSET_SEARCH_RANKING_KEY, word);
 
         Page<Spot> page = null;
         if (word != null) {

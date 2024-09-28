@@ -25,4 +25,7 @@ public interface DittoRepository extends JpaRepository<Ditto, Long> {
 
     Long countByUser(User user);
 
+    @Query(value = "select * from Ditto order by RAND() limit 1", nativeQuery = true)
+    Optional<Ditto> findOneByRandom();
+
 }
