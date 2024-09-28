@@ -1,9 +1,9 @@
-package site.dittotrip.ditto_trip.search;
+package site.dittotrip.ditto_trip.rankingsearch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.dittotrip.ditto_trip.search.dto.RankingSearchRes;
+import site.dittotrip.ditto_trip.rankingsearch.dto.RankingSearchRes;
 import site.dittotrip.ditto_trip.utils.RedisService;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package site.dittotrip.ditto_trip.search.dto;
+package site.dittotrip.ditto_trip.rankingsearch.dto;
 
 import lombok.Builder;
 import lombok.Data;
