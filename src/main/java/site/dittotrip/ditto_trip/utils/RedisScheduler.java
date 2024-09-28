@@ -10,7 +10,7 @@ public class RedisScheduler {
 
     private final RedisService redisService;
 
-    @Scheduled(cron = "0 0 4 * * * *")
+    @Scheduled(cron = "0 0 4 * * *")
     public void updateSearchZSet() {
         redisService.reduceScores(RedisConstants.ZSET_SEARCH_RANKING_KEY, 0.95);
         redisService.reduceScores(RedisConstants.ZSET_CONTENT_RANKING_KEY, 0.6);
