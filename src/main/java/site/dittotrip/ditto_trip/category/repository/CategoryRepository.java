@@ -25,7 +25,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Page<Category> findBySubType(@Param("subType") CategorySubType subType,
                                  Pageable pageable);
 
-    @Query(value = "select * from Category where category_sub_type= :subType order by RAND() limit 5", nativeQuery = true)
+    @Query(value = "select * from category where category_sub_type= :subType order by RAND() limit 5", nativeQuery = true)
     List<Category> findByRandom(@Param("subType") CategorySubType subType);
 
 }
