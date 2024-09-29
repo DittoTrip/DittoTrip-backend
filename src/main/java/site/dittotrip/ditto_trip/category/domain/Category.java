@@ -34,7 +34,7 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private CategoryMajorType categoryMajorType;
     @Setter
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private CategorySubType categorySubType;
     @Setter
     private String imagePath;

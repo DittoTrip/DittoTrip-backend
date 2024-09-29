@@ -48,8 +48,11 @@ public class UserPageService {
         Integer followedCount = followRepository.countByFollowedUser(user);
 
         // 읽지 않은 알림 정보 조회
-        List<Alarm> reqUsersAlarms = alarmRepository.findByUserAndIsChecked(reqUser, Boolean.FALSE);
-        Boolean isNotCheckedAlarm = !reqUsersAlarms.isEmpty();
+        Boolean isNotCheckedAlarm = Boolean.FALSE;
+        if (reqUser != null) {
+            List<Alarm> reqUsersAlarms = alarmRepository.findByUserAndIsChecked(reqUser, Boolean.FALSE);
+            isNotCheckedAlarm = !reqUsersAlarms.isEmpty();
+        }
 
         // 팔로잉 정보 조회
         Optional<Follow> followOptional = followRepository.findByFollowingUserAndFollowedUser(reqUser, user);
