@@ -28,6 +28,10 @@ public class Review {
     @Setter
     private String body;
 
+    @Column(name = "review_body_en")
+    @Setter
+    private String bodyEN;
+
     @Setter
     private Float rating;
 

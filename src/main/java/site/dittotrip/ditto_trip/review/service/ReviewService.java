@@ -29,6 +29,7 @@ import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -53,6 +54,7 @@ public class ReviewService {
     private final ReviewLikeRepository reviewLikeRepository;
     private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
+    private final TranslationService translationService;
 
     private final int REVIEW_WRITE_PERIOD = 604800; // 1 week
 
@@ -122,12 +124,20 @@ public class ReviewService {
             throw new AlreadyWriteReviewException();
         });
 
+        System.out.println(spotVisit.getCreatedDateTime());
+        System.out.println(LocalDateTime.now());
         Duration duration = Duration.between(spotVisit.getCreatedDateTime(), LocalDateTime.now());
         if (duration.getSeconds() > REVIEW_WRITE_PERIOD) {
             throw new ReviewWritePeriodOverException();
         }
 
         Review review = reviewSaveReq.toEntity(reqUser, spotVisit);
+
+        String[] textList = new String[1];
+        textList[0] = review.getBody();
+        String bodyEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        review.setBodyEN(bodyEN);
+
         reviewRepository.save(review);
 
         // image 처리
@@ -154,6 +164,11 @@ public class ReviewService {
         }
 
         saveReq.modifyEntity(review);
+
+        String[] textList = new String[1];
+        textList[0] = saveReq.getBody();
+        String bodyEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        review.setBodyEN(bodyEN);
 
         // image 처리
         List<ReviewImage> reviewImages = review.getReviewImages();
