@@ -34,6 +34,7 @@ import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.RedisConstants;
 import site.dittotrip.ditto_trip.utils.RedisService;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.*;
 
@@ -54,6 +55,7 @@ public class SpotService {
     private final AlarmRepository alarmRepository;
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
+    private final TranslationService translationService;
     private final RedisService redisService;
 
     public SpotCategoryListRes findSpotListInCategory(Long reqUserId, Long categoryId,
@@ -227,6 +229,12 @@ public class SpotService {
     @Transactional(readOnly = false)
     public void saveSpot(SpotSaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
         Spot spot = saveReq.toEntity();
+
+        String[] textList = new String[1];
+        textList[0] = saveReq.getName();
+        String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        spot.setNameEN(nameEN);
+
         spotRepository.save(spot);
 
         // 이미지 처리

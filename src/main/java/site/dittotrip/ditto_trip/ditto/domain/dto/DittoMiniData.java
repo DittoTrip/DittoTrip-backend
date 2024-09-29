@@ -5,6 +5,8 @@ import lombok.Data;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class DittoMiniData {
     public static DittoMiniData fromEntity(Ditto ditto) {
         return DittoMiniData.builder()
                 .dittoId(ditto.getId())
-                .title(ditto.getTitle())
+                .title(TranslationService.getLanguage() == Language.EN ? ditto.getTitleEN() : ditto.getTitle())
                 .imagePath(ditto.getImagePath())
                 .userData(UserData.fromEntity(ditto.getUser()))
                 .build();

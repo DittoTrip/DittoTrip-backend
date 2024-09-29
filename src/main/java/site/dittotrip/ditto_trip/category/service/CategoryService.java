@@ -23,6 +23,8 @@ import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationRes;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class CategoryService {
     private final SpotRepository spotRepository;
     private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
+    private final TranslationService translationService;
 
     public CategoryPageRes findCategoryList(Long reqUserId, CategorySubType subType, Pageable pageable) {
         User reqUser = null;
@@ -144,6 +147,12 @@ public class CategoryService {
     @Transactional(readOnly = false)
     public void saveCategory(CategorySaveReq saveReq, MultipartFile multipartFile) {
         Category category = saveReq.toEntity();
+
+        String[] textList = new String[1];
+        textList[0] = saveReq.getName();
+        String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        category.setNameEN(nameEN);
+
         categoryRepository.save(category);
 
         // 이미지 처리
@@ -173,6 +182,11 @@ public class CategoryService {
     public void modifyCategory(Long categoryId, CategoryModifyReq modifyReq, MultipartFile multipartFile) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         modifyReq.modifyEntity(category);
+
+        String[] textList = new String[1];
+        textList[0] = modifyReq.getName();
+        String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        category.setNameEN(nameEN);
 
         // 이미지 처리
         s3Service.deleteFile(category.getImagePath());

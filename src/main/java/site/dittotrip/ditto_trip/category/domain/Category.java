@@ -27,6 +27,9 @@ public class Category {
 
     @Setter
     private String name;
+    @Column(name = "name_en")
+    @Setter
+    private String nameEN;
     @Setter
     @Enumerated(EnumType.STRING)
     private CategoryMajorType categoryMajorType;

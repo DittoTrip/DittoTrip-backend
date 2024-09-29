@@ -26,6 +26,8 @@ import site.dittotrip.ditto_trip.quest.aop.QuestHandlingTargetMethod;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationRes;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class DittoService {
     private final S3Service s3Service;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final TranslationService translationService;
 
     public DittoListRes findDittoList(Long reqUserId, Pageable pageable) {
         User reqUser = null;
@@ -111,6 +114,15 @@ public class DittoService {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
 
         Ditto ditto = saveReq.toEntity(reqUser);
+
+        String[] textlist = new String[2];
+        textlist[0] = saveReq.getTitle();
+        textlist[1] = saveReq.getBody();
+
+        TranslationRes translationRes = translationService.translateText(textlist);
+        ditto.setTitleEN(translationRes.getTranslations().get(0).getText());
+        ditto.setBodyEN(translationRes.getTranslations().get(1).getText());
+
         dittoRepository.save(ditto);
 
         // hashtag 처리
@@ -144,6 +156,14 @@ public class DittoService {
         }
 
         saveReq.modifyEntity(ditto);
+
+        String[] textlist = new String[2];
+        textlist[0] = saveReq.getTitle();
+        textlist[1] = saveReq.getBody();
+
+        TranslationRes translationRes = translationService.translateText(textlist);
+        ditto.setTitleEN(translationRes.getTranslations().get(0).getText());
+        ditto.setBodyEN(translationRes.getTranslations().get(1).getText());
 
         // image 처리
         s3Service.deleteFile(ditto.getImagePath());

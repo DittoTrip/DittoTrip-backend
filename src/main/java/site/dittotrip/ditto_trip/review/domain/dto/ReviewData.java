@@ -5,6 +5,8 @@ import lombok.Data;
 import site.dittotrip.ditto_trip.review.domain.Review;
 import site.dittotrip.ditto_trip.review.domain.ReviewImage;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class ReviewData {
         ReviewData reviewData = ReviewData.builder()
                 .reviewId(review.getId())
                 .rating(review.getRating())
-                .reviewBody(review.getBody())
+            .reviewBody(TranslationService.getLanguage() == Language.EN ? review.getBodyEN() : review.getBody())
+//                .reviewBody(review.getBody())
                 .likes(review.getLikes())
                 .createdDateTime(review.getCreatedDateTime())
                 .userData(UserData.fromEntity(review.getUser()))

@@ -5,6 +5,8 @@ import lombok.Data;
 import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class SpotData {
     public static SpotData fromEntity(Spot spot, Long bookmarkId, Double distance) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
-                .name(spot.getName())
+                .name(TranslationService.getLanguage() == Language.EN ? spot.getNameEN() : spot.getName())
                 .address(spot.getAddress())
                 .pointX(spot.getPointX())
                 .pointY(spot.getPointY())
@@ -47,7 +49,7 @@ public class SpotData {
     public static SpotData fromEntityForDetail(Spot spot, Long bookmarkId) {
         SpotData spotData = SpotData.builder()
                 .spotId(spot.getId())
-                .name(spot.getName())
+            .name(TranslationService.getLanguage() == Language.EN ? spot.getNameEN() : spot.getName())
                 .address(spot.getAddress())
                 .pointX(spot.getPointX())
                 .pointY(spot.getPointY())
@@ -64,7 +66,7 @@ public class SpotData {
     public static SpotData fromEntityForNoAuth(Spot spot, Double distance) {
         return SpotData.builder()
                 .spotId(spot.getId())
-                .name(spot.getName())
+            .name(TranslationService.getLanguage() == Language.EN ? spot.getNameEN() : spot.getName())
                 .address(spot.getAddress())
                 .pointX(spot.getPointX())
                 .pointY(spot.getPointY())

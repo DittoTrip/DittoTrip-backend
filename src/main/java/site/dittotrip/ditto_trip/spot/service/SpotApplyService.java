@@ -28,6 +28,7 @@ import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.S3Service;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.*;
 
@@ -44,6 +45,7 @@ public class SpotApplyService {
     private final HashtagRepository hashtagRepository;
     private final AlarmRepository alarmRepository;
     private final S3Service s3Service;
+    private final TranslationService translationService;
 
     public SpotApplyListRes findSpotApplyList(String word, Pageable pageable) {
         Page<SpotApply> page;
@@ -128,6 +130,12 @@ public class SpotApplyService {
 
         if (isApproval) {
             Spot spot = Spot.fromSpotApply(spotApply);
+
+            String[] textList = new String[1];
+            textList[0] = spot.getName();
+            String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+            spot.setNameEN(nameEN);
+
             spotRepository.save(spot);
             spotApply.setSpotApplyStatus(SpotApplyStatus.APPROVED);
             processAlarmInHandlingSpotApply(spotApply, spot);

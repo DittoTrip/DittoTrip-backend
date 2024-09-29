@@ -6,6 +6,8 @@ import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpot;
 import site.dittotrip.ditto_trip.review.domain.dto.ReviewMiniData;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class SpotVisitData {
         SpotVisitData spotVisitData = SpotVisitData.builder()
                 .spotVisitId(spotVisit.getId())
                 .spotId(spot.getId())
-                .spotName(spot.getName())
+            .spotName(TranslationService.getLanguage() == Language.EN ? spot.getNameEN() : spot.getName())
                 .address(spot.getAddress())
                 .imagePath(spot.getImagePath())
                 .createdDateTime(spotVisit.getCreatedDateTime())
