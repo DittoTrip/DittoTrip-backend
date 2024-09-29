@@ -124,8 +124,6 @@ public class ReviewService {
             throw new AlreadyWriteReviewException();
         });
 
-        System.out.println(spotVisit.getCreatedDateTime());
-        System.out.println(LocalDateTime.now());
         Duration duration = Duration.between(spotVisit.getCreatedDateTime(), LocalDateTime.now());
         if (duration.getSeconds() > REVIEW_WRITE_PERIOD) {
             throw new ReviewWritePeriodOverException();

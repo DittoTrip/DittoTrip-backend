@@ -5,6 +5,8 @@ import lombok.Data;
 import site.dittotrip.ditto_trip.ditto.domain.Ditto;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagDitto;
 import site.dittotrip.ditto_trip.user.domain.dto.UserData;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,8 +32,8 @@ public class DittoData {
     public static DittoData fromEntity(Ditto ditto, Boolean isMine, Long myBookmarkId) {
         DittoData dittoData = DittoData.builder()
                 .dittoId(ditto.getId())
-                .title(ditto.getTitle())
-                .body(ditto.getBody())
+                .title(TranslationService.getLanguage() == Language.EN ? ditto.getTitleEN() : ditto.getTitle())
+                .body(TranslationService.getLanguage() == Language.EN ? ditto.getBodyEN() : ditto.getBody())
                 .imagePath(ditto.getImagePath())
                 .createdDateTime(ditto.getCreatedDateTime())
                 .userData(UserData.fromEntity(ditto.getUser()))

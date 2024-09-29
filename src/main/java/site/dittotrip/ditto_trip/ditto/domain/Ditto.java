@@ -25,8 +25,18 @@ public class Ditto {
 
     @Setter
     private String title;
+
+    @Column(name = "title_en")
+    @Setter
+    private String titleEN;
+
     @Setter
     private String body;
+
+    @Column(name = "body_en")
+    @Setter
+    private String bodyEN;
+
     @Setter
     private String imagePath;
 

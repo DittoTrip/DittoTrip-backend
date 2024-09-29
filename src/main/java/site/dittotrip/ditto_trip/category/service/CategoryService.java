@@ -183,6 +183,11 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NoSuchElementException::new);
         modifyReq.modifyEntity(category);
 
+        String[] textList = new String[1];
+        textList[0] = modifyReq.getName();
+        String nameEN = translationService.translateText(textList).getTranslations().get(0).getText();
+        category.setNameEN(nameEN);
+
         // 이미지 처리
         s3Service.deleteFile(category.getImagePath());
         String imagePath = s3Service.uploadFile(multipartFile);

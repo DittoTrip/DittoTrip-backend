@@ -26,8 +26,8 @@ public class ContentData {
     public static ContentData fromDittoEntity(Ditto ditto) {
         return ContentData.builder()
                 .id(ditto.getId())
-                .title(ditto.getTitle())
-                .body(ditto.getBody())
+                .title(TranslationService.getLanguage() == Language.EN ? ditto.getTitleEN(): ditto.getTitle())
+                .body(TranslationService.getLanguage() == Language.EN ? ditto.getBodyEN() : ditto.getBody())
                 .build();
     }
 
