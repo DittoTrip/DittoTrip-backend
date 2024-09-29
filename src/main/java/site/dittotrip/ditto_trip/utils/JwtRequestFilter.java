@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.exception.common.AccessTokenExpiredException;
+import site.dittotrip.ditto_trip.exception.common.RefreshTokenExpiredException;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 
@@ -42,12 +44,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       }
 
       filterChain.doFilter(request, response);
-    } catch (ExpiredJwtException e) {
+    } catch (AccessTokenExpiredException | RefreshTokenExpiredException e) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
-      response.getWriter().write("만료된 토큰");
+      response.getWriter().write(e.getMessage());
     } catch (Exception e) {
+      logger.error(e.getMessage(), e);
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.*;
 import site.dittotrip.ditto_trip.auth.domain.enums.TokenType;
+import site.dittotrip.ditto_trip.exception.common.AccessTokenExpiredException;
+import site.dittotrip.ditto_trip.exception.common.RefreshTokenExpiredException;
 
 import java.security.Key;
 import java.util.Collection;
@@ -64,18 +66,31 @@ public class JwtProvider {
     return request.getHeader("Authorization");
   }
 
-  public boolean validateToken(String accessToken) {
-    if (accessToken == null) {
+  public boolean validateToken(String token) {
+    if (token == null) {
       return false;
     }
 
+    try {
       return Jwts.parserBuilder()
           .setSigningKey(getSigningKey())
           .build()
-          .parseClaimsJws(accessToken)
+          .parseClaimsJws(token)
           .getBody()
           .getExpiration()
           .after(new Date());
+    } catch (ExpiredJwtException e) {
+      Claims claims = e.getClaims();  // 만료된 토큰의 클레임을 가져옴
+      TokenType tokenType = TokenType.valueOf(claims.get("type", String.class));
+
+      if (tokenType == TokenType.ACCESS_TOKEN) {
+        throw new AccessTokenExpiredException("만료된 엑세스 토큰");
+      } else if (tokenType == TokenType.REFRESH_TOKEN) {
+        throw new RefreshTokenExpiredException("만료된 리프레시 토큰");
+      } else {
+        throw new IllegalArgumentException("유효하지 않은 토큰 타입입니다.");
+      }
+    }
   }
 
   public String getUserId(String accessToken) {
@@ -99,7 +114,7 @@ public class JwtProvider {
 
   private Date getExpireDate(TokenType tokenType) {
     Date now = new Date();
-    long EXPIRE_TIME = tokenType == TokenType.ACCESS_TOKEN ? ACCESS_EXPIRE_TIME:REFRESH_EXPIRE_TIME;
+    long EXPIRE_TIME = tokenType == TokenType.ACCESS_TOKEN ? ACCESS_EXPIRE_TIME : REFRESH_EXPIRE_TIME;
     return new Date(now.getTime() + EXPIRE_TIME);
   }
 }
