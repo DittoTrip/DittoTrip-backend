@@ -1,4 +1,5 @@
 package site.dittotrip.ditto_trip.utils;
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -20,11 +21,13 @@ public class S3Service {
 
   @Value("${cloud.aws.s3.bucket}")
   private String bucketName;
+  @Value("${cloud.aws.cloudfront.domain}")
+  private String cloudfrontDomain;
 
   public S3Service(@Value("${cloud.aws.credentials.accessKey}") String accessKey,
                    @Value("${cloud.aws.credentials.secretKey}") String secretKey,
                    @Value("${cloud.aws.region.static}") String region) {
-    BasicAWSCredentials awsCredentials= new BasicAWSCredentials(accessKey, secretKey);
+    BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
     this.s3Client = AmazonS3ClientBuilder.standard()
         .withRegion(region)
@@ -43,15 +46,18 @@ public class S3Service {
       metadata.setContentLength(file.getSize());
 
       s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), metadata)
-              .withCannedAcl(CannedAccessControlList.PublicRead));
+          .withCannedAcl(CannedAccessControlList.PublicRead));
     } catch (IOException e) {
       throw new ImageUploadException();
     }
 
-    return s3Client.getUrl(bucketName, fileName).toString();
+    return cloudfrontDomain + fileName;
   }
 
   public void deleteFile(String fileName) {
-    s3Client.deleteObject(bucketName, fileName);
+    if (fileName.startsWith(cloudfrontDomain)) {
+      fileName = fileName.substring(cloudfrontDomain.length());
+      s3Client.deleteObject(bucketName, fileName);
+    }
   }
 }
