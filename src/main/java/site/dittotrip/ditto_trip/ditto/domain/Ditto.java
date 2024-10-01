@@ -31,9 +31,10 @@ public class Ditto {
     private String titleEN;
 
     @Setter
+    @Column(length = 3000)
     private String body;
 
-    @Column(name = "body_en")
+    @Column(name = "body_en", length = 3000)
     @Setter
     private String bodyEN;
 
