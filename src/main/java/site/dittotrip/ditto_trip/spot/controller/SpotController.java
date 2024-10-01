@@ -108,7 +108,7 @@ public class SpotController {
     public void spotSave(@RequestPart(name = "saveReq") SpotSaveReq saveReq,
                          @RequestPart(name = "image") MultipartFile multipartFile,
                          @RequestPart(name = "images") List<MultipartFile> multipartFiles) {
-        if (multipartFiles.size() > 3) {
+        if (multipartFiles.size() > 5) {
             throw new TooManyImagesException();
         }
 
