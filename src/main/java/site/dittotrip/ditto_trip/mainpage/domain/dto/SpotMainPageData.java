@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class SpotMainPageData {
     private static SpotMainPageData fromEntity(Spot spot) {
         SpotMainPageData data = SpotMainPageData.builder()
                 .spotId(spot.getId())
-                .name(spot.getName())
+                .name(TranslationService.getLanguage() == Language.EN ? spot.getNameEN() : spot.getName())
                 .imagePath(spot.getImagePath())
                 .build();
 

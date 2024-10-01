@@ -3,6 +3,8 @@ package site.dittotrip.ditto_trip.mainpage.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 import site.dittotrip.ditto_trip.category.domain.Category;
+import site.dittotrip.ditto_trip.utils.Language;
+import site.dittotrip.ditto_trip.utils.TranslationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class CategoryMainPageData {
     private static CategoryMainPageData fromEntity(Category category) {
         return CategoryMainPageData.builder()
                 .categoryId(category.getId())
-                .name(category.getName())
+                .name(TranslationService.getLanguage() == Language.EN ? category.getNameEN() : category.getName())
                 .imagePath(category.getImagePath())
                 .build();
     }
