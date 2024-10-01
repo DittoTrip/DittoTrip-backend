@@ -209,7 +209,7 @@ public class SpotService {
 
         Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
 
-        List<SpotImage> SpotImages = stillCutRepository.findTop3BySpotOrderByCreatedDateTimeDesc(spot);
+        List<SpotImage> SpotImages = stillCutRepository.findBySpot(spot);
         List<Review> reviews = reviewRepository.findTop3BySpot(spot);
         Long bookmarkId = getReqUsersSpotBookmarkId(spot, reqUser);
 

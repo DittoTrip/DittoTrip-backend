@@ -10,4 +10,6 @@ public interface StillCutRepository extends JpaRepository<SpotImage, Long> {
 
     List<SpotImage> findTop3BySpotOrderByCreatedDateTimeDesc(Spot spot);
 
+    List<SpotImage> findBySpot(Spot spot);
+
 }
