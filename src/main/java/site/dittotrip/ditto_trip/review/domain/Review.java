@@ -24,11 +24,11 @@ public class Review {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(name = "review_body")
+    @Column(name = "review_body", length = 3000)
     @Setter
     private String body;
 
-    @Column(name = "review_body_en")
+    @Column(name = "review_body_en", length = 3000)
     @Setter
     private String bodyEN;
 
