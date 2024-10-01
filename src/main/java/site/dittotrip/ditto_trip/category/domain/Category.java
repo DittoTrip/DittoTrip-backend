@@ -54,6 +54,11 @@ public class Category {
     @Setter
     private List<CategorySpotApply> categorySpotApplies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private List<CategoryBookmark> categoryBookmarks = new ArrayList<>();
+
+
     /**
      * for CategoryListRes test
      */
