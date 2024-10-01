@@ -1,6 +1,7 @@
 package site.dittotrip.ditto_trip.quest.aop;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
@@ -16,6 +17,7 @@ import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Transactional
@@ -41,10 +43,13 @@ public class ExpManager {
         userProfile.addExp(EXP_MAP.get(methodName));
         int afterLevel = UserLevelConverter.getLevel(userProfile.getProgressionBar());
 
+        log.info("before - after : {} - {}", beforeLevel, afterLevel);
         if (beforeLevel < afterLevel) {
             String badgeName = UserLevelConverter.REWARD_MAP.get(afterLevel);
             Badge rewardBadge = badgeRepository.findByName(badgeName).orElseThrow(NoSuchElementException::new);
+            log.info("rewardBadgeName : {}", rewardBadge.getName());
             userBadgeRepository.save(new UserBadge(user, rewardBadge));
+            log.info("saving is successful");
         }
     }
 
