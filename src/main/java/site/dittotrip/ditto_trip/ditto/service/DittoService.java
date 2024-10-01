@@ -229,7 +229,7 @@ public class DittoService {
 
     private void processAlarmInSaveDitto(Ditto ditto) {
         String title = "새로운 디토가 있어요 !!";
-        String body = ditto.getUser() + " 님이 디토를 작성했어요 !!";
+        String body = "[" + ditto.getUser().getNickname() + "]" + " 님이 디토를 작성했어요 !!";
         String path = "/ditto/" + ditto.getId();
         List<User> targets = new ArrayList<>();
         List<Follow> followeds = ditto.getUser().getFolloweds();
