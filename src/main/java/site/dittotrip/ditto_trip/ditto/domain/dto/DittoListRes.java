@@ -15,7 +15,21 @@ public class DittoListRes {
 
     @Builder.Default
     private List<DittoMiniData> dittoMiniDataList = new ArrayList<>();
+    private Boolean isMine;
     private Integer totalPage;
+
+    public static DittoListRes fromEntities(Page<Ditto> page, Boolean isMine) {
+        DittoListRes dittoListRes = DittoListRes.builder()
+                .isMine(isMine)
+                .totalPage(page.getTotalPages())
+                .build();
+
+        for (Ditto ditto : page.getContent()) {
+            dittoListRes.getDittoMiniDataList().add(DittoMiniData.fromEntity(ditto));
+        }
+
+        return dittoListRes;
+    }
 
     public static DittoListRes fromEntities(Page<Ditto> page) {
         DittoListRes dittoListRes = DittoListRes.builder()

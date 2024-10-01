@@ -77,10 +77,19 @@ public class DittoService {
         return DittoListRes.fromEntities(page);
     }
 
-    public DittoListRes findUsersDittoList(Long userId, Pageable pageable) {
+    public DittoListRes findUsersDittoList(Long reqUserId, Long userId, Pageable pageable) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Page<Ditto> page = dittoRepository.findByUser(user, pageable);
-        return DittoListRes.fromEntities(page);
+
+        Boolean isMine;
+        if (reqUser.equals(user)) {
+            isMine = Boolean.TRUE;
+        } else {
+            isMine = Boolean.FALSE;
+        }
+
+        return DittoListRes.fromEntities(page, isMine);
     }
 
     public DittoDetailRes findDittoDetail(Long reqUserId, Long dittoId) {

@@ -68,7 +68,8 @@ public class DittoController {
     public DittoListRes dittoListOfUser(@AuthenticationPrincipal CustomUserDetails userDetails,
                                         @PathVariable(name = "userId") Long userId,
                                         Pageable pageable) {
-        return dittoService.findUsersDittoList(userId, pageable);
+        Long reqUserId = getUserIdFromUserDetails(userDetails, false);
+        return dittoService.findUsersDittoList(reqUserId, userId, pageable);
     }
 
     @GetMapping("/{dittoId}")
