@@ -20,7 +20,8 @@ public class ExpManager {
 
     private final Map<String, Integer> EXP_MAP = Map.of(
             "visitSpot", 50,
-            "saveReview", 100
+            "saveReview", 100,
+            "saveSpotApply", 100
     );
 
     public void handleExp(CustomUserDetails userDetails, String methodName) {

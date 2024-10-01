@@ -16,6 +16,7 @@ import site.dittotrip.ditto_trip.hashtag.domain.Hashtag;
 import site.dittotrip.ditto_trip.hashtag.domain.HashtagSpotApply;
 import site.dittotrip.ditto_trip.hashtag.repository.HashtagRepository;
 import site.dittotrip.ditto_trip.exception.common.NoAuthorityException;
+import site.dittotrip.ditto_trip.quest.aop.ExpHandlingTargetMethod;
 import site.dittotrip.ditto_trip.spot.domain.*;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyDetailRes;
 import site.dittotrip.ditto_trip.spot.domain.dto.SpotApplyListRes;
@@ -76,6 +77,7 @@ public class SpotApplyService {
         return SpotApplyDetailRes.fromEntity(spotApply);
     }
 
+    @ExpHandlingTargetMethod
     @Transactional(readOnly = false)
     public void saveSpotApply(Long reqUserId, SpotApplySaveReq saveReq, MultipartFile multipartFile, List<MultipartFile> multipartFiles) {
         User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
