@@ -42,7 +42,7 @@ public class RewardService {
         List<Badge> badges = badgeRepository.findAll();
         List<UserBadge> userBadges = userBadgeRepository.findByUser(user);
 
-        if (reqUser.equals(user)) {
+        if (reqUser != null && reqUser.equals(user)) {
             Map<Reward, UserBadge> ownBadgeMap = new HashMap<>();
             for (UserBadge userBadge : userBadges) {
                 ownBadgeMap.put(userBadge.getBadge(), userBadge);
