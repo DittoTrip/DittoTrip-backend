@@ -23,7 +23,16 @@ public class ProgressionData {
             1, 100, 2, 200, 3, 400, 4, 700, 5, 1000,
             6, 1400, 7, 1900, 8, 2500, 9, 3200, 10, 4000));
     private static final Map<Integer, String> LEVEL_NAME_MAP = new HashMap<>(Map.of(
-            1, "스타터 디토", 2, "비기너 디토"
+            1, "여행의 새싹",
+            2, "여행의 발걸음",
+            3, "여행의 이야기꾼",
+            4, "여행의 도전자",
+            5, "여행의 길잡이",
+            6, "여행의 탐험가",
+            7, "여행의 대가",
+            8, "여행의 정복자",
+            9, "여행의 영웅",
+            10, "여행의 전설"
     ));
 
     private Integer presentExp;
