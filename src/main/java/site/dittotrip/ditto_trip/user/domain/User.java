@@ -62,10 +62,10 @@ public class User {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Alarm> alarms = new ArrayList<>();
 
-  @OneToMany(mappedBy = "followingUser")
+  @OneToMany(mappedBy = "followingUser", cascade = CascadeType.ALL)
   private List<Follow> followings = new ArrayList<>();
 
-  @OneToMany(mappedBy = "followedUser")
+  @OneToMany(mappedBy = "followedUser", cascade = CascadeType.ALL)
   private List<Follow> followeds = new ArrayList<>();
 
   public User() {
