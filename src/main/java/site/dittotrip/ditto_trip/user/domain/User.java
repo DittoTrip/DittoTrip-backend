@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
@@ -57,6 +58,9 @@ public class User {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<UserItem> userItems = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Alarm> alarms = new ArrayList<>();
 
   @OneToMany(mappedBy = "followingUser")
   private List<Follow> followings = new ArrayList<>();
