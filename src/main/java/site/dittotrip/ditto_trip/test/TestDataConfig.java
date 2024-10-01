@@ -43,7 +43,7 @@ import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import java.util.List;
 
 @Slf4j
-@Component
+//@Component
 @RequiredArgsConstructor
 public class TestDataConfig {
 
@@ -141,51 +141,51 @@ public class TestDataConfig {
         Ditto ditto3 = createDitto("제목3", "여기 좋아요3", user2);
         Ditto ditto4 = createDitto("제목4", "여기 좋아요4", user2);
 
-        Item item11 = createItem("skin1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_1.png", ItemType.SKIN);
-        Item item12 = createItem("skin2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_2.png", ItemType.SKIN);
-        Item item13 = createItem("skin3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_3.png", ItemType.SKIN);
-        Item item14 = createItem("skin4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_4.png", ItemType.SKIN);
-        Item item15 = createItem("skin5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/skin/skin_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/skin/wearing_skin/wearing_skin_5.png", ItemType.SKIN);
-        Item item21 = createItem("eyes1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_1.png", ItemType.EYES);
-        Item item22 = createItem("eyes2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_2.png", ItemType.EYES);
-        Item item23 = createItem("eyes3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_3.png", ItemType.EYES);
-        Item item24 = createItem("eyes4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_4.png", ItemType.EYES);
-        Item item25 = createItem("eyes5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_5.png", ItemType.EYES);
-        Item item26 = createItem("eyes6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_6.png", ItemType.EYES);
-        Item item27 = createItem("eyes7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_7.png", ItemType.EYES);
-        Item item28 = createItem("eyes8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_8.png", ItemType.EYES);
-        Item item29 = createItem("eyes9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_9.png", ItemType.EYES);
-        Item item20 = createItem("eyes10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/eye/eye_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/eye/wearing_eye/wearing_eye_10.png", ItemType.EYES);
-        Item item31 = createItem("mouth1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_1.png", ItemType.MOUTH);
-        Item item32 = createItem("mouth2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_2.png", ItemType.MOUTH);
-        Item item33 = createItem("mouth3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_3.png", ItemType.MOUTH);
-        Item item34 = createItem("mouth4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_4.png", ItemType.MOUTH);
-        Item item35 = createItem("mouth5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_5.png", ItemType.MOUTH);
-        Item item36 = createItem("mouth6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_6.png", ItemType.MOUTH);
-        Item item37 = createItem("mouth7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_7.png", ItemType.MOUTH);
-        Item item38 = createItem("mouth8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_8.png", ItemType.MOUTH);
-        Item item39 = createItem("mouth9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_9.png", ItemType.MOUTH);
-        Item item30 = createItem("mouth10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/mouth/mouth_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/mouth/wearing_mouth/wearing_mouth_10.png", ItemType.MOUTH);
-        Item item41 = createItem("hair1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_1.png", ItemType.HAIR);
-        Item item42 = createItem("hair2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_2.png", ItemType.HAIR);
-        Item item43 = createItem("hair3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_3.png", ItemType.HAIR);
-        Item item44 = createItem("hair4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_4.png", ItemType.HAIR);
-        Item item45 = createItem("hair5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_5.png", ItemType.HAIR);
-        Item item46 = createItem("hair6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_6.png", ItemType.HAIR);
-        Item item47 = createItem("hair7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_7.png", ItemType.HAIR);
-        Item item48 = createItem("hair8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_8.png", ItemType.HAIR);
-        Item item49 = createItem("hair9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_9.png", ItemType.HAIR);
-        Item item40 = createItem("hair10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/hair/hair_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/hair/wearing_hair/wearing_hair_10.png", ItemType.HAIR);
-        Item item51 = createItem("accessory1", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_1.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_1.png", ItemType.ACCESSORY);
-        Item item52 = createItem("accessory2", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_2.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_2.png", ItemType.ACCESSORY);
-        Item item53 = createItem("accessory3", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_3.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_3.png", ItemType.ACCESSORY);
-        Item item54 = createItem("accessory4", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_4.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_4.png", ItemType.ACCESSORY);
-        Item item55 = createItem("accessory5", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_5.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_5.png", ItemType.ACCESSORY);
-        Item item56 = createItem("accessory6", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_6.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_6.png", ItemType.ACCESSORY);
-        Item item57 = createItem("accessory7", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_7.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_7.png", ItemType.ACCESSORY);
-        Item item58 = createItem("accessory8", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_8.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_8.png", ItemType.ACCESSORY);
-        Item item59 = createItem("accessory9", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_9.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_9.png", ItemType.ACCESSORY);
-        Item item50 = createItem("accessory10", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/acc/acc_10.png", "https://ditto-trip.s3.ap-northeast-2.amazonaws.com/item/accessories/wearing_acc/wearing_acc_10.png", ItemType.ACCESSORY);
+        Item item11 = createItem("skin1", "https://d2asm33oixcd9g.cloudfront.net/item/skin/skin/skin_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/skin/wearing_skin/wearing_skin_1.png", ItemType.SKIN);
+        Item item12 = createItem("skin2", "https://d2asm33oixcd9g.cloudfront.net/item/skin/skin/skin_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/skin/wearing_skin/wearing_skin_2.png", ItemType.SKIN);
+        Item item13 = createItem("skin3", "https://d2asm33oixcd9g.cloudfront.net/item/skin/skin/skin_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/skin/wearing_skin/wearing_skin_3.png", ItemType.SKIN);
+        Item item14 = createItem("skin4", "https://d2asm33oixcd9g.cloudfront.net/item/skin/skin/skin_4.png", "https://d2asm33oixcd9g.cloudfront.net/item/skin/wearing_skin/wearing_skin_4.png", ItemType.SKIN);
+        Item item15 = createItem("skin5", "https://d2asm33oixcd9g.cloudfront.net/item/skin/skin/skin_5.png", "https://d2asm33oixcd9g.cloudfront.net/item/skin/wearing_skin/wearing_skin_5.png", ItemType.SKIN);
+        Item item21 = createItem("eyes1", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_1.png", ItemType.EYES);
+        Item item22 = createItem("eyes2", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_2.png", ItemType.EYES);
+        Item item23 = createItem("eyes3", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_3.png", ItemType.EYES);
+        Item item24 = createItem("eyes4", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_4.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_4.png", ItemType.EYES);
+        Item item25 = createItem("eyes5", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_5.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_5.png", ItemType.EYES);
+        Item item26 = createItem("eyes6", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_6.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_6.png", ItemType.EYES);
+        Item item27 = createItem("eyes7", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_7.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_7.png", ItemType.EYES);
+        Item item28 = createItem("eyes8", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_8.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_8.png", ItemType.EYES);
+        Item item29 = createItem("eyes9", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_9.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_9.png", ItemType.EYES);
+        Item item20 = createItem("eyes10", "https://d2asm33oixcd9g.cloudfront.net/item/eye/eye/eye_10.png", "https://d2asm33oixcd9g.cloudfront.net/item/eye/wearing_eye/wearing_eye_10.png", ItemType.EYES);
+        Item item31 = createItem("mouth1", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_1.png", ItemType.MOUTH);
+        Item item32 = createItem("mouth2", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_2.png", ItemType.MOUTH);
+        Item item33 = createItem("mouth3", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_3.png", ItemType.MOUTH);
+        Item item34 = createItem("mouth4", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_4.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_4.png", ItemType.MOUTH);
+        Item item35 = createItem("mouth5", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_5.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_5.png", ItemType.MOUTH);
+        Item item36 = createItem("mouth6", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_6.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_6.png", ItemType.MOUTH);
+        Item item37 = createItem("mouth7", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_7.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_7.png", ItemType.MOUTH);
+        Item item38 = createItem("mouth8", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_8.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_8.png", ItemType.MOUTH);
+        Item item39 = createItem("mouth9", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_9.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_9.png", ItemType.MOUTH);
+        Item item30 = createItem("mouth10", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/mouth/mouth_10.png", "https://d2asm33oixcd9g.cloudfront.net/item/mouth/wearing_mouth/wearing_mouth_10.png", ItemType.MOUTH);
+        Item item41 = createItem("hair1", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_1.png", ItemType.HAIR);
+        Item item42 = createItem("hair2", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_2.png", ItemType.HAIR);
+        Item item43 = createItem("hair3", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_3.png", ItemType.HAIR);
+        Item item44 = createItem("hair4", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_4.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_4.png", ItemType.HAIR);
+        Item item45 = createItem("hair5", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_5.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_5.png", ItemType.HAIR);
+        Item item46 = createItem("hair6", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_6.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_6.png", ItemType.HAIR);
+        Item item47 = createItem("hair7", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_7.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_7.png", ItemType.HAIR);
+        Item item48 = createItem("hair8", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_8.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_8.png", ItemType.HAIR);
+        Item item49 = createItem("hair9", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_9.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_9.png", ItemType.HAIR);
+        Item item40 = createItem("hair10", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_10.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_10.png", ItemType.HAIR);
+        Item item51 = createItem("accessory1", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_1.png", ItemType.ACCESSORY);
+        Item item52 = createItem("accessory2", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_2.png", ItemType.ACCESSORY);
+        Item item53 = createItem("accessory3", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_3.png", ItemType.ACCESSORY);
+        Item item54 = createItem("accessory4", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_4.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_4.png", ItemType.ACCESSORY);
+        Item item55 = createItem("accessory5", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_5.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_5.png", ItemType.ACCESSORY);
+        Item item56 = createItem("accessory6", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_6.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_6.png", ItemType.ACCESSORY);
+        Item item57 = createItem("accessory7", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_7.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_7.png", ItemType.ACCESSORY);
+        Item item58 = createItem("accessory8", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_8.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_8.png", ItemType.ACCESSORY);
+        Item item59 = createItem("accessory9", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_9.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_9.png", ItemType.ACCESSORY);
+        Item item50 = createItem("accessory10", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_10.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_10.png", ItemType.ACCESSORY);
 
         Badge badge1 = createBadge("badge1", "empty imagePath", "body1", "condition1");
         Badge badge2 = createBadge("badge2", "empty imagePath", "body2", "condition2");
