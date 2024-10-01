@@ -10,7 +10,6 @@ import site.dittotrip.ditto_trip.category.domain.enums.CategorySubType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Data
 @NoArgsConstructor
 public class CategorySaveReq {
@@ -23,7 +22,6 @@ public class CategorySaveReq {
     List<Long> spotIds = new ArrayList<>();
 
     public Category toEntity() {
-        log.info("!!! {} {} {}", name, categoryMajorType, categorySubType);
         return new Category(name, categoryMajorType, categorySubType);
     }
 
