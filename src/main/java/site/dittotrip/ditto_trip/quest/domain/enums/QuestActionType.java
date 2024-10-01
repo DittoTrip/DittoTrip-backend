@@ -9,7 +9,7 @@ public enum QuestActionType {
     REVIEW("saveReview"),
     DITTO("saveDitto"),
     FOLLOWING("saveFollow"),
-    SPOT_APPLY("spotApply");
+    SPOT_APPLY("saveSpotApply");
 
 
     private final String methodName;
