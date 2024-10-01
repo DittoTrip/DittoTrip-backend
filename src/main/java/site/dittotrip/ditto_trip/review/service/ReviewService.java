@@ -230,7 +230,7 @@ public class ReviewService {
 
     private void processAlarmInSaveReview(Review review) {
         String title = "새로운 리뷰가 있어요 !!";
-        String body = review.getUser() + " 님이 리뷰를 작성했어요 !!";
+        String body = review.getUser().getNickname() + " 님이 리뷰를 작성했어요 !!";
         String path = "/review/" + review.getId();
         List<User> targets = new ArrayList<>();
         List<Follow> followeds = review.getUser().getFolloweds();
