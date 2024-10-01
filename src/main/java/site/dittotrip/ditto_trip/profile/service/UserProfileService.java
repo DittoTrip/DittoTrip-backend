@@ -17,6 +17,7 @@ import site.dittotrip.ditto_trip.reward.exception.NotMatchedItemTypeException;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
+import site.dittotrip.ditto_trip.utils.JwtProvider;
 
 import java.util.NoSuchElementException;
 
@@ -30,6 +31,7 @@ public class UserProfileService {
     private final UserItemRepository userItemRepository;
     private final UserBadgeRepository userBadgeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
 
     public void modifyUserNickname(Long reqUserId, UserNicknameModifyReq modifyReq) {
@@ -44,6 +46,12 @@ public class UserProfileService {
         }
         // todo 비번 유효성 검사
         reqUser.setPassword(passwordEncoder.encode(modifyReq.getNewPassword()));
+    }
+
+    public void deleteUser(Long reqUserId) {
+        User reqUser = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+        userRepository.delete(reqUser);
+        jwtProvider.deleteRefreshToken(reqUser.getId().toString());
     }
 
     public void modifyUserItem(Long reqUserId, UserProfileModifyReq modifyReq) {

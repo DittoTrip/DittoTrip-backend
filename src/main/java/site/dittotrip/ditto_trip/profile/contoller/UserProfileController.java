@@ -43,6 +43,15 @@ public class UserProfileController {
         userProfileService.modifyPassword(reqUserId, modifyReq);
     }
 
+    @DeleteMapping()
+    @Operation(summary = "회원탈퇴",
+        description = "")
+    public void deleteUserProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+      Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+      userProfileService.deleteUser(reqUserId);
+
+    }
+
     @PutMapping("/items")
     @Operation(summary = "내 아이템 수정하기",
             description = "")

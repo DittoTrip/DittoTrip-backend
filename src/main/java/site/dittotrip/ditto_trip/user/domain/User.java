@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
+import site.dittotrip.ditto_trip.reward.domain.UserItem;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
 
@@ -53,6 +54,9 @@ public class User {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private UserProfile userProfile;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<UserItem> userItems = new ArrayList<>();
 
   @OneToMany(mappedBy = "followingUser")
   private List<Follow> followings = new ArrayList<>();
