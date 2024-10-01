@@ -5,8 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.dittotrip.ditto_trip.profile.utils.UserLevelConverter;
 import site.dittotrip.ditto_trip.quest.domain.Quest;
 import site.dittotrip.ditto_trip.quest.domain.UserQuest;
+import site.dittotrip.ditto_trip.quest.domain.dto.QuestData;
+import site.dittotrip.ditto_trip.quest.domain.dto.QuestListRes;
 import site.dittotrip.ditto_trip.quest.domain.dto.QuestSaveReq;
 import site.dittotrip.ditto_trip.quest.domain.dto.UserQuestListRes;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
@@ -79,7 +82,15 @@ public class QuestService {
         }
 
         if (rewardExp != null) {
+            int beforeLevel = UserLevelConverter.getLevel(reqUser.getUserProfile().getProgressionBar());
             reqUser.getUserProfile().addExp(rewardExp);
+            int afterLevel = UserLevelConverter.getLevel(reqUser.getUserProfile().getProgressionBar());
+
+            if (beforeLevel < afterLevel) {
+                String badgeName = UserLevelConverter.REWARD_MAP.get(afterLevel);
+                Badge rewardBadge = badgeRepository.findByName(badgeName).orElseThrow(NoSuchElementException::new);
+                userBadgeRepository.save(new UserBadge(reqUser, rewardBadge));
+            }
         }
     }
 
@@ -93,6 +104,14 @@ public class QuestService {
 
         List<UserQuest> userQuests = UserQuest.createUserQuests(users, quest);
         userQuestRepository.saveAll(userQuests);
+    }
+
+    public QuestListRes findQuestListForAdmin() {
+        List<Quest> quests = questRepository.findAll();
+        List<QuestData> questDataList = QuestData.fromEntities(quests);
+        return QuestListRes.builder()
+                .questDataList(questDataList)
+                .build();
     }
 
 }

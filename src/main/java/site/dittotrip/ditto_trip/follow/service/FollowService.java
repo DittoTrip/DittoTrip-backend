@@ -84,7 +84,7 @@ public class FollowService {
     private void processAlarmInSaveFollow(Follow follow) {
         String title = "새로운 팔로워가 생겼어요 !!";
         String body = follow.getFollowingUser().getNickname() + "님이 당신을 팔로우 했습니다.";
-        String path = "/user-page/" + follow.getFollowingUser().getId(); // 수정해야 할 수 있음 !!
+        String path = "/my-page?user=" + follow.getFollowingUser().getId(); // 수정해야 할 수 있음 !!
         List<User> targets = new ArrayList<>(List.of(follow.getFollowedUser()));
         alarmRepository.saveAll(Alarm.createAlarms(title, body, path, targets));
     }

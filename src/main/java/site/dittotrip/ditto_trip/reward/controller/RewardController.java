@@ -3,12 +3,10 @@ package site.dittotrip.ditto_trip.reward.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
-import site.dittotrip.ditto_trip.reward.domain.dto.UserBadgeListRes;
-import site.dittotrip.ditto_trip.reward.domain.dto.UserItemListRes;
+import site.dittotrip.ditto_trip.reward.domain.dto.*;
 import site.dittotrip.ditto_trip.reward.service.RewardService;
 
 import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
@@ -38,6 +36,30 @@ public class RewardController {
                                               @PathVariable(name = "userId") Long userId) {
         Long reqUserId = getUserIdFromUserDetails(userDetails, false);
         return rewardService.findBadgeList(reqUserId, userId);
+    }
+
+    @GetMapping("/item/list/admin")
+    @Operation(summary = "전체 아이템 리스트 조회 (관리자 기능)",
+            description = "")
+    public ItemListRes itemList() {
+        return rewardService.findItemList();
+    }
+
+    @PostMapping("/badge")
+    @Operation(summary = "뱃지 등록 (관리자 기능)",
+            description = "")
+    public void badgeSave(@RequestPart(name = "saveReq") BadgeSaveReq saveReq,
+                          @RequestPart(name = "image") MultipartFile multipartFile) {
+        rewardService.saveBadge(saveReq, multipartFile);
+    }
+
+    @PostMapping("/item")
+    @Operation(summary = "아이템 등록 (관리자 기능)",
+            description = "")
+    public void itemSave(@RequestPart(name = "saveReq") ItemSaveReq saveReq,
+                          @RequestPart(name = "image") MultipartFile multipartFile,
+                          @RequestPart(name = "wearingImage") MultipartFile multipartFile2) {
+        rewardService.saveItem(saveReq, multipartFile, multipartFile2);
     }
 
 }
