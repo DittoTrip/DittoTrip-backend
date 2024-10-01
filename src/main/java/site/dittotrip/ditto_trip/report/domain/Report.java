@@ -39,7 +39,7 @@ public class Report {
 
     // 신고자
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "users_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
     /**
