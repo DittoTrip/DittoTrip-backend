@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
 
-    Optional<Badge> findByName(String name);
-
+  Badge findBadgeByNameEquals(String name);
+  Optional<Badge> findByName(String name);
 }

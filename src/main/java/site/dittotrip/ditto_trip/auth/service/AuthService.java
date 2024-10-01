@@ -14,6 +14,14 @@ import site.dittotrip.ditto_trip.auth.domain.dto.LoginReq;
 import site.dittotrip.ditto_trip.auth.domain.dto.SignupReq;
 import site.dittotrip.ditto_trip.auth.domain.dto.TokenRes;
 import site.dittotrip.ditto_trip.auth.domain.enums.TokenType;
+import site.dittotrip.ditto_trip.profile.domain.UserProfile;
+import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
+import site.dittotrip.ditto_trip.reward.domain.UserBadge;
+import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.repository.BadgeRepository;
+import site.dittotrip.ditto_trip.reward.repository.ItemRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserBadgeRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserItemRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.user.service.UserService;
@@ -39,6 +47,11 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final JwtProvider jwtProvider;
+  private final UserProfileRepository userProfileRepository;
+  private final UserBadgeRepository userBadgeRepository;
+  private final UserItemRepository userItemRepository;
+  private final ItemRepository itemRepository;
+  private final BadgeRepository badgeRepository;
 
   public boolean duplicationCheck(String email, String nickname) {
     List<User> users = userService.findAllByEmailOrNickname(email, nickname);
@@ -78,6 +91,24 @@ public class AuthService {
 
     SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
     user.getAuthorities().add(authority);
+
+    userRepository.save(user);
+
+    UserItem userItem1 = userItemRepository.save(new UserItem(user, itemRepository.findItemByNameEquals("skin2")));
+    UserItem userItem2 = userItemRepository.save(new UserItem(user, itemRepository.findItemByNameEquals("eyes1")));
+    UserItem userItem3 = userItemRepository.save(new UserItem(user, itemRepository.findItemByNameEquals("mouth1")));
+    UserItem userItem4 = userItemRepository.save(new UserItem(user, itemRepository.findItemByNameEquals("hair1")));
+    UserItem userItem5 = userItemRepository.save(new UserItem(user, itemRepository.findItemByNameEquals("accessory0")));
+    UserBadge userBadge1 = userBadgeRepository.save(new UserBadge(user, badgeRepository.findBadgeByNameEquals("여행의 새싹")));
+
+    UserProfile userProfile = user.getUserProfile();
+    userProfile.setUserItemSkin(userItem1);
+    userProfile.setUserItemEyes(userItem2);
+    userProfile.setUserItemMouth(userItem3);
+    userProfile.setUserItemHair(userItem4);
+    userProfile.setUserItemAccessory(userItem5);
+    userProfile.setUserBadge(userBadge1);
+    userProfileRepository.save(userProfile);
 
     return userRepository.save(user);
   }

@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
 import site.dittotrip.ditto_trip.profile.repository.UserProfileRepository;
+import site.dittotrip.ditto_trip.reward.domain.UserBadge;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
+import site.dittotrip.ditto_trip.reward.repository.BadgeRepository;
 import site.dittotrip.ditto_trip.reward.repository.ItemRepository;
+import site.dittotrip.ditto_trip.reward.repository.UserBadgeRepository;
 import site.dittotrip.ditto_trip.reward.repository.UserItemRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
@@ -25,8 +28,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   private final UserRepository userRepository;
   private final UserProfileRepository userProfileRepository;
+  private final UserBadgeRepository userBadgeRepository;
   private final UserItemRepository userItemRepository;
   private final ItemRepository itemRepository;
+  private final BadgeRepository badgeRepository;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) {
@@ -51,11 +56,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       newUser.getAuthorities().add(new SimpleGrantedAuthority("ROLE_USER"));
       userRepository.save(newUser);
 
-        UserItem userItem1 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("skin1")));
+        UserItem userItem1 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("skin2")));
         UserItem userItem2 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("eyes1")));
         UserItem userItem3 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("mouth1")));
         UserItem userItem4 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("hair1")));
-        UserItem userItem5 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("accessory1")));
+        UserItem userItem5 = userItemRepository.save(new UserItem(newUser, itemRepository.findItemByNameEquals("accessory0")));
+        UserBadge userBadge1 = userBadgeRepository.save(new UserBadge(newUser, badgeRepository.findBadgeByNameEquals("여행의 새싹")));
 
       UserProfile userProfile = newUser.getUserProfile();
         userProfile.setUserItemSkin(userItem1);
@@ -63,8 +69,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         userProfile.setUserItemMouth(userItem3);
         userProfile.setUserItemHair(userItem4);
         userProfile.setUserItemAccessory(userItem5);
-//        userProfile.setUserBadge(userBadge1);
-      userProfileRepository.save(userProfile);
+        userProfile.setUserBadge(userBadge1);
+        userProfileRepository.save(userProfile);
 
       return newUser;
     }
