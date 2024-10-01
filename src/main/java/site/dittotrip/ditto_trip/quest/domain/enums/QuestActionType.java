@@ -8,7 +8,8 @@ public enum QuestActionType {
     VISIT("visitSpot"),
     REVIEW("saveReview"),
     DITTO("saveDitto"),
-    FOLLOWING("saveFollow");
+    FOLLOWING("saveFollow"),
+    SPOT_APPLY("saveSpotApply");
 
 
     private final String methodName;
