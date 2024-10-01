@@ -39,3 +39,5 @@ out/
 
 src/main/resources/application.properties
 src/main/java/site/dittotrip/ditto_trip/test/TestDataConfig.java
+
+logs

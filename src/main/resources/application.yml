@@ -8,9 +8,9 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
+    show-sql: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql:
@@ -70,5 +70,15 @@ cloud:
       secretKey: ${S3_SECRET_KEY}
     cloudfront:
       domain: ${CLOUD_FRONT_DOMAIN}
+logging:
+  level:
+    root: INFO
+  file:
+    name: logs/error.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB # 로그 파일 최대 크기 설정
+      max-history: 30     # 30일치 로그 파일 보관
+      total-size-cap: 1GB # 전체 로그 파일이 1GB를 넘으면 오래된 로그 삭제
 translation:
   apiKey: ${DEEPL_API_KEY}
