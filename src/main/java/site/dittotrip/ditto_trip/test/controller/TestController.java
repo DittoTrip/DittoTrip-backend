@@ -16,6 +16,8 @@ import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.JwtProvider;
+import site.dittotrip.ditto_trip.utils.RedisConstants;
+import site.dittotrip.ditto_trip.utils.RedisService;
 import site.dittotrip.ditto_trip.utils.S3Service;
 
 import java.util.List;
@@ -37,6 +39,7 @@ public class TestController {
   private final S3Service s3Service;
   private final SpotRepository spotRepository;
   private final SpotVisitRepository spotVisitRepository;
+  private final RedisService redisService;
 
   @Transactional(readOnly = false)
   @PostMapping("/spot/{spotId}/visit")
@@ -50,6 +53,9 @@ public class TestController {
 
     SpotVisit spotVisit = new SpotVisit(spot, user);
     spotVisitRepository.save(spotVisit);
+
+    redisService.addIfAbsent(RedisConstants.ZSET_SPOT_RANKING_KEY, spot.getId().toString());
+    redisService.incrementScore(RedisConstants.ZSET_SPOT_RANKING_KEY, spot.getId().toString());
   }
 
   @GetMapping
