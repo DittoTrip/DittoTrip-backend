@@ -3,14 +3,25 @@ package site.dittotrip.ditto_trip.test.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
 import site.dittotrip.ditto_trip.auth.domain.enums.TokenType;
+import site.dittotrip.ditto_trip.spot.domain.Spot;
+import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
+import site.dittotrip.ditto_trip.spot.repository.SpotRepository;
+import site.dittotrip.ditto_trip.spot.repository.SpotVisitRepository;
 import site.dittotrip.ditto_trip.user.domain.User;
 import site.dittotrip.ditto_trip.user.repository.UserRepository;
 import site.dittotrip.ditto_trip.utils.JwtProvider;
 import site.dittotrip.ditto_trip.utils.S3Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static site.dittotrip.ditto_trip.auth.domain.CustomUserDetails.getUserIdFromUserDetails;
 
 /**
  * 1. 테스트용 액세스 토큰 발급
@@ -24,11 +35,26 @@ public class TestController {
   private final JwtProvider jwtProvider;
   private final UserRepository userRepository;
   private final S3Service s3Service;
+  private final SpotRepository spotRepository;
+  private final SpotVisitRepository spotVisitRepository;
 
+  @Transactional(readOnly = false)
+  @PostMapping("/spot/{spotId}/visit")
+  @Operation(summary = "스팟 방문 처리하기",
+          description = "")
+  public void spotVisitTest(@AuthenticationPrincipal CustomUserDetails userDetails,
+                            @PathVariable(name = "spotId") Long spotId) {
+    Long reqUserId = getUserIdFromUserDetails(userDetails, true);
+    User user = userRepository.findById(reqUserId).orElseThrow(NoSuchElementException::new);
+    Spot spot = spotRepository.findById(spotId).orElseThrow(NoSuchElementException::new);
+
+    SpotVisit spotVisit = new SpotVisit(spot, user);
+    spotVisitRepository.save(spotVisit);
+  }
 
   @GetMapping
   @Operation(summary = "서버 정상 여부 확인",
-      description = "")
+          description = "")
   public String test() {
     return "server is ok";
   }
