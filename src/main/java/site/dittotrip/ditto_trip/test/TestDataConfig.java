@@ -176,6 +176,7 @@ public class TestDataConfig {
         Item item48 = createItem("hair8", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_8.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_8.png", ItemType.HAIR);
         Item item49 = createItem("hair9", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_9.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_9.png", ItemType.HAIR);
         Item item40 = createItem("hair10", "https://d2asm33oixcd9g.cloudfront.net/item/hair/hair/hair_10.png", "https://d2asm33oixcd9g.cloudfront.net/item/hair/wearing_hair/wearing_hair_10.png", ItemType.HAIR);
+        Item item501 = createItem("accessory0", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_0.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_0.png", ItemType.ACCESSORY);
         Item item51 = createItem("accessory1", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_1.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_1.png", ItemType.ACCESSORY);
         Item item52 = createItem("accessory2", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_2.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_2.png", ItemType.ACCESSORY);
         Item item53 = createItem("accessory3", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/acc/acc_3.png", "https://d2asm33oixcd9g.cloudfront.net/item/accessories/wearing_acc/wearing_acc_3.png", ItemType.ACCESSORY);
