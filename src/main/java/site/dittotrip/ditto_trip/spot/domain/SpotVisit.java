@@ -32,7 +32,7 @@ public class SpotVisit {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
-    @OneToOne(mappedBy = "spotVisit")
+    @OneToOne(mappedBy = "spotVisit", cascade = CascadeType.REMOVE)
     private Review review;
 
     public SpotVisit(Spot spot, User user) {
