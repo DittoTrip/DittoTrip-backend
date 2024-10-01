@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
+import site.dittotrip.ditto_trip.report.domain.Report;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
@@ -61,6 +62,9 @@ public class User {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Alarm> alarms = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Report> reports = new ArrayList<>();
 
   @OneToMany(mappedBy = "followingUser", cascade = CascadeType.ALL)
   private List<Follow> followings = new ArrayList<>();
