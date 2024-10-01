@@ -36,7 +36,7 @@ public class UserLevelConverter {
         int level = 0;
 
         for (Integer mapExp : LEVEL_MAP.keySet()) {
-            if (mapExp < exp) {
+            if (mapExp <= exp) {
                 level = LEVEL_MAP.get(mapExp);
             } else {
                 break;
