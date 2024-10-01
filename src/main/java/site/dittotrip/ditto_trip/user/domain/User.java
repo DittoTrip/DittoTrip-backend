@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import site.dittotrip.ditto_trip.alarm.domain.Alarm;
 import site.dittotrip.ditto_trip.follow.domain.Follow;
 import site.dittotrip.ditto_trip.profile.domain.UserProfile;
-import site.dittotrip.ditto_trip.report.domain.Report;
 import site.dittotrip.ditto_trip.reward.domain.UserItem;
 import site.dittotrip.ditto_trip.spot.domain.SpotVisit;
 import site.dittotrip.ditto_trip.user.domain.enums.UserStatus;
