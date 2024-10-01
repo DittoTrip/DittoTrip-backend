@@ -55,6 +55,10 @@ public class Spot {
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
     private List<SpotBookmark> spotBookmarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL)
+    private List<SpotVisit> spotVisits = new ArrayList<>();
+
+
     public static Spot fromSpotApply(SpotApply spotApply) {
         Spot spot = new Spot(spotApply.getName(), spotApply.getAddress(), spotApply.getPointX(), spotApply.getPointY(), spotApply.getImagePath());
 
