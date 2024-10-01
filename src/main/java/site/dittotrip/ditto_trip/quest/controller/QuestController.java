@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import site.dittotrip.ditto_trip.auth.domain.CustomUserDetails;
+import site.dittotrip.ditto_trip.quest.domain.dto.QuestListRes;
 import site.dittotrip.ditto_trip.quest.domain.dto.QuestSaveReq;
 import site.dittotrip.ditto_trip.quest.domain.dto.UserQuestListRes;
 import site.dittotrip.ditto_trip.quest.domain.enums.UserQuestStatus;
@@ -50,6 +51,13 @@ public class QuestController {
             description = "")
     public void questSave(@RequestBody QuestSaveReq saveReq) {
         questService.saveQuest(saveReq);
+    }
+
+    @GetMapping("/list/admin")
+    @Operation(summary = "전체 퀘스트 리스트 조회 (관리자 기능)",
+            description = "")
+    public QuestListRes questListForAdmin() {
+        return questService.findQuestListForAdmin();
     }
 
 }
