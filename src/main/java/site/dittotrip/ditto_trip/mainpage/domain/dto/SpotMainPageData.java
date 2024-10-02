@@ -2,6 +2,7 @@ package site.dittotrip.ditto_trip.mainpage.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import site.dittotrip.ditto_trip.category.domain.Category;
 import site.dittotrip.ditto_trip.spot.domain.CategorySpot;
 import site.dittotrip.ditto_trip.spot.domain.Spot;
 import site.dittotrip.ditto_trip.utils.Language;
@@ -42,7 +43,8 @@ public class SpotMainPageData {
     private void getCategoryName(Spot spot) {
         List<CategorySpot> categorySpots = spot.getCategorySpots();
         if (!categorySpots.isEmpty()) {
-            this.categoryName = categorySpots.get(0).getCategory().getName();
+            Category category = categorySpots.get(0).getCategory();
+            this.categoryName = TranslationService.getLanguage() == Language.EN ? category.getNameEN() : category.getName();
         }
     }
 
